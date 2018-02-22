@@ -1,0 +1,149 @@
+<html>
+  <head>
+    <title>Topology</title>
+    <link rel="stylesheet" href="/diagrams/style.css">
+    <style>
+      body, html, #diagram, .storm-diagrams-canvas {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+      }
+
+      .storm-diagrams-canvas {
+        background-color: #3c3c3c;
+        background-image: linear-gradient(0deg, transparent 24%, rgba(255, 255, 255, 0.05) 25%, rgba(255, 255, 255, 0.05) 26%, transparent 27%, transparent 74%, rgba(255, 255, 255, 0.05) 75%, rgba(255, 255, 255, 0.05) 76%, transparent 77%, transparent), linear-gradient(90deg, transparent 24%, rgba(255, 255, 255, 0.05) 25%, rgba(255, 255, 255, 0.05) 26%, transparent 27%, transparent 74%, rgba(255, 255, 255, 0.05) 75%, rgba(255, 255, 255, 0.05) 76%, transparent 77%, transparent);
+        background-size: 50px 50px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="diagram"></div>
+
+    <script src="https://fb.me/react-15.0.0.js"></script>
+    <script src="https://fb.me/react-dom-15.0.0.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.34/browser.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.4/lodash.min.js"></script>
+    <script src="diagrams/main.js"></script>
+    <script type="text/babel">
+
+      const topology = {{ topology | safe }}
+
+      const {
+        DefaultNodeFactory,
+        DiagramEngine,
+        DefaultLinkFactory,
+        DiagramModel,
+        DefaultNodeModel,
+        DefaultPortModel,
+        LinkModel,
+        DiagramWidget
+      } = window['storm-react-diagrams']
+
+      const generateNodes = (topology) => {
+        const nodes = []
+        const links = []
+        const taskPorts = []
+
+        topology.tasks.forEach((task, tind) => {
+          const xSep = 600
+          const node = new DefaultNodeModel(task.name + '#' + task.route, "rgb(102,204,0)");
+          const port = node.addPort(new DefaultPortModel(true, "in-" + tind, "In"));
+          taskPorts.push({name: task.name, port})
+          node.x = 100 + xSep;
+          node.y = 100 * (tind + 1);
+
+          nodes.push(node)
+        })
+
+        let sepFactor = 0
+
+        topology.events.forEach((event, index) => {
+          const eventNode = new DefaultNodeModel(event.name + '#' + event.route, "rgb(0,192,255)");
+          const eventPort = eventNode.addPort(new DefaultPortModel(false, "out-" + index, "Out"));
+          eventNode.x = 100;
+          eventNode.y = 100 * (index + 1 + sepFactor);
+
+          let prevActionOutPort
+
+          event.actions.forEach((action, ind) => {
+            const xSep  = 300
+            const node = new DefaultNodeModel(action.name, "rgb(255,153,51)");
+            const actionInPort = node.addPort(new DefaultPortModel(true, "in-" + ind, "In"));
+            const actionOutPort = node.addPort(new DefaultPortModel(false, "out-" + ind, "Out"));
+
+            // First action should be connected directly to event
+            if (ind === 0) {
+              const actionLink = new LinkModel()
+              actionLink.setSourcePort(eventPort)
+              actionLink.setTargetPort(actionInPort)
+              links.push(actionLink)
+            } else {
+              console.log('Connection actions between them')
+              const actionLink = new LinkModel()
+              actionLink.setSourcePort(prevActionOutPort)
+              actionLink.setTargetPort(actionInPort)
+              links.push(actionLink)
+            }
+
+            if (action.type === 'event2task' || action.type === 'prev2task') {
+              const actionOutPort = node.addPort(new DefaultPortModel(false, "out-" + ind, "Out"));
+              taskPorts.forEach((taskPort) => {
+                if (taskPort.name === action.options.target) {
+                  const event2taskLink = new LinkModel()
+                  event2taskLink.setSourcePort(actionOutPort)
+                  event2taskLink.setTargetPort(taskPort.port)
+                  console.log('connecting event2task')
+                  links.push(event2taskLink)
+                }
+              })
+            }
+
+            prevActionOutPort = actionOutPort
+
+            node.x = 100 + xSep;
+            node.y = 100 * ((index + ind) + 1 + sepFactor);
+            sepFactor ++;
+
+            nodes.push(node)
+          })
+
+          nodes.push(eventNode)
+        })
+
+        return {nodes, links}
+      }
+
+      var Greeting = React.createClass({
+        render: () => {
+          //1) setup the diagram engine
+          var engine = new DiagramEngine();
+          engine.registerNodeFactory(new DefaultNodeFactory());
+          engine.registerLinkFactory(new DefaultLinkFactory());
+
+          //2) setup the diagram model
+          const model = new DiagramModel();
+
+          const genTopology = generateNodes(topology)
+
+          genTopology.nodes.forEach((node) => {
+            model.addNode(node)
+          })
+          genTopology.links.forEach((link) => {
+            model.addLink(link)
+          })
+
+          //5) load model into engine
+          engine.setDiagramModel(model);
+
+          //6) render the diagram!
+          return <DiagramWidget diagramEngine={engine} />;
+        }
+      });
+
+      ReactDOM.render(
+        <Greeting/>,
+        document.getElementById('diagram')
+      );
+    </script>
+  </body>
+</html>

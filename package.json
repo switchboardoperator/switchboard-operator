@@ -1,0 +1,42 @@
+{
+  "name": "switchboard-operator-api",
+  "version": "0.0.1",
+  "description": "Handle the asyncronous communication between microservices using AMQP",
+  "main": "app.js",
+  "scripts": {
+    "test": "NODE_ENV=test node_modules/.bin/mocha --exit app.spec.js src/**/**.spec.js src/**/**/**.spec.js",
+    "start": "node app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:alvarium/switchboard-operator.git"
+  },
+  "keywords": [
+    "amqp",
+    "rabbitmq"
+  ],
+  "author": "Genar <genar@cirici.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "chai": "^4.1.2",
+    "chai-as-promised": "^7.1.1",
+    "chai-http": "^3.0.0",
+    "mocha": "^4.0.1"
+  },
+  "dependencies": {
+    "axios": "^0.17.0",
+    "config": "^1.27.0",
+    "express": "^4.16.2",
+    "express-healthcheck": "^0.1.0",
+    "express-nunjucks": "^2.2.3",
+    "js-yaml": "^3.10.0",
+    "nunjucks": "^3.0.1",
+    "object-mapper": "^5.0.0",
+    "object-transformer": "0.0.5",
+    "rabbot": "^1.1.0",
+    "schema-object": "^4.0.11",
+    "sinon": "^4.0.1",
+    "storm-react-diagrams": "^3.1.2",
+    "winston": "^2.4.0"
+  }
+}

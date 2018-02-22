@@ -1,0 +1,22 @@
+{
+  "topology": {
+    "rabbitmq": {
+      "host": "rabbitmq.example.com",
+      "port": 5672,
+      "user": "admin",
+      "pass": "example"
+    },
+    "tasks": [
+      {
+        "name": "emailsReceiver",
+        "eventName": "cfs-emails",
+        "route": "send"
+      },
+      {
+        "name": "logReceiver",
+        "eventName": "log-test",
+        "route": "log"
+      }
+    ]
+  }
+}

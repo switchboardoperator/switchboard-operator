@@ -1,0 +1,10 @@
+{
+  "topology": {
+    "rabbitmq": {
+      "host": "rabbitmq.example.com",
+      "port": 5672,
+      "user": "admin",
+      "pass": "example"
+    }
+  }
+}
