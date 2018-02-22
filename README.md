@@ -107,66 +107,66 @@ actions:
 
 #### print-log
 
-    ```yaml
-    - name: print-log
-      type: log
-    ```
+```yaml
+- name: print-log
+  type: log
+```
 
 #### event2task
 
-    event2task definition:
-    ```yaml
-    - name: whatever
-      type: event2task
-      options:
-        target: task-exchange
-        targetRoute: route-to-send-to
-    ```
+event2task definition:
+```yaml
+- name: whatever
+  type: event2task
+  options:
+    target: task-exchange
+    targetRoute: route-to-send-to
+```
 #### http
 
-    options:
-    ```yaml
-    - name: whatever
-      type: http
-      options
-        url: http://someurl.com/{{accept_template_int}}
-        method: GET|POST|PUT|etc
-    ```
+options:
+```yaml
+- name: whatever
+  type: http
+  options
+    url: http://someurl.com/{{accept_template_int}}
+    method: GET|POST|PUT|etc
+```
 
 #### conditional
 
-    options:
-    ```yaml
-    - name: whatever
-      type: conditional
-      options
-        conditions:
-          - field: someReceivingObjField
-            operation: ===
-            checkValue: valueToCheckAgainst
-    ```
+options:
+```yaml
+- name: whatever
+  type: conditional
+  options
+    conditions:
+      - field: someReceivingObjField
+        operation: ===
+        checkValue: valueToCheckAgainst
+```
 #### mapper
 
-    options:
+options:
 
-    ```yaml
-    - name: membershipToEmailMapper
-      type: mapper
-      options:
-        fields:
-          whatever.name: 'result.fullname'
-          firstName: 'lastName'
-    ```
+```yaml
+- name: membershipToEmailMapper
+  type: mapper
+  options:
+    fields:
+      whatever.name: 'result.fullname'
+      firstName: 'lastName'
+```
 
 #### prev2task
 
-    ```yaml
-    - name: sendMembershipToEmailQueue
-      type: prev2task
-      options:
-        target: cfs-emails
-        targetRoute: email.send
-    ```
+```yaml
+- name: sendMembershipToEmailQueue
+  type: prev2task
+  options:
+    target: cfs-emails
+    targetRoute: email.send
+```
 
 Send previous generated object to task
 
@@ -175,6 +175,11 @@ Send previous generated object to task
 - This microservice is prepared to work only with `direct` type rabbitmq exchanges
 
 ## References
+
 - https://runnable.com/blog/event-driven-microservices-using-rabbitmq
 - https://derickbailey.com/2015/09/02/rabbitmq-best-practices-for-designing-exchanges-queues-and-bindings/
 - http://blog.thedigitalcatonline.com/blog/2013/08/21/some-tips-about-amqp-direct-exchanges/#.Wd5CjR_nhhG
+
+## Licence
+
+MIT
