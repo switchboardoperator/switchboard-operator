@@ -44,6 +44,7 @@ This library uses [rabbot](https://github.com/arobson/rabbot) node module to man
 ```
 
 **NOTE**: The service will automatically create dead-letter exchanges for failed messages, this way you won't lose messages when some operator will fail.
+*NOTE*: You should declare all tasks where you want to send your message using `prev2task` or `event2task` plugin.
 
 ## Visual representation of topology
 
@@ -58,6 +59,7 @@ Open http://localhost:3000/topology
 ## Operators
 
 The actions to be executed when a message is received in a subscribed queue are grouped in a files called operators. Operators should group some common actions in a specific context. The operators are defined in yaml files stored in `operators` folder. This is the way you have to define what should happen every time you receive a message for a specific event.
+To add new operators just drop your operator yaml file to `operators` folder.
 
 Each Operator will create its own queue to manage its tasks, so you can have several operators listening the same event but maintaining different queues to process its actions. This way the work of an operator shouldn't interfere in the work of another operator.
 
@@ -107,22 +109,16 @@ actions:
 
 #### print-log
 
+Just print the received object to stdout.
+
 ```yaml
 - name: print-log
   type: log
 ```
 
-#### event2task
-
-event2task definition:
-```yaml
-- name: whatever
-  type: event2task
-  options:
-    target: task-exchange
-    targetRoute: route-to-send-to
-```
 #### http
+
+It makes a HTTP request, you can set the url using nunjucks templating. Ideal to execute webhooks with your AMQP events.
 
 options:
 ```yaml
@@ -135,6 +131,8 @@ options:
 
 #### conditional
 
+It checks for defined conditions in the received object and abort execution if some condition is not met.
+
 options:
 ```yaml
 - name: whatever
@@ -146,6 +144,8 @@ options:
         checkValue: valueToCheckAgainst
 ```
 #### mapper
+
+It converts the message from the last action executed, to a new object following the mapping
 
 options:
 
@@ -160,12 +160,27 @@ options:
 
 #### prev2task
 
+It gets the message comming from the last action executed and send it to a defined task.
+
 ```yaml
 - name: sendMembershipToEmailQueue
   type: prev2task
   options:
     target: cfs-emails
     targetRoute: email.send
+```
+
+#### event2task
+
+The same as prev2task but getting the first message received without alteration.
+
+event2task definition:
+```yaml
+- name: whatever
+  type: event2task
+  options:
+    target: task-exchange
+    targetRoute: route-to-send-to
 ```
 
 Send previous generated object to task
