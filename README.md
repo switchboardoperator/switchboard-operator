@@ -185,6 +185,15 @@ event2task definition:
 
 Send previous generated object to task
 
+## Usage with docker
+
+Create your own operators under the folder `operators` in yaml format. The service will autoload all operators.
+Then just run docker-compose.
+
+```
+docker-compose up -d
+```
+
 ## Known limitations
 
 - This microservice is prepared to work only with `direct` type rabbitmq exchanges
