@@ -7,11 +7,11 @@ const Logger = new (winston.Logger)({
         return Date.now()
       },
       formatter: (options) => {
-        return {
+        return JSON.stringify({
           time: options.timestamp(),
           level: options.level,
           msg: undefined !== options.message ? options.message : ''
-        }
+        })
       }
     })
   ]
