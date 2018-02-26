@@ -10,7 +10,7 @@ describe('log-plugin', () => {
     name: 'log',
   })
 
-  const logPlugin = new LogPlugin({}, action)
+  const logPlugin = new LogPlugin({test: 'value', test2: 'value2'}, action)
 
   logPlugin.execute((err, msg) => {
     expect(err).to.be.null

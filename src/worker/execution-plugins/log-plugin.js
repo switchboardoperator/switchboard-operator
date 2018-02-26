@@ -4,7 +4,7 @@ module.exports = class LogPlugin {
   constructor(msg, action, preLog) {
     this.msg = msg
     this.action = action
-    this.preLog = preLog + ' > ' + action.name
+    this.preLog = preLog + ' > ' + action.name + ': %j'
   }
 
   execute(callback) {
