@@ -34,7 +34,10 @@ const rabbotClient = new RabbotClient(
   topology.getTopology(),
   operators
 )
-rabbotClient.start()
+
+if (process.env.NODE_ENV !== 'test') {
+  rabbotClient.start()
+}
 
 const app = express()
 
