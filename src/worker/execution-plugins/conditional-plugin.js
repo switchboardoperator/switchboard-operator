@@ -52,10 +52,10 @@ const PluginOptionsSchema = new SchemaObject({
 })
 
 module.exports = class ConditionalPlugin {
-  constructor(msg, action) {
+  constructor(msg, action, preLog) {
     this.msg = msg
     this.action = action
-    this.preLog = action.name + '[ ' + msg.id + ' ]'
+    this.preLog = preLog + ' > ' + action.name
     this.parsedMessage = flattenObject(
       this.msg
     )

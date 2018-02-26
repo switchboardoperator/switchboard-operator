@@ -17,7 +17,7 @@ describe('ActionExecuter', () => {
 
     expect(action.isErrors()).to.be.false
 
-    const actionExecuter = new ActionExecuter(action, rabbit)
+    const actionExecuter = new ActionExecuter(action, rabbit, {name: 'test'})
 
     const msg = {
       body: {

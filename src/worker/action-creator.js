@@ -36,7 +36,7 @@ module.exports = class ActionCreator {
     }
     this.rabbit = rabbit
     this.event = event
-    this.preLog = event.name + ':'
+    this.preLog = event.name + ' >'
   }
 
   createHandler() {
@@ -77,7 +77,7 @@ module.exports = class ActionCreator {
 
     // Iterate over all actions passing the lastResult
     this.event.actions.forEach((action, index) => {
-      const executer = new ActionExecuter(action, rabbit)
+      const executer = new ActionExecuter(action, rabbit, this.event)
 
       const executionPromise = function (lastValue, preLog, eventsLenght) {
         preLog = preLog + ' [' + lastValue.id + ']:'

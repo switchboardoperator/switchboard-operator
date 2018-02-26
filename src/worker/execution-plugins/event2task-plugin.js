@@ -15,7 +15,7 @@ const PluginOptionsSchema = new SchemaObject({
 })
 
 module.exports = class Event2TaskPlugin {
-  constructor(msg, action, rabbit) {
+  constructor(msg, action, rabbit, preLog) {
     if (!rabbit) {
       throw new Error('You must provide a rabbitmq instance')
     }
@@ -28,6 +28,7 @@ module.exports = class Event2TaskPlugin {
     this.msg = msg
     this.action = action
     this.rabbit = rabbit
+    this.preLog = preLog + ' > ' + action.name
   }
 
   execute(callback) {
@@ -46,10 +47,10 @@ module.exports = class Event2TaskPlugin {
       body: payload,
       replyTimeout: 3000
     }).then(() => {
-      logger.info(this.action.name, ': event2task executed')
+      logger.info(this.preLog, ': event2task executed')
       return callback(null, this.msg)
     }, (err) => {
-      logger.info(this.action.name, ': event2task failed')
+      logger.info(this.preLog, ': event2task failed')
       return callback(new Error('Error publishing to the quque', err))
     })
   }

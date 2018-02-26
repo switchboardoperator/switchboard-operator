@@ -16,13 +16,14 @@ const PluginOptionsSchema = new SchemaObject({
 })
 
 module.exports = class HttpPlugin {
-  constructor(msg, action) {
+  constructor(msg, action, preLog) {
     this.msg = msg
 
     this.options = new PluginOptionsSchema(action.options)
     if (this.options.isErrors()) {
       throw new Error('The options provided are not valid '+ JSON.stringify(this.options.getErrors()))
     }
+    this.preLog = preLog + ' > ' + action.name
   }
 
   renderUrl() {

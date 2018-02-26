@@ -16,7 +16,7 @@ const PluginOptionsSchema = new SchemaObject({
 })
 
 module.exports = class ObjectTransformerPlugin {
-  constructor(msg, action) {
+  constructor(msg, action, preLog) {
     this.msg = msg
     this.action = action
     debug('received next msg: %j', this.msg)
@@ -34,6 +34,8 @@ module.exports = class ObjectTransformerPlugin {
     if (this.options.isErrors()) {
       throw new Error('The options provided are not valid '+ JSON.stringify(this.options.getErrors()))
     }
+
+    this.preLog = preLog + ' > ' + action.name
   }
 
   execute(callback) {
@@ -49,7 +51,7 @@ module.exports = class ObjectTransformerPlugin {
     }
 
     debug('Result mapped object is %j', transformedObj)
-    logger.info(this.action.name, ': Object mapping applied')
+    logger.info(this.preLog, 'Object mapping applied')
 
     return callback(null, transformedObj)
   }
