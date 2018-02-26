@@ -53,12 +53,13 @@ module.exports = class ActionCreator {
         })
         .catch((err) => {
           debug('Error in serial execution')
-          logger.error(this.preLog, 'An error has been ocurred executing the handler actions', err)
           // The plugin executed is asking to abort operation and
           // discard the message, preventing to be send to dead-letter queue
           if (err.action && err.action === 'abort') {
+            logger.error(this.preLog, 'The execution of operator has been aborted', err)
             return msg.ack()
           }
+          logger.error(this.preLog, 'An error has been ocurred executing the handler actions', err)
           // return msg.nack()
           return msg.reject()
         })
@@ -80,7 +81,7 @@ module.exports = class ActionCreator {
       const executer = new ActionExecuter(action, rabbit, this.event)
 
       const executionPromise = function (lastValue, preLog, eventsLenght) {
-        preLog = preLog + ' [' + lastValue.id + ']:'
+        preLog = '[' + lastValue.id + '] > ' + preLog
         debug('Last value received is: ', lastValue)
         return new Promise((resolve, reject) => {
           logger.info(preLog, 'Running action ', index + 1 , ' of ', eventsLenght)
