@@ -81,7 +81,9 @@ module.exports = class ActionCreator {
       const executer = new ActionExecuter(action, rabbit, this.event)
 
       const executionPromise = function (lastValue, preLog, eventsLenght) {
-        preLog = '[' + lastValue.id + '] > ' + preLog
+        if (lastValue.id) {
+          preLog = '[' + lastValue.id + '] > ' + preLog
+        }
         debug('Last value received is: ', lastValue)
         return new Promise((resolve, reject) => {
           logger.info(preLog, 'Running action ', index + 1 , ' of ', eventsLenght)
