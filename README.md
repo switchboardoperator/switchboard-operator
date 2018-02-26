@@ -120,11 +120,10 @@ Just print the received object to stdout.
 
 It makes a HTTP request, you can set the url using nunjucks templating. Ideal to execute webhooks with your AMQP events.
 
-options:
 ```yaml
 - name: whatever
   type: http
-  options
+  options:
     url: http://someurl.com/{{accept_template_int}}
     method: GET|POST|PUT|etc
 ```
@@ -133,11 +132,10 @@ options:
 
 It checks for defined conditions in the received object and abort execution if some condition is not met.
 
-options:
 ```yaml
 - name: whatever
   type: conditional
-  options
+  options:
     conditions:
       - field: someReceivingObjField
         operation: ===
@@ -146,8 +144,6 @@ options:
 #### mapper
 
 It converts the message from the last action executed, to a new object following the mapping
-
-options:
 
 ```yaml
 - name: membershipToEmailMapper
