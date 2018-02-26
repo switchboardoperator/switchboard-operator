@@ -1,6 +1,6 @@
-# switchboard-operator API
+# switchboard-operator
 
-![Switchboard operatorstext](https://c1.staticflickr.com/7/6079/6081891190_72e39f2e78_z.jpg "Switchboards operators")
+![Switchboard operatorstext](https://catalog.archives.gov/OpaAPI/media/1633445/content/arcmedia/Public_Vaults/11900_2005_001_a.jpg "Switchboards operators")
 
 ## Introduction
 
