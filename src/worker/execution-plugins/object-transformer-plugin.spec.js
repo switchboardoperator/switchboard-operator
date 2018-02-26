@@ -36,6 +36,29 @@ describe('object-transformer-plugin', () => {
     })
   })
 
+  it('should convert msg to transformed object but merging last values with new ones', (done) => {
+
+    const options = {
+      merge: true,
+      fields: {
+        name: 'vars.nom',
+        lastName: 'vars.cognom1',
+        lastName2: 'vars.cognom2',
+        'okCallbacks.sendEmail.to': 'vars.to'
+      }
+    }
+
+    const objTransformer = new ObjectTransformerPlugin(msg, {options})
+
+    objTransformer.execute((err, transformedObj) => {
+      expect(err).to.be.null
+      expect(transformedObj).to.be.a('Object')
+      expect(transformedObj.name).to.equal('John')
+      expect(transformedObj.vars.nom).to.equal('John')
+      done()
+    })
+  })
+
   it('should convert all the source object in a property of the target object', (done) => {
     const options = {
       copy: [

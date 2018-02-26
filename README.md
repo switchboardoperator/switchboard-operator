@@ -143,12 +143,14 @@ It checks for defined conditions in the received object and abort execution if s
 ```
 #### mapper
 
-It converts the message from the last action executed, to a new object following the mapping
+It converts the message from the last action executed, to a new object following the mapping.
+This plugin is using the [object-mapper](https://github.com/wankdanker/node-object-mapper) library behind the scenes, so you can use all mapping options avilable in the library, including wildcards.
 
 ```yaml
 - name: membershipToEmailMapper
   type: mapper
   options:
+    merge: false # (Optionally return a copy of previous message with the fields mapped being replaced)
     fields:
       whatever.name: 'result.fullname'
       firstName: 'lastName'

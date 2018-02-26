@@ -5,6 +5,10 @@ const SchemaObject = require('schema-object')
 const { logger } = require('../../utils/logger')
 
 const PluginOptionsSchema = new SchemaObject({
+  merge: {
+    type: Boolean,
+    required: false
+  },
   copy: {
     type: Array,
     required: false
@@ -53,6 +57,10 @@ module.exports = class ObjectTransformerPlugin {
     debug('Result mapped object is %j', transformedObj)
     logger.info(this.preLog, 'Object mapping applied')
 
-    return callback(null, transformedObj)
+    if (this.options.merge) {
+      return callback(null, Object.assign({}, this.msg, transformedObj))
+    } else {
+      return callback(null, transformedObj)
+    }
   }
 }
