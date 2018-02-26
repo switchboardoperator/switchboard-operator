@@ -1,6 +1,6 @@
 # switchboard-operator
 
-![Switchboard operatorstext](https://catalog.archives.gov/OpaAPI/media/1633445/content/arcmedia/Public_Vaults/11900_2005_001_a.jpg "Switchboards operators")
+![Switchboard operatorstext](https://upload.wikimedia.org/wikipedia/commons/8/8e/Photograph_of_Women_Working_at_a_Bell_System_Telephone_Switchboard_%283660047829%29.jpg "Switchboards operators")
 
 ## Introduction
 
