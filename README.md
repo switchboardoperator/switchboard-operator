@@ -1,5 +1,7 @@
 # switchboard-operator
 
+[![Build status][build svg]][build status]
+
 ![Switchboard operatorstext](https://upload.wikimedia.org/wikipedia/commons/8/8e/Photograph_of_Women_Working_at_a_Bell_System_Telephone_Switchboard_%283660047829%29.jpg "Switchboards operators")
 
 ## Introduction
@@ -205,3 +207,6 @@ docker-compose up -d
 ## Licence
 
 MIT
+
+[build status]: https://travis-ci.org/alvarium/switchboard-operator
+[build svg]: https://img.shields.io/travis/alvarium/switchboard-operator/master.svg?style=flat-square
