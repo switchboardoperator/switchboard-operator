@@ -170,21 +170,6 @@ It gets the message comming from the last action executed and send it to a defin
     targetRoute: email.send
 ```
 
-#### event2task
-
-The same as prev2task but getting the first message received without alteration.
-
-event2task definition:
-```yaml
-- name: whatever
-  type: event2task
-  options:
-    target: task-exchange
-    targetRoute: route-to-send-to
-```
-
-Send previous generated object to task
-
 ## Usage with docker
 
 Create your own operators under the folder `operators` in yaml format. The service will autoload all operators.

@@ -1,10 +1,51 @@
-const ConditionalPlugin = require('./execution-plugins/conditional-plugin')
-const Event2TaskPlugin = require('./execution-plugins/event2task-plugin')
-const HttpPlugin = require('./execution-plugins/http-plugin')
-const LogPlugin = require('./execution-plugins/log-plugin')
-const ObjectTransformerPlugin = require('./execution-plugins/object-transformer-plugin')
+const fs = require('fs')
+const path = require('path')
+const { logger } = require('../utils/logger')
 
 const debug = require('debug')('action-executer')
+
+
+const loadPlugin = (prevMessage, action, preLog, rabbit) => {
+  const folder = path.resolve('./src/worker/execution-plugins')
+  debug('Loading pluginsPath %s', folder)
+
+  let module
+  let files = fs.readdirSync(folder)
+  debug('Files to analyse: %j', files)
+  files = files.filter((file) => file !== 'index.js' && !file.match(/.*\.spec\.js$/))
+  debug('Filtered files to analyse: %j', files)
+
+  files.forEach((file) => {
+    const moduleName = path.resolve(folder, file)
+    debug('Trying to import the next plugin %s', moduleName)
+    const moduleId = file.replace(/\.js%/, '')
+
+    // If the module is not the one we're looking for return
+    if (moduleId === action.type) {
+      return false
+    }
+
+    try {
+      const Module = require(moduleName)
+      // do not load if there's nothing in there
+      if (typeof Module === 'undefined') {
+        debug('Loaded file has undefined module, %j', Module)
+        return false
+      }
+
+      // Remove the extension to get an internal name
+
+      debug('Module successfull required, %s', moduleId)
+      // Instantiating module
+      module = new Module(prevMessage, action, preLog, rabbit)
+
+    } catch (err) {
+      logger.error('An error loading plugins has occurred, %j', err)
+    }
+  })
+
+  return module
+}
 
 module.exports = class ActionExecuter {
   constructor(action, rabbit, event) {
@@ -17,54 +58,15 @@ module.exports = class ActionExecuter {
 
   // Instantiate the proper plugin with proper parameters and execute it
   execute(originalMsg, prevMessage, callback) {
-    let executionPlugin
-
     // starting with originalMsg
     if (!prevMessage) {
       prevMessage = originalMsg
     }
 
-    // Manual setting type of the action and loading its plugin
-    switch (this.action.type) {
-    case 'log':
-      executionPlugin = new LogPlugin(
-        prevMessage,
-        this.action,
-        this.preLog
-      )
-      break
-    case 'mapper':
-    case 'obj-transformer':
-      executionPlugin = new ObjectTransformerPlugin(
-        prevMessage,
-        this.action,
-        this.preLog
-      )
-      break
-    case 'http':
-      executionPlugin = new HttpPlugin(
-        prevMessage,
-        this.action,
-        this.preLog
-      )
-      break
-    case 'conditional':
-      executionPlugin = new ConditionalPlugin(
-        prevMessage,
-        this.action,
-        this.preLog
-      )
-      break
-    case 'event2task':
-    case 'prev2task':
-      executionPlugin = new Event2TaskPlugin(
-        prevMessage,
-        this.action,
-        this.rabbit,
-        this.preLog
-      )
-      break
-    default:
+    const executionPlugin = loadPlugin(prevMessage, this.action, this.preLog, this.rabbit)
+    debug('Loaded the next modules: %j', module)
+
+    if (!module) {
       debug('No action type has been defined')
       return new Error('No action type has been defined')
     }

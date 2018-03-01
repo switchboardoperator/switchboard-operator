@@ -1,11 +1,11 @@
 const chai = require('chai')
 
 const ActionSchema = require('../../model/action-schema')
-const Event2TaskPlugin = require('./event2task-plugin')
+const Prev2TaskPlugin = require('./prev2task')
 
 const expect = chai.expect
 
-describe('event2task-plugin', () => {
+describe('prev2task', () => {
   it('should send the event to a task', (done) => {
     const msg = {}
     const action = new ActionSchema({
@@ -18,7 +18,7 @@ describe('event2task-plugin', () => {
     const rabbit = {
       publish: () => Promise.resolve({})
     }
-    const event2Task = new Event2TaskPlugin(msg, action, rabbit)
+    const event2Task = new Prev2TaskPlugin(msg, action, '', rabbit)
 
     event2Task.execute((error, msg) => {
       expect(msg).to.be.a('Object')

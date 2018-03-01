@@ -1,11 +1,11 @@
 const chai = require('chai')
 
 const ActionSchema = require('../../model/action-schema')
-const LogPlugin = require('./log-plugin')
+const LogPlugin = require('./log')
 
 const expect = chai.expect
 
-describe('log-plugin', () => {
+describe('log', () => {
   const action = new ActionSchema({
     name: 'log',
   })

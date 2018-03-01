@@ -1,8 +1,8 @@
 const chai = require('chai')
 const expect = chai.expect
-const ObjectTransformerPlugin = require('./object-transformer-plugin')
+const ObjectTransformerPlugin = require('./mapper')
 
-describe('object-transformer-plugin', () => {
+describe('object-transformer', () => {
   const msg = {
     name: 'John',
     lastName: 'Doe',

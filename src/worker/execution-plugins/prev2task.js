@@ -1,5 +1,5 @@
 const SchemaObject = require('schema-object')
-const debug = require('debug')('event2task-plugin')
+const debug = require('debug')('prev2task-plugin')
 
 const { logger } = require('../../utils/logger')
 
@@ -14,8 +14,8 @@ const PluginOptionsSchema = new SchemaObject({
   }
 })
 
-module.exports = class Event2TaskPlugin {
-  constructor(msg, action, rabbit, preLog) {
+module.exports = class Prev2TaskPlugin {
+  constructor(msg, action, preLog, rabbit) {
     if (!rabbit) {
       throw new Error('You must provide a rabbitmq instance')
     }

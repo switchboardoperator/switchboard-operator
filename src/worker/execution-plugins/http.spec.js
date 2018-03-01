@@ -1,11 +1,11 @@
 const chai = require('chai')
 
 const ActionSchema = require('../../model/action-schema')
-const HttpPlugin = require('./http-plugin')
+const HttpPlugin = require('./http')
 
 const expect = chai.expect
 
-describe('http-plugin', () => {
+describe('http', () => {
   const msg = {
     hello: 'topology'
   }

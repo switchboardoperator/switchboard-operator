@@ -3,11 +3,11 @@ const chaiAsPromised = require('chai-as-promised')
 chai.use(chaiAsPromised)
 
 const ActionSchema = require('../../model/action-schema')
-const ConditionalPlugin = require('./conditional-plugin')
+const ConditionalPlugin = require('./conditional')
 
 const expect = chai.expect
 
-describe('conditional-plugin', () => {
+describe('conditional', () => {
   const msg = {
     hello: 'world'
   }
