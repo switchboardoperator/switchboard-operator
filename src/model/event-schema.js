@@ -1,5 +1,6 @@
 // EventSchema
 // It handle the events to listen to and saves the actions to be executed
+// A.K.A Operators
 
 const SchemaObject = require('schema-object')
 const ActionSchema = require('./action-schema')
@@ -8,6 +9,10 @@ module.exports = new SchemaObject({
   name: {
     type: String,
     required: true
+  },
+  enabled: {
+    type: Boolean,
+    default: true
   },
   eventName: {
     type: String,

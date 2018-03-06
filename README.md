@@ -72,6 +72,7 @@ An example of operator can be seen
 name: someUniqueName
 eventName: events.purchase
 route: updated
+enabled: true
 actions:
   # Print event purchase logs
   - name: print-log

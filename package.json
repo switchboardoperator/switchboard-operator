@@ -35,7 +35,7 @@
     "object-transformer": "0.0.5",
     "rabbot": "^1.1.0",
     "schema-object": "^4.0.11",
-    "sinon": "^4.0.1",
+    "sinon": "^4.4.2",
     "storm-react-diagrams": "^3.1.2",
     "winston": "^2.4.0"
   }
