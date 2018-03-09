@@ -3,11 +3,13 @@ const yaml = require('js-yaml')
 
 const operatorsDir = __dirname + '/../../operators'
 
+// List all operator files detected
 const loadOperatorFiles = () => {
   const files = fs.readdirSync(operatorsDir)
   return files
 }
 
+// Load operators from yaml files
 module.exports.loadOperators = () => {
   const operators = []
   const operatorFiles = loadOperatorFiles()
@@ -18,7 +20,12 @@ module.exports.loadOperators = () => {
       'utf8'
     )
     const doc = yaml.safeLoad(fileContents)
-    operators.push(doc)
+    if (!doc) {
+      return
+    }
+    if (doc.enabled === undefined || doc.enabled !== false) {
+      operators.push(doc)
+    }
   })
 
   return operators
