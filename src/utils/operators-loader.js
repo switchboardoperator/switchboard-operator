@@ -13,12 +13,11 @@ module.exports.loadOperators = () => {
   const operatorFiles = loadOperatorFiles()
 
   operatorFiles.forEach((operatorYaml) => {
-    const doc = yaml.safeLoad(
-      fs.readFileSync(
-        operatorsDir + '/' + operatorYaml,
-        'utf8'
-      )
+    const fileContents = fs.readFileSync(
+      operatorsDir + '/' + operatorYaml,
+      'utf8'
     )
+    const doc = yaml.safeLoad(fileContents)
     operators.push(doc)
   })
 

@@ -5,15 +5,19 @@ const { loadOperators } = require('./operators-loader')
 const expect = require('chai').expect
 
 describe('operators-loader', () => {
-  const sandbox = sinon.sandbox.create()
-  sandbox.stub(fs, 'readdirSync').callsFake(function () {
+  sinon.stub(fs, 'readdirSync').callsFake(function () {
     return ['operator1.yaml', 'operator2.yml', 'operator3.yml']
   })
-  sandbox.stub(fs, 'readFileSync').callsFake(() => {
-    return '
-
-    '
-  })
+  sinon.stub(fs, 'readFileSync').returns(() => `
+# Execute every time a purchase is update
+name: eventPurchases
+eventName: events.purchase
+route: updated
+actions:
+  # Print event purchase logs
+  - name: print-log
+    type: log
+`)
 
   expect(loadOperators()).to.be.a('array')
 })
