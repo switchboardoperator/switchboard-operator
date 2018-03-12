@@ -22,7 +22,7 @@ const loadPlugin = (prevMessage, action, preLog, rabbit) => {
     const moduleId = extractModuleId(file)
 
     // If the module is not the one we're looking for return
-    if (moduleId === action.type) {
+    if (moduleId !== action.type) {
       debug('The requested module %s isn\'t the one checked %s', action.type, moduleId)
       return false
     }
