@@ -32,10 +32,15 @@ module.exports = class HttpPlugin {
     return renderedUrl
   }
 
+  populateData() {
+    return this.msg
+  }
+
   execute(callback) {
     axios({
       method: this.options.method.toLowerCase(),
-      url: this.renderUrl()
+      url: this.renderUrl(),
+      data: this.populateData()
     })
       .then((response) => {
         debug('Received the next response ' + JSON.stringify(response.data))
