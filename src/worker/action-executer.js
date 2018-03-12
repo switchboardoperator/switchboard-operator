@@ -1,6 +1,7 @@
 const fs = require('fs')
 const path = require('path')
 const { logger } = require('../utils/logger')
+const { extractModuleId } = require('./utils/plugins')
 
 const debug = require('debug')('action-executer')
 
@@ -18,10 +19,11 @@ const loadPlugin = (prevMessage, action, preLog, rabbit) => {
   files.forEach((file) => {
     const moduleName = path.resolve(folder, file)
     debug('Trying to import the next plugin %s', moduleName)
-    const moduleId = file.replace(/\.js%/, '')
+    const moduleId = extractModuleId(file)
 
     // If the module is not the one we're looking for return
     if (moduleId === action.type) {
+      debug('The requested module %s isn\'t the one checked %s', action.type, moduleId)
       return false
     }
 
