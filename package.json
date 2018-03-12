@@ -30,6 +30,7 @@
     "express-healthcheck": "^0.1.0",
     "express-nunjucks": "^2.2.3",
     "js-yaml": "^3.10.0",
+    "node-telegram-bot-api": "^0.30.0",
     "nunjucks": "^3.0.1",
     "object-mapper": "^5.0.0",
     "object-transformer": "0.0.5",
