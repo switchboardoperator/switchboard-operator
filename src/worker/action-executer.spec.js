@@ -8,7 +8,7 @@ describe('ActionExecuter', () => {
   it('should handle comming events', (done) => {
     const action = new ActionSchema({
       name: 'sendMembershipsToEmail',
-      type: 'event2task',
+      type: 'log',
       options: {
         target: 'test',
         targetRoute: 'someroute'

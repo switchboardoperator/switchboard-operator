@@ -7,7 +7,6 @@ module.exports = new SchemaObject({
   },
   type: {
     type: String,
-    enum: ['event2task', 'log', 'http', 'obj-transformer', 'conditional', 'mapper', 'prev2task'],
     required: true
   },
   options: {
