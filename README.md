@@ -171,6 +171,21 @@ It gets the message comming from the last action executed and send it to a defin
     targetRoute: email.send
 ```
 
+#### setter
+
+Manually set some object attributes to be consumed for the next operator's action.
+
+```yaml
+# Set paid attribte as true
+- name: setPaidPayloadAttribute
+  type: setter
+  options:
+    fields:
+      paid: true
+      message: 'Payment set to true'
+```
+
+
 ## Usage with docker
 
 Create your own operators under the folder `operators` in yaml format. The service will autoload all operators.
