@@ -52,7 +52,7 @@ module.exports = class ActionCreator {
           return msg.ack()
         })
         .catch((err) => {
-          debug('Error in serial execution')
+          debug('Error in serial execution', err)
           // The plugin executed is asking to abort operation and
           // discard the message, preventing to be send to dead-letter queue
           if (err.action && err.action === 'abort') {

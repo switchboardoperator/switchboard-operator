@@ -1,5 +1,5 @@
-const TelegramBot = require('node-telegram-bot-api')
 const SchemaObject = require('schema-object')
+const axios = require('axios')
 const config = require('config')
 const nunjucks = require('nunjucks')
 
@@ -27,19 +27,34 @@ module.exports = class TelegramPlugin {
 
     if (config.has('plugins.telegram.token')) {
       this.telegramToken = config.get('plugins.telegram.token')
-      this.bot = new TelegramBot(
-        config.get('plugins.telegram.token')
-      )
     } else {
       throw new Error('To use Telegram plugin you must provide token, talk to @BotFather to get yours.')
     }
+  }
+
+  sendMessage(chatId, message) {
+    const apiUrl = `https://api.telegram.org/bot${this.telegramToken}/sendMessage`
+    const data = {
+      chat_id: chatId,
+      text: message
+    }
+    return axios({
+      method: 'POST',
+      url: apiUrl,
+      data: data
+    })
   }
 
   execute(callback) {
     const renderedTemplate = nunjucks.renderString(
       this.options.template, this.msg
     )
-    this.bot.sendMessage(this.options.chatId, renderedTemplate)
-    return callback(null, this.msg)
+    this.sendMessage(this.options.chatId, renderedTemplate)
+      .then(() => {
+        return callback(null, this.msg)
+      })
+      .catch((err) => {
+        return callback(err, this.msg)
+      })
   }
 }
