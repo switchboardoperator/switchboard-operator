@@ -185,6 +185,28 @@ Manually set some object attributes to be consumed for the next operator's actio
       message: 'Payment set to true'
 ```
 
+#### telegram
+
+In order to use telegram plugin you must set the telegram token in your config:
+
+```json
+  "plugins": {
+    "telegram": {
+      "token": "xxxxxxxxx:yyyyyyyyyyyyyyyyyyyyy--zzzzzzzzzzzz"
+    }
+  }
+```
+
+Then you can define your operator action as it follows:
+
+```yaml
+  # Send membership to logs for debugging purposes
+  - name: logMembership
+    type: telegram
+    options:
+      chatId: '-288888888'
+      template: 'A new membership with {{ id }} has been registered'
+```
 
 ## Usage with docker
 
