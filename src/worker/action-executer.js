@@ -66,9 +66,9 @@ module.exports = class ActionExecuter {
     }
 
     const executionPlugin = loadPlugin(prevMessage, this.action, this.preLog, this.rabbit)
-    debug('Loaded the next modules: %j', module)
+    debug('Loaded the next modules: %j', executionPlugin)
 
-    if (!module) {
+    if (!executionPlugin) {
       debug('No action type has been defined')
       return new Error('No action type has been defined')
     }

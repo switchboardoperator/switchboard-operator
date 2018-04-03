@@ -6,5 +6,10 @@
       "user": "admin",
       "pass": "example"
     }
+  },
+  "plugins": {
+    "telegram": {
+      "token": "1234"
+    }
   }
 }
