@@ -103,7 +103,13 @@ module.exports = class ActionCreator {
         })
       }
 
-      promiseChain = promiseChain.then((lastValue) => executionPromise(lastValue, this.preLog, this.event.actions.length))
+      promiseChain = promiseChain.then(
+        (lastValue) => executionPromise(
+          lastValue,
+          this.preLog,
+          this.event.actions.length
+        )
+      )
     })
 
     return promiseChain

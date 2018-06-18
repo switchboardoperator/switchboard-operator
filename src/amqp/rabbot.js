@@ -22,7 +22,7 @@ module.exports = class Rabbot {
       .then(() => {
         this.rabbit
           .configure(this.topology)
-          .done(() => {
+          .then(() => {
             debug('Connected to rabbit with the next topology: %j', this.topology)
             logger.info('connected to rabbitmq successfully')
           })
