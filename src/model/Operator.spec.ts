@@ -1,4 +1,5 @@
-import Operator from './operator'
+import Operator from './Operator'
+
 import { expect } from 'chai'
 import 'mocha'
 
