@@ -1,6 +1,4 @@
-import Action from './Action'
-
-export default class Operator {
+export class Operator {
   name: string
   eventName: string
   route: string
