@@ -1,9 +1,8 @@
-const chai     = require('chai')
-const chaiHttp = require('chai-http')
-const expect   = chai.expect
-const { app }  = require('./app')
+import { expect } from 'chai'
+import ChaiHttp = require('chai-http')
+import app from './app'
 
-chai.use(chaiHttp)
+chai.use(ChaiHttp)
 
 describe('main app', () => {
   it('expressjs should listen on port 3000', (done) => {

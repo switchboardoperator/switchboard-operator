@@ -10,4 +10,4 @@ const Logger = new (winston.Logger)({
   ]
 })
 
-module.exports.logger = Logger
+export default Logger

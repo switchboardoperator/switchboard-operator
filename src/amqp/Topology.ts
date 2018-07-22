@@ -1,9 +1,15 @@
-const { logger } = require('../utils/logger')
-const EventSchema  = require('../model/event-schema')
-const TaskSchema   = require('../model/task-schema')
+import ConnectionSchema  from './ConnectionSchema'
+import logger from '../services/logger'
+import Event from '../model/Event'
+import Task  from '../model/Task'
+import Config  from '../model/Config'
 
-module.exports = class Topology {
-  constructor(config) {
+export default class Topology {
+  connection: ConnectionSchema
+  events: Array<Event>
+  tasks: Array<Task>
+
+  constructor(config: Config) {
     this.connection = config.rabbitmq
     this.mapConfigToTopology(config)
   }
@@ -14,22 +20,13 @@ module.exports = class Topology {
     this.tasks = []
 
     config.events.forEach((elem) => {
-      const event = new EventSchema(elem)
-
-      if (!event.isErrors()) {
-        this.events.push(event)
-      } else {
-        logger.error('Event provided has errors: %j', event.getErrors())
-      }
+      const event = new Event(elem)
+      this.events.push(event)
     })
 
     config.tasks.forEach((elem) => {
-      const task = new TaskSchema(elem)
-      if (!task.isErrors()) {
-        this.tasks.push(task)
-      } else {
-        logger.error('Task provided has errors: %j', task.getErrors())
-      }
+      const task = new Task(elem)
+      this.tasks.push(task)
     })
   }
 

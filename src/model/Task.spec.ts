@@ -1,7 +1,4 @@
-const expect = require('chai').expect
-const TaskSchema = require('./task-schema')
-
-describe('TaskSchema', () => {
+describe('Task', () => {
   it('should has task queue properties', (done) => {
     const task = new TaskSchema({
       name: 'testing',

@@ -1,4 +1,4 @@
-const chai = require('chai')
+import chai = require('chai')
 const expect = chai.expect
 const rabbit = require('rabbot')
 

@@ -10,7 +10,7 @@ const loadOperatorFiles = () => {
 }
 
 // Load operators from yaml files
-module.exports.loadOperators = () => {
+export const loadOperators = () => {
   const operators = []
   const operatorFiles = loadOperatorFiles()
 

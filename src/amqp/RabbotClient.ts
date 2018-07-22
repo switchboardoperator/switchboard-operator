@@ -1,12 +1,16 @@
 // Raboot
 // This class set ups RabbitMQ with specified topology
 
-const { logger } = require('../utils/logger')
-const ActionCreator = require('../worker/action-creator')
-const EventSchema = require('../model/event-schema')
-const debug = require('debug')('rabbot')
+import logger from '../services/logger'
+import Action from '../model/Action'
+import Event from '../model/Event'
+import debug from 'debug'
 
-module.exports = class Rabbot {
+export default class RabbotClient {
+  rabbit: object
+  topology: object
+  events: Array<Event>
+
   constructor(rabbit, topology, events) {
     if (!events) {
       logger.error('RabbotClient needs events to listen to')

@@ -5,7 +5,7 @@
 // the action based on type and options
 
 const debug = require('debug')('action-creator')
-const { logger } = require('../utils/logger')
+const { logger } = require('../services/logger')
 const ActionExecuter = require('./action-executer')
 
 // If the message received is the one get from AMQP

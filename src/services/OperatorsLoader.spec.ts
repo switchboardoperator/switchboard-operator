@@ -1,6 +1,6 @@
 const sinon = require('sinon')
 const fs = require('fs')
-const { loadOperators } = require('./operators-loader')
+const { loadOperators } = require('./OperatorsLoader')
 
 const expect = require('chai').expect
 

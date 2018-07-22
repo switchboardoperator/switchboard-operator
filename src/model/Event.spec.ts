@@ -1,9 +1,28 @@
-const expect = require('chai').expect
-const EventSchema = require('./event-schema')
+import Event from './Event'
 
-describe('EventSchema', () => {
+import { expect } from 'chai'
+import 'mocha'
+
+describe('Event', () => {
+  const params = {
+    name: 'testEvent',
+    enabled: false,
+    options: {},
+    eventName: '',
+    route: '',
+    prefix: '',
+    prefetch: '',
+    exclusive: '',
+    subscribe: '',
+    actions: []
+  }
+  const testEvent = new Event(params)
+  it('should must be a model instance', () => {
+    expect(testEvent instanceof Event).to.be.true
+  })
+
   it('should has event queue properties', (done) => {
-    const event = new EventSchema({
+    const event = new Event({
       name: 'testing',
       eventName: 'testing',
       route: 'created'
@@ -11,7 +30,6 @@ describe('EventSchema', () => {
 
     expect(event.eventName).to.equals('testing')
     expect(event.route).to.equals('created')
-    expect(event.getErrors()).to.be.empty
 
     // Converting event to exchange
     const generatedExchange = event.toExchange()

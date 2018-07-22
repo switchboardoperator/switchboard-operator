@@ -1,33 +1,26 @@
-const config = require('config')
-const express = require('express')
-const expressNunjucks = require('express-nunjucks')
-const logger = require('winston')
-const rabbit = require('rabbot')
+import path = require('path')
+import config from 'config'
+import express from 'express'
+import expressNunjucks from 'express-nunjucks'
+import logger from 'winston'
+import rabbit from 'rabbot'
 
-const path = require('path')
-
-const { loadOperators } = require('./src/utils/operators-loader')
-const ConfigSchema = require('./src/model/config-schema')
-const RabbotClient = require('./src/amqp/rabbot')
-const Topology = require('./src/amqp/topology')
+import { loadOperators } from './src/services/OperatorsLoader'
+import Config from './src/model/Config'
+import RabbotClient from './src/amqp/RabbotClient'
+import Topology from './src/amqp/Topology'
 
 const operators = loadOperators()
 
-const mergedConfig = Object.assign(config.get('topology'), {
+const mergedConfig = { ...config.get('topology'), {
   events: operators
-})
+}}
 
 const topology = new Topology(mergedConfig)
 
-const definedConfig = new ConfigSchema(
+const definedConfig = new Config(
   config.util.toObject(mergedConfig)
 )
-
-if (definedConfig.isErrors()) {
-  logger.error('The topology defined has errors %j', definedConfig.getErrors())
-} else {
-  logger.info('Config validated, no errors found')
-}
 
 const rabbotClient = new RabbotClient(
   rabbit,
@@ -70,7 +63,7 @@ app.get('/topology', (req, res) => {
   })
 })
 
-app.listen(3000, function () {
+app.listen(3000, () => {
   logger.info('SwitchBoard Operator listening on port 3000!')
 })
 
@@ -79,4 +72,4 @@ process.on('unhandledRejection', (reason, p) => {
   logger.error('Unhandled Rejection at: Promise', p, 'reason:', reason)
 })
 
-module.exports.app = app
+export default app

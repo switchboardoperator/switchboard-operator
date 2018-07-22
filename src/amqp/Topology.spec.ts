@@ -1,6 +1,6 @@
-const expect = require('chai').expect
-const Topology = require('./topology')
-const topologyExampleConf =  require('./test/configurationFixtures')
+import { expect } from 'chai'
+import Topology from './Topology'
+import topologyExampleConf from './test/configurationFixtures'
 
 describe('Topology', () => {
   const topology = new Topology(topologyExampleConf)

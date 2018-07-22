@@ -1,6 +1,6 @@
 const fs = require('fs')
 const path = require('path')
-const { logger } = require('../utils/logger')
+const { logger } = require('../services/logger')
 const { extractModuleId } = require('./utils/plugins')
 
 const debug = require('debug')('action-executer')

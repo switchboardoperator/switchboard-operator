@@ -1,4 +1,4 @@
-const Topology = require('./topology')
+const Topology = require('./Topology')
 const RabbotClient = require('./rabbot')
 const topologyExampleConf =  require('./test/configurationFixtures')
 const rabbit = require('rabbot')
