@@ -1,7 +1,8 @@
-import { expect } from 'chai'
+import * as chai from 'chai'
 import ChaiHttp = require('chai-http')
 import SwitchBoardOperator from './app'
 
+const expect = chai.expect
 chai.use(ChaiHttp)
 
 describe('main app', () => {

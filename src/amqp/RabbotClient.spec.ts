@@ -1,6 +1,6 @@
+import * as topologyExampleConf from './test/configurationFixtures.json'
 const Topology = require('./Topology')
-const RabbotClient = require('./rabbot')
-const topologyExampleConf =  require('./test/configurationFixtures')
+const RabbotClient = require('./RabbotClient')
 const rabbit = require('rabbot')
 
 describe('RabbotClient', () => {

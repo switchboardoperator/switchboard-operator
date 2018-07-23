@@ -2,7 +2,6 @@
 // This class set ups RabbitMQ with specified topology
 
 import logger from '../services/logger'
-import Action from '../model/Action'
 import Event from '../model/Event'
 import ActionCreator from '../worker/ActionCreator'
 import debug from 'debug'

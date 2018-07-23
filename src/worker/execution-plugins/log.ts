@@ -1,6 +1,12 @@
+import Action from "../../model/Action";
+
 const { logger } = require('../../utils/logger')
 
-module.exports = class LogPlugin {
+export default class LogPlugin {
+  msg: string
+  action: Action
+  preLog: string
+
   constructor(msg, action, preLog) {
     this.msg = msg
     this.action = action

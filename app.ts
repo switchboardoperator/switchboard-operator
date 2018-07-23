@@ -1,9 +1,9 @@
-import path = require('path')
-import config from 'config'
-import express from 'express'
-import expressNunjucks from 'express-nunjucks'
-import logger from 'winston'
-import rabbit from 'rabbot'
+import * as path from 'path'
+import * as config from 'config'
+import * as express from 'express'
+import * as expressNunjucks from 'express-nunjucks'
+import * as logger from 'winston'
+import * as rabbit from 'rabbot'
 
 import { loadOperators } from './src/services/OperatorsLoader'
 import Config from './src/model/Config'

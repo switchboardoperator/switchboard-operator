@@ -51,7 +51,13 @@ const PluginOptionsSchema = new SchemaObject({
   }
 })
 
-module.exports = class ConditionalPlugin {
+export default class ConditionalPlugin {
+  msg: string
+  action: string
+  preLog: string
+  parsedMessage: object
+  options: any
+
   constructor(msg, action, preLog) {
     this.msg = msg
     this.action = action
@@ -61,9 +67,6 @@ module.exports = class ConditionalPlugin {
     )
 
     this.options = new PluginOptionsSchema(action.options)
-    if (this.options.isErrors()) {
-      throw new Error('The options provided are not valid '+ JSON.stringify(this.options.getErrors()))
-    }
   }
 
   // Execute the conditions logic

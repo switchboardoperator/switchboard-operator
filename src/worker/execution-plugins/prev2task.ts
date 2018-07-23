@@ -1,3 +1,6 @@
+import RabbotClient from "../../amqp/RabbotClient";
+import Action from "../../model/Action";
+
 const SchemaObject = require('schema-object')
 const debug = require('debug')('prev2task-plugin')
 
@@ -14,7 +17,13 @@ const PluginOptionsSchema = new SchemaObject({
   }
 })
 
-module.exports = class Prev2TaskPlugin {
+export default class Prev2TaskPlugin {
+  options: any
+  msg: any
+  action: Action
+  rabbit: any
+  preLog: string
+
   constructor(msg, action, preLog, rabbit) {
     if (!rabbit) {
       throw new Error('You must provide a rabbitmq instance')
@@ -51,7 +60,7 @@ module.exports = class Prev2TaskPlugin {
       return callback(null, this.msg)
     }, (err) => {
       logger.info(this.preLog, ': event2task failed')
-      return callback(new Error('Error publishing to the quque', err))
+      return callback(new Error(`Error publishing to the quque ${err}`))
     })
   }
 }

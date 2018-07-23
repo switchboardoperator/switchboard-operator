@@ -1,4 +1,4 @@
-const chai = require('chai')
+import * as chai from 'chai'
 const chaiAsPromised = require('chai-as-promised')
 chai.use(chaiAsPromised)
 

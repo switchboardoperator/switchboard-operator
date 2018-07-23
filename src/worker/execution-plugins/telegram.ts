@@ -1,3 +1,5 @@
+import Action from "../../model/Action";
+
 const SchemaObject = require('schema-object')
 const axios = require('axios')
 const config = require('config')
@@ -14,7 +16,13 @@ const PluginOptionsSchema = new SchemaObject({
   }
 })
 
-module.exports = class TelegramPlugin {
+export default class TelegramPlugin {
+  msg: string
+  action: Action
+  preLog: string
+  telegramToken: string
+  options: any
+
   constructor(msg, action, preLog) {
     this.msg = msg
     this.action = action

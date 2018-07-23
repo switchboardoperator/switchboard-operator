@@ -1,4 +1,4 @@
-const chai = require('chai')
+import * as chai from 'chai'
 
 const ActionSchema = require('../../model/action-schema')
 const LogPlugin = require('./log')

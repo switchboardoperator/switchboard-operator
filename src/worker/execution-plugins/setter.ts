@@ -1,3 +1,5 @@
+import Action from "../../model/Action";
+
 const debug = require('debug')('setter-plugin')
 const SchemaObject = require('schema-object')
 
@@ -10,7 +12,12 @@ const PluginOptionsSchema = new SchemaObject({
   }
 })
 
-module.exports = class SetterPlugin {
+export default class SetterPlugin {
+  msg: string
+  action: Action
+  options: any
+  preLog: string
+
   constructor(msg, action, preLog) {
     this.msg = msg
     this.action = action

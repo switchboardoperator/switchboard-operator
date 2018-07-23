@@ -15,7 +15,11 @@ const PluginOptionsSchema = new SchemaObject({
   }
 })
 
-module.exports = class HttpPlugin {
+export default class HttpPlugin {
+  msg: string
+  options: any
+  preLog: string
+
   constructor(msg, action, preLog) {
     this.msg = msg
 
@@ -47,7 +51,7 @@ module.exports = class HttpPlugin {
         callback(null, response)
       })
       .catch((err) => {
-        callback(new Error('Error in the request ', err))
+        callback(new Error(`Error in the request ${err}`))
       })
   }
 }
