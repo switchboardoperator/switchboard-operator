@@ -4,10 +4,11 @@
 import logger from '../services/logger'
 import Action from '../model/Action'
 import Event from '../model/Event'
+import ActionCreator from '../worker/ActionCreator'
 import debug from 'debug'
 
 export default class RabbotClient {
-  rabbit: object
+  rabbit: any
   topology: object
   events: Array<Event>
 
@@ -36,7 +37,7 @@ export default class RabbotClient {
   mapActionsToHandlers() {
     return new Promise((resolve) => {
       this.events.forEach((event) => {
-        const eventObj = new EventSchema(event)
+        const eventObj = new Event(event)
         const actionCreator = new ActionCreator(
           this.rabbit,
           eventObj

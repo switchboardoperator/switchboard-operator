@@ -1,12 +1,11 @@
-const chai = require('chai')
-const expect = chai.expect
-const rabbit = require('rabbot')
-const ActionExecuter = require('./action-executer')
-const ActionSchema = require('../model/action-schema')
+import { expect } from 'chai'
+import rabbit from 'rabbot'
+import ActionExecuter from './ActionExecuter'
+import Action from '../model/Action'
 
 describe('ActionExecuter', () => {
   it('should handle comming events', (done) => {
-    const action = new ActionSchema({
+    const action = new Action({
       name: 'sendMembershipsToEmail',
       type: 'log',
       options: {
@@ -14,8 +13,6 @@ describe('ActionExecuter', () => {
         targetRoute: 'someroute'
       }
     })
-
-    expect(action.isErrors()).to.be.false
 
     const actionExecuter = new ActionExecuter(action, rabbit, {name: 'test'})
 

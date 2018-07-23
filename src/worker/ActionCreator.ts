@@ -4,9 +4,10 @@
 // Start listening to defined rabbitmq event and execute
 // the action based on type and options
 
-const debug = require('debug')('action-creator')
-const { logger } = require('../services/logger')
-const ActionExecuter = require('./action-executer')
+import debug = require('debug')
+import logger from '../services/logger'
+import ActionExecuter from './ActionExecuter'
+import Event from '../model/Event'
 
 // If the message received is the one get from AMQP
 // extract only the contents.
@@ -29,11 +30,13 @@ const extractMessage = (prevMessage) => {
 }
 
 
-module.exports = class ActionCreator {
-  constructor(rabbit, event) {
-    if (event.isErrors()) {
-      logger.error('Error in defined event %j', event.getErrors())
-    }
+export default class ActionCreator {
+  rabbit: any
+  event: Event
+  preLog: string
+  handler: any
+
+  constructor(rabbit, event: Event) {
     this.rabbit = rabbit
     this.event = event
     this.preLog = event.name + ' >'

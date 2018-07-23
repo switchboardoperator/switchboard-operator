@@ -1,12 +1,12 @@
 import { expect } from 'chai'
 import ChaiHttp = require('chai-http')
-import app from './app'
+import SwitchBoardOperator from './app'
 
 chai.use(ChaiHttp)
 
 describe('main app', () => {
   it('expressjs should listen on port 3000', (done) => {
-    chai.request(app)
+    chai.request(SwitchBoardOperator.app)
       .get('/status')
       .end((err, res) => {
         if (err) {
@@ -18,7 +18,7 @@ describe('main app', () => {
   })
 
   it('should render topology configuration as diagrams', (done) => {
-    chai.request(app)
+    chai.request(SwitchBoardOperator.app)
       .get('/topology')
       .end((err, res) => {
         if (err) {

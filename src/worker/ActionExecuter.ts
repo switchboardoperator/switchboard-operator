@@ -1,3 +1,5 @@
+import Action from "../model/Action";
+
 const fs = require('fs')
 const path = require('path')
 const { logger } = require('../services/logger')
@@ -49,7 +51,12 @@ const loadPlugin = (prevMessage, action, preLog, rabbit) => {
   return module
 }
 
-module.exports = class ActionExecuter {
+export default class ActionExecuter {
+  action: Action
+  rabbit: any
+  event: Event
+  preLog: string
+
   constructor(action, rabbit, event) {
     debug('action executer action received: %j', action)
     this.action = action

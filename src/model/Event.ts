@@ -1,3 +1,5 @@
+import Action from './Action'
+
 export default class Event {
   name: string
   eventName: string
@@ -6,6 +8,7 @@ export default class Event {
   exclusive: boolean
   subscribe: boolean = true
   prefetch: number = 1
+  actions: Array<Action>
 
   constructor({name, eventName, route}: {name: string, eventName: string, route: string}) {
     this.eventName = eventName
