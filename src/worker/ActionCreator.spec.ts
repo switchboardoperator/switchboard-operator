@@ -23,6 +23,7 @@ describe('ActionCreator', () => {
       route: 'created',
       actions: []
     })
+
     const actionCreator = new ActionCreator(rabbit, event)
     actionCreator.createHandler()
 
@@ -65,8 +66,8 @@ describe('ActionCreator', () => {
     actionCreator.createHandler()
 
     const handler = actionCreator.getHandler()
-
     expect(handler).to.be.an('object')
+
     expect(handler.topic).to.equals('sbo-ms-test-memberships-created.#')
 
     const msg = {
@@ -82,6 +83,9 @@ describe('ActionCreator', () => {
       .then((results) => {
         expect(results).to.be.an('object')
         done()
+      })
+      .catch((err) => {
+        done(err)
       })
   })
 

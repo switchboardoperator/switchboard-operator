@@ -8,11 +8,13 @@ export default class Event {
   exclusive: boolean
   subscribe: boolean = true
   prefetch: number = 1
-  actions: Array<Action>
+  actions: Array<Action> = []
 
   constructor({name, eventName, route, actions}: {name: string, eventName: string, route: string, actions: Array<Action>}) {
+    this.name = name
     this.eventName = eventName
     this.route = route
+    this.actions = actions
   }
 
   // Returns the exchange object attached to this event

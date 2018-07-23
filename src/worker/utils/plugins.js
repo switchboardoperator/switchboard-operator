@@ -1,3 +1,3 @@
 module.exports.extractModuleId = (file) => {
-  return file.replace(/\.js$/, '')
+  return file.replace(/\.ts$/, '')
 }

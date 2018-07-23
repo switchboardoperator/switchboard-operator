@@ -1,13 +1,14 @@
 const topologyExampleConf = require('./test/configurationFixtures.json')
-const Topology = require('./Topology')
-const RabbotClient = require('./RabbotClient')
-const rabbit = require('rabbot')
+import * as rabbit from 'rabbot'
+
+import Topology from './Topology'
+import RabbotClient from './RabbotClient'
 
 describe('RabbotClient', () => {
   // To be mocked
   it('Should connect to rabbitmq', (done) => {
     const topology = new Topology(topologyExampleConf)
-    const rabbotClient = new RabbotClient(topology.getTopology())
+    const rabbotClient = new RabbotClient(rabbit, topology.getTopology(), [])
     // rabbotClient.start()
     done()
   })

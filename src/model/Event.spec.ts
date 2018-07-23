@@ -25,7 +25,8 @@ describe('Event', () => {
     const event = new Event({
       name: 'testing',
       eventName: 'testing',
-      route: 'created'
+      route: 'created',
+      actions: []
     })
 
     expect(event.eventName).to.equals('testing')

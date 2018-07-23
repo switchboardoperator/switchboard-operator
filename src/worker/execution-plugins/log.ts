@@ -1,6 +1,6 @@
 import Action from "../../model/Action";
 
-const { logger } = require('../../utils/logger')
+import logger from '../../services/logger'
 
 export default class LogPlugin {
   msg: string

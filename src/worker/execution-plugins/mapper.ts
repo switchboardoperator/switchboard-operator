@@ -1,10 +1,10 @@
 import Action from "../../model/Action";
+import logger from '../../services/logger'
 
 const debug = require('debug')('mapper-plugin')
 const objectMapper = require('object-mapper')
 const SchemaObject = require('schema-object')
 
-const { logger } = require('../../utils/logger')
 
 const PluginOptionsSchema = new SchemaObject({
   merge: {

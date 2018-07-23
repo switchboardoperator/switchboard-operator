@@ -4,6 +4,7 @@
 // Start listening to defined rabbitmq event and execute
 // the action based on type and options
 
+import * as rabbit from 'rabbot'
 import debug = require('debug')
 import logger from '../services/logger'
 import ActionExecuter from './ActionExecuter'
@@ -31,7 +32,7 @@ const extractMessage = (prevMessage) => {
 
 
 export default class ActionCreator {
-  rabbit: any
+  rabbit: rabbit
   event: Event
   preLog: string
   handler: any
@@ -43,9 +44,8 @@ export default class ActionCreator {
   }
 
   createHandler() {
-    const event = this.event
-    const queue = event.getQueueName()
-    const route = event.route
+    const queue = this.event.getQueueName()
+    const route = this.event.route
 
     this.handler = this.rabbit.handle({ queue }, (msg) => {
       return this.executeActions(msg)

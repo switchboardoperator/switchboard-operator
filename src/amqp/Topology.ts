@@ -1,5 +1,4 @@
 import ConnectionSchema  from './ConnectionSchema'
-import logger from '../services/logger'
 import Event from '../model/Event'
 import Task  from '../model/Task'
 import Config  from '../model/Config'

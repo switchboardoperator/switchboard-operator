@@ -1,5 +1,5 @@
 import { expect } from 'chai'
-import rabbit from 'rabbot'
+import * as rabbit from 'rabbot'
 import ActionExecuter from './ActionExecuter'
 import Action from '../model/Action'
 
