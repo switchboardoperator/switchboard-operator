@@ -2,9 +2,9 @@ import chai = require('chai')
 const expect = chai.expect
 const rabbit = require('rabbot')
 
-const EventSchema = require('../model/event-schema')
-const ActionCreator = require('./action-creator')
-const ActionSchema = require('../model/action-schema')
+import Event from '../model/Event'
+import Action from '../model/Action'
+import ActionCreator from './ActionCreator'
 
 describe('ActionCreator', () => {
   it('should fail if one of the steps fails', (done) => {
@@ -17,7 +17,7 @@ describe('ActionCreator', () => {
       ack: function () {}
     }
 
-    const event = new EventSchema({
+    const event = new Event({
       name: 'test',
       eventName: 'memberships',
       route: 'created',
@@ -42,19 +42,19 @@ describe('ActionCreator', () => {
         'okCallbacks.sendEmail.to': 'vars.to'
       }
     }
-    const action = new ActionSchema({
+    const action = new Action({
       name: 'mapper1',
       type: 'mapper',
       options
     })
 
-    const action2 = new ActionSchema({
+    const action2 = new Action({
       name: 'mapper2',
       type: 'mapper',
       options
     })
 
-    const event = new EventSchema({
+    const event = new Event({
       name: 'test',
       eventName: 'memberships',
       route: 'created',

@@ -49,13 +49,6 @@ describe('Event', () => {
     expect(generatedBinding.target).to.equals('sbo-ms.testing.testing.created')
     expect(generatedBinding.keys).to.equals('created')
 
-    // Testing validation of required fields
-    const event2 = new EventSchema({
-      route: 'created'
-    })
-    expect(event2.getErrors()).to.be.a('array')
-    expect(event2.getErrors()).to.not.be.empty
-
     done()
   })
 })

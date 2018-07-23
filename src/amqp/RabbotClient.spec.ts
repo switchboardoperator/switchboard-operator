@@ -1,4 +1,4 @@
-import * as topologyExampleConf from './test/configurationFixtures.json'
+const topologyExampleConf = require('./test/configurationFixtures.json')
 const Topology = require('./Topology')
 const RabbotClient = require('./RabbotClient')
 const rabbit = require('rabbot')

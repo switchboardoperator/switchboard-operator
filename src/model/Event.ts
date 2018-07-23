@@ -10,7 +10,7 @@ export default class Event {
   prefetch: number = 1
   actions: Array<Action>
 
-  constructor({name, eventName, route}: {name: string, eventName: string, route: string}) {
+  constructor({name, eventName, route, actions}: {name: string, eventName: string, route: string, actions: Array<Action>}) {
     this.eventName = eventName
     this.route = route
   }
