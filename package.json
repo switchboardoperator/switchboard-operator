@@ -4,7 +4,7 @@
   "description": "Handle the asyncronous communication between microservices using AMQP",
   "main": "built/app.js",
   "scripts": {
-    "test": "NODE_ENV=test node_modules/.bin/mocha --require ts-node/register --exit app.spec.ts src/**/*.spec.js src/**/*.spec.ts",
+    "test": "NODE_ENV=test node_modules/.bin/mocha --require ts-node/register --exit src/**/*.spec.js src/**/*.spec.ts",
     "build": "tsc",
     "start": "tsc && node built/app.js"
   },
