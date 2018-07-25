@@ -5,10 +5,10 @@ import * as expressNunjucks from 'express-nunjucks'
 import * as logger from 'winston'
 import * as rabbit from 'rabbot'
 
-import { loadOperators } from './src/services/OperatorsLoader'
-import Config from './src/model/Config'
-import RabbotClient from './src/amqp/RabbotClient'
-import Topology from './src/amqp/Topology'
+import { loadOperators } from './services/OperatorsLoader'
+import Config from './model/Config'
+import RabbotClient from './amqp/RabbotClient'
+import Topology from './amqp/Topology'
 
 class SwitchBoardOperator {
 

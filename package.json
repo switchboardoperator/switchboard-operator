@@ -2,10 +2,11 @@
   "name": "switchboard-operator-api",
   "version": "0.2.0",
   "description": "Handle the asyncronous communication between microservices using AMQP",
-  "main": "app.js",
+  "main": "built/app.js",
   "scripts": {
     "test": "NODE_ENV=test node_modules/.bin/mocha --require ts-node/register --exit app.spec.ts src/**/*.spec.js src/**/*.spec.ts",
-    "start": "node app.js"
+    "build": "tsc",
+    "start": "tsc && node built/app.js"
   },
   "repository": {
     "type": "git",

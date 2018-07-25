@@ -6,10 +6,10 @@ COPY . /app
 
 WORKDIR /app
 
-RUN npm install
+RUN npm install && npm run build
 
 ENV NODE_ENV production
 
 EXPOSE 3000
 
-ENTRYPOINT node app.js
+ENTRYPOINT node built/app.js
