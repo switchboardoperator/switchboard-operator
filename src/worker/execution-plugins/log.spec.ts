@@ -1,7 +1,7 @@
 import * as chai from 'chai'
 
 const ActionSchema = require('../../model/action-schema')
-const LogPlugin = require('./log')
+import LogPlugin from './log'
 
 const expect = chai.expect
 
@@ -10,7 +10,7 @@ describe('log', () => {
     name: 'log',
   })
 
-  const logPlugin = new LogPlugin({test: 'value', test2: 'value2'}, action)
+  const logPlugin = new LogPlugin({test: 'value', test2: 'value2'}, action, 'preLog')
 
   logPlugin.execute((err, msg) => {
     expect(err).to.be.null
