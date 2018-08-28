@@ -10,7 +10,7 @@ const debug = require('debug')('action-executer')
 
 
 const loadPlugin = (prevMessage: string, action: Action, preLog: string, rabbit) => {
-  const folder = path.resolve('./src/worker/execution-plugins')
+  const folder = path.resolve(__dirname, './execution-plugins')
   debug('Loading pluginsPath %s', folder)
 
   let module
