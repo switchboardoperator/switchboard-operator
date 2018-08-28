@@ -1,7 +1,9 @@
-import Action from "../model/Action";
 import * as fs from 'fs'
 import * as path from 'path'
+
 import { extractModuleId } from './utils/plugins'
+import Action from "../model/Action"
+import Event from "../model/Event"
 import logger from '../services/logger'
 
 const debug = require('debug')('action-executer')
@@ -14,7 +16,7 @@ const loadPlugin = (prevMessage: string, action: Action, preLog: string, rabbit)
   let module
   let files = fs.readdirSync(folder)
   debug('Files to analyse: %j', files)
-  files = files.filter((file) => file !== 'index.ts' && !file.match(/.*\.spec\.ts$/))
+  files = files.filter((file) => file !== 'index.ts' && !file.match(/.*\.spec\.ts$/) && file !== 'index.js' && !file.match(/.*\.spec\.js$/))
   debug('Filtered files to analyse: %j', files)
 
   files.forEach((file) => {
@@ -57,7 +59,7 @@ export default class ActionExecuter {
   event: Event
   preLog: string
 
-  constructor(action, rabbit, event) {
+  constructor(action: Action, rabbit: any, event: Event) {
     debug('action executer action received: %j', action)
     this.action = action
     this.rabbit = rabbit

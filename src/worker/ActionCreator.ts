@@ -83,7 +83,7 @@ export default class ActionCreator {
     this.event.actions.forEach((action, index) => {
       const executer = new ActionExecuter(action, rabbit, this.event)
 
-      const executionPromise = function (lastValue, preLog, eventsLenght) {
+      const executionPromise = (lastValue, preLog, eventsLenght) => {
         if (lastValue.id) {
           preLog = '[' + lastValue.id + '] > ' + preLog
         }

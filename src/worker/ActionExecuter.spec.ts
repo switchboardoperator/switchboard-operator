@@ -2,6 +2,7 @@ import { expect } from 'chai'
 import * as rabbit from 'rabbot'
 import ActionExecuter from './ActionExecuter'
 import Action from '../model/Action'
+import Event from '../model/Event'
 
 describe('ActionExecuter', () => {
   it('should handle comming events', (done) => {
@@ -14,7 +15,7 @@ describe('ActionExecuter', () => {
       }
     })
 
-    const actionExecuter = new ActionExecuter(action, rabbit, {name: 'test'})
+    const actionExecuter = new ActionExecuter(action, rabbit, new Event({name: 'test', eventName: 'test', route: 'test', actions: []}))
 
     const msg = {
       body: {
