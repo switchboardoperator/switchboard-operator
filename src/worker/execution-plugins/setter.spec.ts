@@ -1,6 +1,8 @@
 import * as chai from 'chai'
+
+import SetterPlugin from './setter'
+
 const expect = chai.expect
-const SetterPlugin = require('./setter')
 
 describe('setter', () => {
   const msg = {}
@@ -12,7 +14,7 @@ describe('setter', () => {
       }
     }
 
-    const objTransformer = new SetterPlugin(msg, {options})
+    const objTransformer = new SetterPlugin(msg, {options}, '')
 
     objTransformer.execute((err, setObj) => {
       expect(err).to.be.null

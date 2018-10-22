@@ -4,7 +4,7 @@
   "description": "Handle the asyncronous communication between microservices using AMQP",
   "main": "built/app.js",
   "scripts": {
-    "test": "NODE_ENV=test node_modules/.bin/mocha --require ts-node/register --exit src/**/*.spec.js src/**/*.spec.ts",
+    "test": "NODE_ENV=test node_modules/.bin/mocha --recursive --require ts-node/register --exit './src/**/*.spec.ts'",
     "build": "tsc",
     "start": "tsc && node built/app.js"
   },
@@ -36,6 +36,7 @@
   },
   "dependencies": {
     "axios": "^0.18.0",
+    "axios-mock-adapter": "^1.15.0",
     "config": "^1.27.0",
     "express": "^4.16.2",
     "express-healthcheck": "^0.1.0",

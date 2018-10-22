@@ -1,15 +1,16 @@
 import * as chai from 'chai'
 
-const ActionSchema = require('../../model/action-schema')
-const Prev2TaskPlugin = require('./prev2task')
+import Action from '../../model/Action'
+import Prev2TaskPlugin from './prev2task'
 
 const expect = chai.expect
 
 describe('prev2task', () => {
   it('should send the event to a task', (done) => {
     const msg = {}
-    const action = new ActionSchema({
+    const action = new Action({
       name: 'event2task',
+      type: 'event2task',
       options: {
         target: 'some-queue',
         targetRoute: 'some-route'

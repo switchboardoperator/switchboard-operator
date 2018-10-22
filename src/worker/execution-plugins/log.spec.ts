@@ -1,13 +1,15 @@
 import * as chai from 'chai'
 
-const ActionSchema = require('../../model/action-schema')
+import Action from '../../model/Action'
 import LogPlugin from './log'
 
 const expect = chai.expect
 
 describe('log', () => {
-  const action = new ActionSchema({
+  const action = new Action({
     name: 'log',
+    type: 'log',
+    options: {}
   })
 
   const logPlugin = new LogPlugin({test: 'value', test2: 'value2'}, action, 'preLog')

@@ -1,9 +1,11 @@
 import * as chai from 'chai'
 const chaiAsPromised = require('chai-as-promised')
+
+import Action from '../../model/Action'
+import ConditionalPlugin from './conditional'
+
 chai.use(chaiAsPromised)
 
-const ActionSchema = require('../../model/action-schema')
-const ConditionalPlugin = require('./conditional')
 
 const expect = chai.expect
 
@@ -11,7 +13,7 @@ describe('conditional', () => {
   const msg = {
     hello: 'world'
   }
-  const action = new ActionSchema({
+  const action = new Action({
     name: 'testing-checks',
     type: 'conditional',
     options: {
@@ -24,12 +26,12 @@ describe('conditional', () => {
       ]
     }
   })
-  const conditionalPlugin = new ConditionalPlugin(msg, action)
+  const conditionalPlugin = new ConditionalPlugin(msg, action, '')
 
   it('should checkConditions() should make === operation', (done) => {
     expect(conditionalPlugin.checkConditions()).to.be.false
 
-    const passingAction = new ActionSchema({
+    const passingAction = new Action({
       name: 'testing-checks',
       type: 'conditional',
       options: {
@@ -42,7 +44,7 @@ describe('conditional', () => {
         ]
       }
     })
-    const passingConditionalPlugin = new ConditionalPlugin(msg, passingAction)
+    const passingConditionalPlugin = new ConditionalPlugin(msg, passingAction, '')
 
     expect(passingConditionalPlugin.checkConditions()).to.be.true
 
@@ -52,7 +54,7 @@ describe('conditional', () => {
   it('should checkConditions() should make !== operation', (done) => {
     expect(conditionalPlugin.checkConditions()).to.be.false
 
-    const passingAction = new ActionSchema({
+    const passingAction = new Action({
       name: 'testing-checks',
       type: 'conditional',
       options: {
@@ -65,7 +67,7 @@ describe('conditional', () => {
         ]
       }
     })
-    const passingConditionalPlugin = new ConditionalPlugin(msg, passingAction)
+    const passingConditionalPlugin = new ConditionalPlugin(msg, passingAction, '')
 
     expect(passingConditionalPlugin.checkConditions()).to.be.false
 
@@ -80,7 +82,7 @@ describe('conditional', () => {
       }
     }
 
-    const passingAction = new ActionSchema({
+    const passingAction = new Action({
       name: 'testing-checks',
       type: 'conditional',
       options: {
@@ -92,7 +94,7 @@ describe('conditional', () => {
         ]
       }
     })
-    const passingConditionalPlugin = new ConditionalPlugin(msg, passingAction)
+    const passingConditionalPlugin = new ConditionalPlugin(msg, passingAction, '')
 
     expect(passingConditionalPlugin.checkConditions()).to.be.false
 
@@ -102,7 +104,7 @@ describe('conditional', () => {
   it('should return false if one of the checks fails', (done) => {
     const msg = {}
 
-    const nonPassingAction = new ActionSchema({
+    const nonPassingAction = new Action({
       name: 'testing-checks',
       type: 'conditional',
       options: {
@@ -124,7 +126,7 @@ describe('conditional', () => {
       }
     })
 
-    const nonPassingConditionalPlugin = new ConditionalPlugin(msg, nonPassingAction)
+    const nonPassingConditionalPlugin = new ConditionalPlugin(msg, nonPassingAction, '')
 
     expect(nonPassingConditionalPlugin.checkConditions()).to.be.false
 

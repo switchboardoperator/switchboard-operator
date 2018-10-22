@@ -1,6 +1,8 @@
 import * as chai from 'chai'
+
+import ObjectTransformerPlugin from './mapper'
+
 const expect = chai.expect
-const ObjectTransformerPlugin = require('./mapper')
 
 describe('object-transformer', () => {
   const msg = {
@@ -24,7 +26,7 @@ describe('object-transformer', () => {
       }
     }
 
-    const objTransformer = new ObjectTransformerPlugin(msg, {options})
+    const objTransformer = new ObjectTransformerPlugin(msg, {options}, '')
 
     objTransformer.execute((err, transformedObj) => {
       expect(err).to.be.null
@@ -48,7 +50,7 @@ describe('object-transformer', () => {
       }
     }
 
-    const objTransformer = new ObjectTransformerPlugin(msg, {options})
+    const objTransformer = new ObjectTransformerPlugin(msg, {options}, '')
 
     objTransformer.execute((err, transformedObj) => {
       expect(err).to.be.null
@@ -68,7 +70,7 @@ describe('object-transformer', () => {
       }
     }
 
-    const objTransformer = new ObjectTransformerPlugin(msg, {name:'convert-all', options})
+    const objTransformer = new ObjectTransformerPlugin(msg, {name:'convert-all', options}, '')
 
     objTransformer.execute((err, transformedObj) => {
       expect(err).to.be.null

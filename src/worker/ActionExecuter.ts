@@ -1,14 +1,12 @@
 import * as fs from 'fs'
 import * as path from 'path'
 
-import { extractModuleId } from './utils/plugins'
 import Action from "../model/Action"
 import Event from "../model/Event"
 import logger from '../services/logger'
 import plugins from './execution-plugins'
 
 const debug = require('debug')('action-executer')
-
 
 const loadPlugin = (prevMessage: string, action: Action, preLog: string, rabbit) => {
   if (plugins[action.type]) {

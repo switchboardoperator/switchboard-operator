@@ -43,7 +43,7 @@ class SwitchBoardOperator {
 
     app.use(express.static('public'))
 
-    app.set('views', __dirname + '/templates')
+    app.set('views', __dirname + '/../templates')
     // Nunjucks config
     expressNunjucks(app, {
       watch: false,
@@ -52,7 +52,7 @@ class SwitchBoardOperator {
     app.use('/diagrams', express.static(
       path.join(
         __dirname,
-        'node_modules/storm-react-diagrams/dist'
+        '/../node_modules/storm-react-diagrams/dist'
       )
     ))
 

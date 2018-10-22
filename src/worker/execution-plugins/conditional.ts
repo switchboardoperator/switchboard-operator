@@ -8,7 +8,7 @@ const flattenObject = (ob) => {
   var toReturn = {}
 
   for (var index in ob) {
-    if (!ob.hasOwnProperty(index)) {
+    if (!ob.hasOwnProperty || !ob.hasOwnProperty(index)) {
       continue
     }
 

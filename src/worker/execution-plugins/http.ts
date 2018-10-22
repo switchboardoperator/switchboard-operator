@@ -25,7 +25,7 @@ export default class HttpPlugin {
 
     this.options = new PluginOptionsSchema(action.options)
     if (this.options.isErrors()) {
-      throw new Error('The options provided are not valid '+ JSON.stringify(this.options.getErrors()))
+      throw new Error('The options provided are not valid ' + JSON.stringify(this.options.getErrors()))
     }
     this.preLog = preLog + ' > ' + action.name
   }
@@ -41,17 +41,18 @@ export default class HttpPlugin {
   }
 
   execute(callback) {
+    const method = this.options.method.toLowerCase()
     axios({
-      method: this.options.method.toLowerCase(),
+      method: method,
       url: this.renderUrl(),
-      data: this.populateData()
+      data: method !== 'get' ? this.populateData() : {}
     })
       .then((response) => {
         debug('Received the next response ' + JSON.stringify(response.data))
-        callback(null, response)
+        return callback(null, response.data)
       })
       .catch((err) => {
-        callback(new Error(`Error in the request ${err}`))
+        return callback(new Error(`Error in the request ${err}`))
       })
   }
 }
