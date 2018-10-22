@@ -15,7 +15,12 @@ describe('ActionExecuter', () => {
       }
     })
 
-    const actionExecuter = new ActionExecuter(action, rabbit, new Event({name: 'test', eventName: 'test', route: 'test', actions: []}))
+    const actionExecuter = new ActionExecuter(action, rabbit, new Event({
+      name: 'test',
+      eventName: 'test',
+      route: 'test',
+      actions: []
+    }))
 
     const msg = {
       body: {
@@ -30,4 +35,32 @@ describe('ActionExecuter', () => {
       done()
     })
   }).timeout(5000)
+
+  it('should handle conditional type action', (done) => {
+    const action = new Action({
+      name: 'myConditionalAction',
+      type: 'conditional',
+      options: {
+        conditions: {
+          field: 'test',
+          operation: 'defined'
+        }
+      }
+    })
+
+    const actionExecuter = new ActionExecuter(action, rabbit, new Event({name: 'test', eventName: 'test', route: 'test', actions: []}))
+
+    const msg = {
+      body: {
+        test: 'Test',
+        test2: 'Test2',
+        toString: () => '{test1: "Test", test2: "Test2"}'
+      }
+    }
+
+    actionExecuter.execute(msg, {}, (err) => {
+      expect(err).to.be.null
+      done()
+    })
+  })
 })

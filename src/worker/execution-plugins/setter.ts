@@ -3,7 +3,7 @@ import Action from "../../model/Action";
 const debug = require('debug')('setter-plugin')
 const SchemaObject = require('schema-object')
 
-const { logger } = require('../../utils/logger')
+import logger from '../../services/logger'
 
 const PluginOptionsSchema = new SchemaObject({
   fields: {

@@ -4,7 +4,7 @@ import Action from "../../model/Action";
 const SchemaObject = require('schema-object')
 const debug = require('debug')('prev2task-plugin')
 
-const { logger } = require('../../utils/logger')
+import logger from '../../services/logger'
 
 const PluginOptionsSchema = new SchemaObject({
   target: {

@@ -5,52 +5,17 @@ import { extractModuleId } from './utils/plugins'
 import Action from "../model/Action"
 import Event from "../model/Event"
 import logger from '../services/logger'
+import plugins from './execution-plugins'
 
 const debug = require('debug')('action-executer')
 
 
 const loadPlugin = (prevMessage: string, action: Action, preLog: string, rabbit) => {
-  const folder = path.resolve(__dirname, './execution-plugins')
-  debug('Loading pluginsPath %s', folder)
+  if (plugins[action.type]) {
+    return new plugins[action.type](prevMessage, action, preLog)
+  }
 
-  let module
-  let files = fs.readdirSync(folder)
-  debug('Files to analyse: %j', files)
-  files = files.filter((file) => file !== 'index.ts' && !file.match(/.*\.spec\.ts$/) && file !== 'index.js' && !file.match(/.*\.spec\.js$/))
-  debug('Filtered files to analyse: %j', files)
-
-  files.forEach((file) => {
-    const moduleName = path.resolve(folder, file)
-    debug('Trying to import the next plugin %s', moduleName)
-    const moduleId = extractModuleId(file)
-
-    // If the module is not the one we're looking for return
-    if (moduleId !== action.type) {
-      debug('The requested module %s isn\'t the one checked %s', action.type, moduleId)
-      return false
-    }
-
-    try {
-      const Module = require(moduleName)
-
-      // do not load if there's nothing in there
-      if (typeof Module === 'undefined') {
-        debug('Loaded file has undefined module, %j', Module)
-        return false
-      }
-
-      // Remove the extension to get an internal name
-
-      debug('Module successfull required, %s', moduleId)
-      // Instantiating module
-      module = new Module.default(prevMessage, action, preLog, rabbit)
-
-    } catch (err) {
-      logger.error('An error loading plugins has occurred, %j', err)
-    }
-  })
-
-  return module
+  return
 }
 
 export default class ActionExecuter {
@@ -83,8 +48,8 @@ export default class ActionExecuter {
     debug('Loaded the next modules: %j', executionPlugin)
 
     if (!executionPlugin) {
-      debug(`No action type has been defined for ${this.action}`)
-      return callback(new Error(`No action type has been defined for ${JSON.stringify(this.action)}`))
+      debug(`The plugin cannot be loaded for action: ${this.action}`)
+      return callback(new Error(`The plugin cannot be loaded for action: ${JSON.stringify(this.action)}`))
     }
 
     // Execute plugin and send result to callback

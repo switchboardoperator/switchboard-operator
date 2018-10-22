@@ -1,7 +1,7 @@
 const SchemaObject = require('schema-object')
 const debug = require('debug')('conditional-plugin')
 
-const { logger } = require('../../utils/logger')
+import logger from '../../services/logger'
 
 // Convert objecto to one level of deepness
 const flattenObject = (ob) => {
