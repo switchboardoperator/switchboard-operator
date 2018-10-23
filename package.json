@@ -2,10 +2,11 @@
   "name": "switchboard-operator-api",
   "version": "0.2.0",
   "description": "Handle the asyncronous communication between microservices using AMQP",
-  "main": "app.js",
+  "main": "built/app.js",
   "scripts": {
-    "test": "NODE_ENV=test node_modules/.bin/mocha --exit app.spec.js src/**/**.spec.js src/**/**/**.spec.js",
-    "start": "node app.js"
+    "test": "NODE_ENV=test node_modules/.bin/mocha --recursive --require ts-node/register --exit './src/**/*.spec.ts'",
+    "build": "tsc",
+    "start": "tsc && node built/app.js"
   },
   "repository": {
     "type": "git",
@@ -18,13 +19,24 @@
   "author": "Genar <genar@cirici.com>",
   "license": "MIT",
   "devDependencies": {
+    "@types/chai": "^4.1.4",
+    "@types/chai-http": "^3.0.5",
+    "@types/config": "^0.0.34",
+    "@types/express": "^4.16.0",
+    "@types/mocha": "^5.2.5",
+    "@types/node": "^10.5.2",
     "chai": "^4.1.2",
     "chai-as-promised": "^7.1.1",
     "chai-http": "^3.0.0",
-    "mocha": "^4.0.1"
+    "mocha": "^5.2.0",
+    "ts-node": "^7.0.0",
+    "tslint-config-standard": "^7.1.0",
+    "typescript": "^2.9.2",
+    "typescript-eslint-parser": "^18.0.0"
   },
   "dependencies": {
-    "axios": "^0.17.0",
+    "axios": "^0.18.0",
+    "axios-mock-adapter": "^1.15.0",
     "config": "^1.27.0",
     "express": "^4.16.2",
     "express-healthcheck": "^0.1.0",
@@ -36,7 +48,7 @@
     "rabbot": "^2.1.0",
     "schema-object": "^4.0.11",
     "sinon": "^4.4.2",
-    "storm-react-diagrams": "^3.1.2",
+    "storm-react-diagrams": "^5.2.1",
     "winston": "^2.4.0"
   }
 }

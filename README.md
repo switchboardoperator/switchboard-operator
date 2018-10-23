@@ -73,6 +73,7 @@ name: someUniqueName
 eventName: events.purchase
 route: updated
 enabled: true
+output: "interleaved|group|prefixed"
 actions:
   # Print event purchase logs
   - name: print-log

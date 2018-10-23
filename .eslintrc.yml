@@ -5,6 +5,7 @@ env:
   jasmine: true
   node: true
 extends: 'eslint:recommended'
+parser: typescript-eslint-parser
 parserOptions:
   sourceType: module
 rules:

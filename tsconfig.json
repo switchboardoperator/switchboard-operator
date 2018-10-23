@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "outDir": "./built",
+    "allowJs": true,
+    "target": "es6",
+    "module": "commonjs",
+    "typeRoots": [
+      "node_modules/@types",
+      "typings.d.ts"
+    ]
+  },
+  "include": [
+    "./src/**/*"
+  ]
+}
