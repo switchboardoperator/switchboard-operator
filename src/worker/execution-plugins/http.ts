@@ -16,6 +16,10 @@ const PluginOptionsSchema = new SchemaObject({
   merge: {
     type: Boolean,
     required: false
+  },
+  mergeTarget: {
+    type: String,
+    required: false
   }
 })
 
@@ -53,7 +57,17 @@ export default class HttpPlugin {
     })
       .then((response) => {
         debug('Received the next response ' + JSON.stringify(response.data))
-        const result = this.options.merge ? {...this.msg, ...response.data}: response.data
+        let result = {}
+
+        if (this.options.merge && !this.options.mergeTarget) {
+          result = {...this.msg, ...response.data}
+        }
+
+        if (this.options.merge && this.options.mergeTarget) {
+          result = {...this.msg}
+          result[this.options.mergeTarget] = response.data
+        }
+
         return callback(null, result)
       })
       .catch((err) => {

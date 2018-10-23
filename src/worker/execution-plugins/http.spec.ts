@@ -60,4 +60,27 @@ describe('http', () => {
       done()
     })
   })
+
+  it('should save the request response to the defined field', (done) => {
+    const action = new ActionSchema({
+      name: 'makeHttpRequest',
+      type: 'http',
+      options: {
+        url: 'http://localhost:3000/{{ hello }}',
+        method: 'GET',
+        merge: true,
+        mergeTarget: 'response'
+      }
+    })
+    const httpPlugin = new HttpPlugin(msg, action, 'test')
+
+    httpPlugin.execute((err, result) => {
+      if (err) {
+        done(err)
+      }
+
+      expect(result.response.myTopology).to.be.equal('test')
+      done()
+    })
+  })
 })

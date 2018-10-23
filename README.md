@@ -130,6 +130,8 @@ It makes a HTTP request, you can set the url using nunjucks templating. Ideal to
   options:
     url: http://someurl.com/{{accept_template_int}}
     method: GET|POST|PUT|etc
+    merge: true|false # We must merge response with the previous message
+    mergeTarget: 'someField' # Where to merge the response? If not specified will be merged on the root level
 ```
 
 #### conditional
