@@ -12,15 +12,19 @@ const PluginOptionsSchema = new SchemaObject({
     type: String,
     required: true,
     enum: ['GET', 'POST', 'PUT']
+  },
+  merge: {
+    type: Boolean,
+    required: false
   }
 })
 
 export default class HttpPlugin {
-  msg: string
+  msg: any
   options: any
   preLog: string
 
-  constructor(msg, action, preLog) {
+  constructor(msg: any, action: any, preLog: string) {
     this.msg = msg
 
     this.options = new PluginOptionsSchema(action.options)
@@ -49,7 +53,8 @@ export default class HttpPlugin {
     })
       .then((response) => {
         debug('Received the next response ' + JSON.stringify(response.data))
-        return callback(null, response.data)
+        const result = this.options.merge ? {...this.msg, ...response.data}: response.data
+        return callback(null, result)
       })
       .catch((err) => {
         return callback(new Error(`Error in the request ${err}`))

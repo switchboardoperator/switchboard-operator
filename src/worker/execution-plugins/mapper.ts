@@ -22,7 +22,7 @@ const PluginOptionsSchema = new SchemaObject({
 })
 
 export default class ObjectTransformerPlugin {
-  msg: string
+  msg: any
   action: Action
   options: any
   preLog: string

@@ -16,7 +16,8 @@ describe('http', () => {
     type: 'http',
     options: {
       url: 'http://localhost:3000/{{ hello }}',
-      method: 'GET'
+      method: 'GET',
+      merge: true
     }
   })
   const httpPlugin = new HttpPlugin(msg, action, 'test')
@@ -45,5 +46,18 @@ describe('http', () => {
     expect(result).to.equal('http://localhost:3000/topology')
 
     done()
+  })
+
+  it('should embed request response to the previous value', (done) => {
+    httpPlugin.execute((err, result) => {
+      if (err) {
+        done(err)
+      }
+
+      expect(result).to.be.an('object')
+      expect(result.myTopology).to.be.equal('test')
+      expect(result.hello).to.be.equal('topology')
+      done()
+    })
   })
 })
