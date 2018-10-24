@@ -13,6 +13,11 @@ describe('object-transformer', () => {
       sendEmail: {
         to: 'alerts@example.com'
       }
+    },
+    okCallbacks2: {
+      sendEmail: {
+        apikey: 1234,
+      }
     }
   }
 
