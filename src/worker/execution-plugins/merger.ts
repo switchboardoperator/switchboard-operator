@@ -3,6 +3,7 @@ import Action from "../../model/Action";
 const debug = require('debug')('merger-plugin')
 const SchemaObject = require('schema-object')
 const objectMapper = require('object-mapper')
+const merge = require('deepmerge')
 
 import logger from '../../services/logger'
 
@@ -54,7 +55,7 @@ export default class MergerPlugin {
     })
 
     const mergedResult = slicedObjects.reduce((prevObj: any, currObj: any) => {
-      return {...prevObj, ...currObj}
+      return merge(prevObj, currObj)
     })
 
     const result = objectMapper.setKeyValue({}, this.options.targetField, mergedResult)
