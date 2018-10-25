@@ -22,6 +22,9 @@ describe('merger', () => {
           four: 'four',
           five: 'five',
         }
+      },
+      valueNotToBeMerged: {
+        iMust: 'be on result'
       }
     }
 
@@ -40,6 +43,7 @@ describe('merger', () => {
       expect(mergedObj.newBody.deep).to.be.an('object')
       expect(mergedObj.newBody.deep.someValue).to.be.equal('test2')
       expect(Object.keys(mergedObj.newBody.deep.nestedValues).length).to.be.equal(5)
+      expect(mergedObj.valueNotToBeMerged.iMust).to.be.equal('be on result')
       done()
     })
   })

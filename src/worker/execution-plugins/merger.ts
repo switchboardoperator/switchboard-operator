@@ -58,7 +58,7 @@ export default class MergerPlugin {
       return merge(prevObj, currObj)
     })
 
-    const result = objectMapper.setKeyValue({}, this.options.targetField, mergedResult)
+    const result = objectMapper.setKeyValue(this.msg, this.options.targetField, mergedResult)
 
     logger.info(this.preLog, 'Object merged applied')
     return callback(null, result)
