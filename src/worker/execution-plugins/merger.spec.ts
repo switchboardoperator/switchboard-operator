@@ -23,6 +23,7 @@ describe('merger', () => {
           five: 'five',
         }
       },
+      payload3: undefined,
       valueNotToBeMerged: {
         iMust: 'be on result'
       }
@@ -31,7 +32,8 @@ describe('merger', () => {
     const options = {
       sourceFields: [
         'payload',
-        'payload2'
+        'payload2',
+        'payload3'
       ],
       targetField: 'newBody.deep'
     }

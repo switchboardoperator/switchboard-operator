@@ -51,7 +51,9 @@ export default class MergerPlugin {
     const slicedObjects = []
     this.options.sourceFields.forEach((key) => {
       const slicedObj = objectMapper.getKeyValue(this.msg, key)
-      slicedObjects.push(slicedObj)
+      if (slicedObj) {
+        slicedObjects.push(slicedObj)
+      }
     })
 
     const mergedResult = slicedObjects.reduce((prevObj: any, currObj: any) => {
