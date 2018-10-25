@@ -188,6 +188,22 @@ Manually set some object attributes to be consumed for the next operator's actio
       message: 'Payment set to true'
 ```
 
+#### merger
+
+deep-Merge specified input source keys to one output target key
+
+```yaml
+# Merge meta's ^^
+- name: bookingToEmailBody
+  type: merger
+  options:
+    sourceFields:
+    - 'accountObj.meta.eventsMetaDefaults'
+    - 'user.metaDefaults'
+    - 'user.transportDefaults'
+    targetField: 'transport.somDeeperField'
+```
+
 #### telegram
 
 In order to use telegram plugin you must set the telegram token in your config:

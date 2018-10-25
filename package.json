@@ -38,6 +38,7 @@
     "axios": "^0.18.0",
     "axios-mock-adapter": "^1.15.0",
     "config": "^1.27.0",
+    "deepmerge": "^2.2.1",
     "express": "^4.16.2",
     "express-healthcheck": "^0.1.0",
     "express-nunjucks": "^2.2.3",
