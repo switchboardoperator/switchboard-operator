@@ -8,9 +8,9 @@ import plugins from './execution-plugins'
 
 const debug = require('debug')('action-executer')
 
-const loadPlugin = (prevMessage: string, action: Action, preLog: string, rabbit) => {
+const loadPlugin = (prevMessage: string, action: Action, preLog: string, rabbit: any) => {
   if (plugins[action.type]) {
-    return new plugins[action.type](prevMessage, action, preLog)
+    return new plugins[action.type](prevMessage, action, preLog, rabbit)
   }
 
   return

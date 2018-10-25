@@ -1,11 +1,7 @@
 import Event from './Event'
 
-export default class Task extends Event{
-  route: string
-  name: string
-
-  constructor({name}) {
-    super({name: '', eventName: '', route: '', actions: []})
-    this.name = name
+export default class Task extends Event {
+  constructor({name, eventName, route}) {
+    super({name, eventName, route, actions: []})
   }
 }
