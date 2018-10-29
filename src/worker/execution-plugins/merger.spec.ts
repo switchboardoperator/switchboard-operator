@@ -49,6 +49,24 @@ describe('merger', () => {
     })
   })
 
+  it('merging keys should return strings, not objects', (done) => {
+    const options = {
+      sourceFields: [
+        'invented',
+        'payload.nestedValues.one',
+      ],
+      targetField: 'newBody.deep'
+    }
+
+    const objTransformer = new MergerPlugin(msg, {options}, '')
+
+    objTransformer.execute((err, mergedObj) => {
+      expect(err).to.be.null
+      expect(mergedObj.newBody.deep).to.be.an('string')
+      done()
+    })
+  })
+
   it('should merge even with empty objects from previous merges', (done) => {
     const options = {
       sourceFields: [
@@ -61,7 +79,7 @@ describe('merger', () => {
 
     objTransformer.execute((err, mergedObj) => {
       expect(err).to.be.null
-      expect(mergedObj.newBody.deep).to.be.an('object')
+      expect(mergedObj.newBody.deep).to.be.an('array')
       expect(Object.keys(mergedObj.newBody.deep).length).to.be.equal(0)
       done()
     })
