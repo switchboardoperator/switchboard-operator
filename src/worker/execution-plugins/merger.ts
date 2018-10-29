@@ -58,7 +58,7 @@ export default class MergerPlugin {
 
     const mergedResult = slicedObjects.reduce((prevObj: any, currObj: any) => {
       return merge(prevObj, currObj)
-    })
+    }, {})
 
     const result = objectMapper.setKeyValue(this.msg, this.options.targetField, mergedResult)
 
