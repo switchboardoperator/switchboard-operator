@@ -22,6 +22,11 @@ describe('merger', () => {
       }
     },
     payload3: undefined,
+    payload4: {
+      nestedValues: {
+        one: 'whatever',
+      },
+    },
     valueNotToBeMerged: {
       iMust: 'be on result'
     }
@@ -81,6 +86,25 @@ describe('merger', () => {
       expect(err).to.be.null
       expect(mergedObj.newBody.deep).to.be.an('array')
       expect(Object.keys(mergedObj.newBody.deep).length).to.be.equal(0)
+      done()
+    })
+  })
+
+  it('should merge strings even with empty objects from next merges', (done) => {
+    const options = {
+      sourceFields: [
+        'payload.nestedValues.one',
+        'payload4.nestedValues.one',
+      ],
+      targetField: 'newBody.deep'
+    }
+
+    const objTransformer = new MergerPlugin(msg, {options}, '')
+
+    objTransformer.execute((err, mergedObj) => {
+      expect(err).to.be.null
+      expect(mergedObj.newBody.deep).to.be.an('string')
+      expect(mergedObj.newBody.deep).to.equal('whatever')
       done()
     })
   })

@@ -57,6 +57,10 @@ export default class MergerPlugin {
     })
 
     const mergedResult = slicedObjects.reduce((prevObj: any, currObj: any) => {
+      if (typeof prevObj === 'string' && typeof currObj === 'string') {
+        return currObj
+      }
+
       return merge(prevObj, currObj)
     }, [])
 
