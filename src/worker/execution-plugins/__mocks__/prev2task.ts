@@ -1,6 +1,19 @@
-export const mockExecute = jest.fn()
-const mock = jest.fn().mockImplementation(() => ({
-  execute: () => console.log('Running prev2task plugin mock')
-}))
+import logger from "../../../services/logger"
+import Action from "../../../model/Action"
 
-export default mock
+export default class Prev2TaskPlugin {
+  msg: string
+  action: Action
+  preLog: string
+
+  constructor(msg, action, preLog) {
+    this.msg = msg,
+    this.action = action,
+    this.preLog = preLog
+  }
+
+  execute(cb) {
+    logger.info('Running prev2task plugin mock')
+    cb(null, this.msg)
+  }
+}

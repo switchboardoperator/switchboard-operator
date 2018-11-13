@@ -1,6 +1,19 @@
-export const mockExecute = jest.fn()
-const mock = jest.fn().mockImplementation(() => ({
-  execute: () => console.log('Running telegram plugin mock')
-}))
+import logger from "../../../services/logger"
+import Action from "../../../model/Action"
 
-export default mock
+export default class TelegramPlugin {
+  msg: string
+  action: Action
+  preLog: string
+
+  constructor(msg, action, preLog) {
+    this.msg = msg,
+    this.action = action,
+    this.preLog = preLog
+  }
+
+  execute(cb) {
+    logger.info('Running telegram plugin mock')
+    cb(null, this.msg)
+  }
+}
