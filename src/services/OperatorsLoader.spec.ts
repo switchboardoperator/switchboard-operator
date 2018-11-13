@@ -2,8 +2,6 @@ const sinon = require('sinon')
 const fs = require('fs')
 const { loadOperators } = require('./OperatorsLoader')
 
-const expect = require('chai').expect
-
 describe('operators-loader', () => {
   beforeEach(() => {
     sinon.stub(fs, 'readdirSync').callsFake(function () {
@@ -17,7 +15,7 @@ describe('operators-loader', () => {
     fs.readFileSync.restore()
   })
 
-  it('load all the defined operators', (done) => {
+  it('load all the defined operators', () => {
     sinon.stub(fs, 'readFileSync').returns(`
 # Execute every time a purchase is update
 name: eventPurchases
@@ -30,13 +28,11 @@ actions:
 `)
     const loadedOperators = loadOperators()
 
-    expect(loadedOperators).to.be.a('array')
-    expect(loadedOperators.length).to.equal(3)
-
-    done()
+    expect(Array.isArray(loadedOperators)).toBeTruthy()
+    expect(loadedOperators.length).toEqual(3)
   })
 
-  it('should ignore the operator if enabled is set to false', (done) => {
+  it('should ignore the operator if enabled is set to false', () => {
     sinon.stub(fs, 'readFileSync').returns(`
 # Execute every time a purchase is update
 name: eventPurchases
@@ -50,9 +46,7 @@ actions:
 `)
     const loadedOperators = loadOperators()
 
-    expect(loadedOperators).to.be.a('array')
-    expect(loadedOperators.length).to.equal(0)
-
-    done()
+    expect(Array.isArray(loadedOperators)).toBeTruthy()
+    expect(loadedOperators.length).toEqual(0)
   })
 })

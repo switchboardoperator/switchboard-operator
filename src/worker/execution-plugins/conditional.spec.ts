@@ -38,7 +38,7 @@ describe('conditional', () => {
     })
     const passingConditionalPlugin = new ConditionalPlugin(msg, passingAction, '')
 
-    expect(passingConditionalPlugin.checkConditions()).to.be.true
+    expect(passingConditionalPlugin.checkConditions()).toBe(true)
   })
 
   it('should checkConditions() should make !== operation', () => {

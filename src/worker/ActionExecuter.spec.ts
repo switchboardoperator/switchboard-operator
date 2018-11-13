@@ -1,11 +1,10 @@
-import { expect } from 'chai'
 import * as rabbit from 'rabbot'
 import ActionExecuter from './ActionExecuter'
 import Action from '../model/Action'
 import Event from '../model/Event'
 
 describe('ActionExecuter', () => {
-  it('should handle comming events', (done) => {
+  it('should handle comming events', () => {
     const action = new Action({
       name: 'sendMembershipsToEmail',
       type: 'log',
@@ -31,12 +30,11 @@ describe('ActionExecuter', () => {
     }
 
     actionExecuter.execute(msg, {}, (err) => {
-      expect(err).to.not.be.undefined
-      done()
+      expect(err).toBe(null)
     })
-  }).timeout(5000)
+  })
 
-  it('should handle conditional type action', (done) => {
+  it('should handle conditional type action', () => {
     const action = new Action({
       name: 'myConditionalAction',
       type: 'conditional',
@@ -59,8 +57,7 @@ describe('ActionExecuter', () => {
     }
 
     actionExecuter.execute(msg, {}, (err) => {
-      expect(err).to.be.null
-      done()
+      expect(err).toBe(null)
     })
   })
 })

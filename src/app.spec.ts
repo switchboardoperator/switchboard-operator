@@ -1,32 +1,18 @@
-import * as chai from 'chai'
-import ChaiHttp = require('chai-http')
+import * as request from 'supertest'
 import SwitchBoardOperator from './app'
-
-const expect = chai.expect
-chai.use(ChaiHttp)
 
 describe('main app', () => {
   it('expressjs should listen on port 3000', (done) => {
-    chai.request(SwitchBoardOperator.app)
+    request(SwitchBoardOperator.app)
       .get('/status')
-      .end((err, res) => {
-        if (err) {
-          done(err)
-        }
-        expect(res).to.have.status(200)
-        return done()
-      })
+      .expect(200)
+    done()
   })
 
   it('should render topology configuration as diagrams', (done) => {
-    chai.request(SwitchBoardOperator.app)
+    request(SwitchBoardOperator.app)
       .get('/topology')
-      .end((err, res) => {
-        if (err) {
-          done(err)
-        }
-        expect(res).to.have.status(200)
-        return done()
-      })
+      .expect(200)
+    done()
   })
 })
