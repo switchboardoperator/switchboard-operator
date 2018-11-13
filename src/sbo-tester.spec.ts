@@ -1,6 +1,5 @@
 import * as fs from 'fs'
 import * as config from 'config'
-import sinon from 'sinon'
 
 import { loadOperators } from '../built/services/OperatorsLoader'
 import ActionCreator from './worker/ActionCreator'
@@ -10,6 +9,8 @@ import Topology from './amqp/Topology'
 import Event from './model/Event'
 import Config from './model/Config'
 import TelegramPlugin from './worker/execution-plugins/telegram'
+
+jest.mock('./worker/execution-plugins/telegram')
 
 describe('switchboard-operator', () => {
   it('test', () => {
@@ -23,8 +24,6 @@ describe('switchboard-operator', () => {
       // Checks if file exists
       fs.accessSync(filename, fs.constants.R_OK)
       const json = JSON.parse(fs.readFileSync(filename).toString())
-
-      sinon.stub(TelegramPlugin.prototype, 'execute', () => 'mock')
 
       events.forEach((event) => {
         const eventObj = new Event(event)

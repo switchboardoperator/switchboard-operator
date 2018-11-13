@@ -17,18 +17,32 @@
     "rabbitmq"
   ],
   "author": "Genar <genar@cirici.com>",
+  "contributors": [
+    {
+      "name": "Òscar Casajuana",
+      "email": "oscar@alvarium.io",
+      "url": "https://sourcerer.io/elboletaire"
+    },
+    {
+      "name": "Alexander Arce",
+      "email": "alexander@alvarium.io"
+    }
+  ],
   "license": "MIT",
   "devDependencies": {
     "@types/chai": "^4.1.4",
     "@types/chai-http": "^3.0.5",
     "@types/config": "^0.0.34",
     "@types/express": "^4.16.0",
+    "@types/jest": "^23.3.9",
     "@types/mocha": "^5.2.5",
     "@types/node": "^10.5.2",
     "chai": "^4.1.2",
     "chai-as-promised": "^7.1.1",
     "chai-http": "^3.0.0",
+    "jest": "^23.6.0",
     "mocha": "^5.2.0",
+    "ts-jest": "^23.10.4",
     "ts-node": "^7.0.0",
     "tslint-config-standard": "^7.1.0",
     "typescript": "^2.9.2",
@@ -51,5 +65,22 @@
     "sinon": "^7.1.1",
     "storm-react-diagrams": "^5.2.1",
     "winston": "^2.4.0"
+  },
+  "jest": {
+    "roots": [
+      "<rootDir>/src"
+    ],
+    "transform": {
+      "^.+\\.tsx?$": "ts-jest"
+    },
+    "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.tsx?$",
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "jsx",
+      "json",
+      "node"
+    ]
   }
 }
