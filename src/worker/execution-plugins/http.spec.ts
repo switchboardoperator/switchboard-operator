@@ -1,11 +1,8 @@
 import axios from 'axios'
-import * as chai from 'chai'
 import MockAdapter from 'axios-mock-adapter'
 
 import ActionSchema from '../../model/Action'
 import HttpPlugin from './http'
-
-const expect = chai.expect
 
 describe('http', () => {
   const msg = {
@@ -27,41 +24,38 @@ describe('http', () => {
     myTopology: 'test'
   })
 
-  it('should make the http request', (done) => {
+  it('should make the http request', () => {
     httpPlugin.execute((err, result) => {
       if (err) {
-        done(err)
+        throw err
       }
 
-      expect(result).to.be.an('object')
-      expect(result.myTopology).to.be.equal('test')
-      done()
+      expect(typeof result).toEqual('object')
+      expect(result.myTopology).toEqual('test')
     })
   })
 
-  it('should apply templating to provided url', (done) => {
+  it('should apply templating to provided url', () => {
     const result = httpPlugin.renderUrl()
 
-    expect(result).to.be.a('String')
-    expect(result).to.equal('http://localhost:3000/topology')
+    expect(typeof result).toEqual('string')
+    expect(result).toEqual('http://localhost:3000/topology')
 
-    done()
   })
 
-  it('should embed request response to the previous value', (done) => {
+  it('should embed request response to the previous value', () => {
     httpPlugin.execute((err, result) => {
       if (err) {
-        done(err)
+        throw err
       }
 
-      expect(result).to.be.an('object')
-      expect(result.myTopology).to.be.equal('test')
-      expect(result.hello).to.be.equal('topology')
-      done()
+      expect(typeof result).toEqual('object')
+      expect(result.myTopology).toEqual('test')
+      expect(result.hello).toEqual('topology')
     })
   })
 
-  it('should save the request response to the defined field', (done) => {
+  it('should save the request response to the defined field', () => {
     const action = new ActionSchema({
       name: 'makeHttpRequest',
       type: 'http',
@@ -76,11 +70,10 @@ describe('http', () => {
 
     httpPlugin.execute((err, result) => {
       if (err) {
-        done(err)
+        throw err
       }
 
-      expect(result.response.myTopology).to.be.equal('test')
-      done()
+      expect(result.response.myTopology).toEqual('test')
     })
   })
 })

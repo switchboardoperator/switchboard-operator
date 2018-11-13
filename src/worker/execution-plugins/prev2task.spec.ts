@@ -1,12 +1,8 @@
-import * as chai from 'chai'
-
 import Action from '../../model/Action'
 import Prev2TaskPlugin from './prev2task'
 
-const expect = chai.expect
-
 describe('prev2task', () => {
-  it('should send the event to a task', (done) => {
+  it('should send the event to a task', () => {
     const msg = {}
     const action = new Action({
       name: 'event2task',
@@ -21,10 +17,10 @@ describe('prev2task', () => {
     }
     const event2Task = new Prev2TaskPlugin(msg, action, '', rabbit)
 
-    event2Task.execute((error, msg) => {
-      expect(msg).to.be.a('Object')
+    expect.assertions(1)
 
-      done()
+    event2Task.execute((error, msg) => {
+      expect(typeof msg).toBe('object')
     })
   })
 })

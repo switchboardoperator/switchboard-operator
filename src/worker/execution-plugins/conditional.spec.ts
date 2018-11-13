@@ -1,13 +1,5 @@
-import * as chai from 'chai'
-const chaiAsPromised = require('chai-as-promised')
-
 import Action from '../../model/Action'
 import ConditionalPlugin from './conditional'
-
-chai.use(chaiAsPromised)
-
-
-const expect = chai.expect
 
 describe('conditional', () => {
   const msg = {
@@ -28,8 +20,8 @@ describe('conditional', () => {
   })
   const conditionalPlugin = new ConditionalPlugin(msg, action, '')
 
-  it('should checkConditions() should make === operation', (done) => {
-    expect(conditionalPlugin.checkConditions()).to.be.false
+  it('should checkConditions() should make === operation', () => {
+    return expect(conditionalPlugin.checkConditions()).toBe(false)
 
     const passingAction = new Action({
       name: 'testing-checks',
@@ -47,12 +39,10 @@ describe('conditional', () => {
     const passingConditionalPlugin = new ConditionalPlugin(msg, passingAction, '')
 
     expect(passingConditionalPlugin.checkConditions()).to.be.true
-
-    done()
   })
 
-  it('should checkConditions() should make !== operation', (done) => {
-    expect(conditionalPlugin.checkConditions()).to.be.false
+  it('should checkConditions() should make !== operation', () => {
+    return expect(conditionalPlugin.checkConditions()).toBe(false)
 
     const passingAction = new Action({
       name: 'testing-checks',
@@ -69,12 +59,10 @@ describe('conditional', () => {
     })
     const passingConditionalPlugin = new ConditionalPlugin(msg, passingAction, '')
 
-    expect(passingConditionalPlugin.checkConditions()).to.be.false
-
-    done()
+    return expect(passingConditionalPlugin.checkConditions()).toBe(false)
   })
 
-  it('should return false if the field doesn\'t exists', (done) => {
+  it('should return false if the field doesn\'t exists', () => {
 
     const msg = {
       content: {
@@ -96,12 +84,10 @@ describe('conditional', () => {
     })
     const passingConditionalPlugin = new ConditionalPlugin(msg, passingAction, '')
 
-    expect(passingConditionalPlugin.checkConditions()).to.be.false
-
-    done()
+    return expect(passingConditionalPlugin.checkConditions()).toBe(false)
   })
 
-  it('should return false if one of the checks fails', (done) => {
+  it('should return false if one of the checks fails', () => {
     const msg = {}
 
     const nonPassingAction = new Action({
@@ -128,8 +114,6 @@ describe('conditional', () => {
 
     const nonPassingConditionalPlugin = new ConditionalPlugin(msg, nonPassingAction, '')
 
-    expect(nonPassingConditionalPlugin.checkConditions()).to.be.false
-
-    done()
+    return expect(nonPassingConditionalPlugin.checkConditions()).toBe(false)
   })
 })

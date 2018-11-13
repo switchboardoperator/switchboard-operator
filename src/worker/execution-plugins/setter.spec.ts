@@ -1,13 +1,9 @@
-import * as chai from 'chai'
-
 import SetterPlugin from './setter'
-
-const expect = chai.expect
 
 describe('setter', () => {
   const msg = {}
 
-  it('should convert msg payload to transformed object', (done) => {
+  it('should convert msg payload to transformed object', () => {
     const options = {
       fields: {
         test: 'value'
@@ -17,9 +13,8 @@ describe('setter', () => {
     const objTransformer = new SetterPlugin(msg, {options}, '')
 
     objTransformer.execute((err, setObj) => {
-      expect(err).to.be.null
-      expect(setObj.test).to.equal('value')
-      done()
+      expect(err).toBe(null)
+      expect(setObj.test).toEqual('value')
     })
   })
 })

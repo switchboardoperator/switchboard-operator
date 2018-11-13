@@ -1,8 +1,4 @@
-import * as chai from 'chai'
-
 import ObjectTransformerPlugin from './mapper'
-
-const expect = chai.expect
 
 describe('object-transformer', () => {
   const msg = {
@@ -21,7 +17,7 @@ describe('object-transformer', () => {
     }
   }
 
-  it('should convert msg payload to transformed object', (done) => {
+  it('should convert msg payload to transformed object', () => {
     const options = {
       fields: {
         name: 'vars.nom',
@@ -33,17 +29,18 @@ describe('object-transformer', () => {
 
     const objTransformer = new ObjectTransformerPlugin(msg, {options}, '')
 
+    expect.assertions(5)
+
     objTransformer.execute((err, transformedObj) => {
-      expect(err).to.be.null
-      expect(transformedObj).to.be.a('Object')
-      expect(transformedObj.vars).to.be.a('Object')
-      expect(transformedObj.vars.nom).to.equal('John')
-      expect(transformedObj.vars.to).to.equal('alerts@example.com')
-      done()
+      expect(err).toBe(null)
+      expect(typeof transformedObj).toEqual('object')
+      expect(typeof transformedObj.vars).toEqual('object')
+      expect(transformedObj.vars.nom).toEqual('John')
+      expect(transformedObj.vars.to).toEqual('alerts@example.com')
     })
   })
 
-  it('should convert msg to transformed object but merging last values with new ones', (done) => {
+  it('should convert msg to transformed object but merging last values with new ones', () => {
 
     const options = {
       merge: true,
@@ -57,16 +54,17 @@ describe('object-transformer', () => {
 
     const objTransformer = new ObjectTransformerPlugin(msg, {options}, '')
 
+    expect.assertions(4)
+
     objTransformer.execute((err, transformedObj) => {
-      expect(err).to.be.null
-      expect(transformedObj).to.be.a('Object')
-      expect(transformedObj.name).to.equal('John')
-      expect(transformedObj.vars.nom).to.equal('John')
-      done()
+      expect(err).toBe(null)
+      expect(typeof transformedObj).toEqual('object')
+      expect(transformedObj.name).toEqual('John')
+      expect(transformedObj.vars.nom).toEqual('John')
     })
   })
 
-  it('should convert all the source object in a property of the target object', (done) => {
+  it('should convert all the source object in a property of the target object', () => {
     const options = {
       copy: [
         'vars'
@@ -77,13 +75,14 @@ describe('object-transformer', () => {
 
     const objTransformer = new ObjectTransformerPlugin(msg, {name:'convert-all', options}, '')
 
+    expect.assertions(5)
+
     objTransformer.execute((err, transformedObj) => {
-      expect(err).to.be.null
-      expect(transformedObj).to.be.a('Object')
-      expect(transformedObj.vars).to.be.a('Object')
-      expect(transformedObj.vars.name).to.equal('John')
-      expect(transformedObj.vars.lastName).to.equal('Doe')
-      done()
+      expect(err).toBe(null)
+      expect(typeof transformedObj).toEqual('object')
+      expect(typeof transformedObj.vars).toEqual('object')
+      expect(transformedObj.vars.name).toEqual('John')
+      expect(transformedObj.vars.lastName).toEqual('Doe')
     })
   })
 })
