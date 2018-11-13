@@ -1,0 +1,73 @@
+name: membershipsPreregisterEmails
+eventName: memberships
+route: created
+actions:
+
+  # Send membership to logs for debugging purposes
+  - name: logMembership
+    type: log
+
+  # Check if membership has okCallbacks asking to send email
+  - name: shouldSendEmail
+    type: conditional
+    options:
+      conditions:
+        - field: payload.okCallbacks.sendEmail.from
+          operation: defined
+        - field: payload.pack.type
+          operation: '==='
+          checkValue: 'pre-register'
+
+  # Transform payload to be sent to emails queue
+  - name: membershipToEmailMapper
+    type: mapper
+    options:
+      fields:
+        'payload.member': 'vars'
+        'payload.member.email': 'to'
+        'payload.pack': 'vars.pack'
+        'payload.okCallbacks': 'vars.okCallbacks'
+        'payload.okCallbacks.sendEmail.from': 'from'
+        'payload.okCallbacks.sendEmail.template': 'template'
+        'payload.okCallbacks.sendEmail.subject': 'subject'
+        'payload.okCallbacks.sendEmail.transport': 'transport'
+
+  # Send membership to logs for debugging purposes
+  - name: logEmailBeforeSend
+    type: log
+
+  - name: sendPreinscriptionNotificationToTg
+    type: telegram
+    options:
+      chatId: '-197073180'
+      template: 'A new member with email {{ to }} has been pre-registered to {{ vars.pack.name }} {{ vars.pack.meta.centerName }}'
+
+  # Send membership to emails queue applying
+  - name: sendMembershipToEmailQueue
+    type: prev2task
+    options:
+      target: emails
+      targetRoute: email.send
+
+  # Check if should send copy email
+  - name: shouldSendCopyEmail
+    type: conditional
+    options:
+      conditions:
+        - field: vars.okCallbacks.sendEmail.copyEmail
+          operation: defined
+
+  # Convert previous email to copyEmail
+  - name: preregisterToCopyEmailMapper
+    type: mapper
+    options:
+      merge: true
+      fields:
+        'vars.okCallbacks.sendEmail.copyEmail': 'to'
+
+  # Send membership to emails queue applying
+  - name: sendPreRegisterCopyEmailToEmailQueue
+    type: prev2task
+    options:
+      target: emails
+      targetRoute: email.send

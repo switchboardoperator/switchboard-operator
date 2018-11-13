@@ -1,0 +1,28 @@
+{
+  "membershipsPreregisterEmails": {
+    "input": {
+      "payload": {
+        "okCallbacks": {
+          "sendEmail": {
+            "from": "",
+            "template": "",
+            "subject": "",
+            "transport": "",
+            "copyEmail": ""
+          }
+        },
+        "pack": {
+          "type": "pre-register",
+          "name": "",
+          "meta": {
+            "centerName": ""
+          }
+        },
+        "member": {
+          "email": ""
+        }
+      }
+    },
+    "output": {}
+  }
+}
