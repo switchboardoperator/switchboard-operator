@@ -2,27 +2,17 @@ const path = require('path')
 
 const fs = jest.genMockFromModule('fs')
 
-console.log('MOOOOOOOOOOCK LOOOOAAAADEEED')
-
 // This is a custom function that our tests can use during setup to specify
 // what the files on the "mock" filesystem should look like when any of the
 // `fs` APIs are used.
 let mockFiles = Object.create(null)
 let dirContents = Object.create(null)
 function __setMockFiles(newMockFiles) {
-  mockFiles = Object.create(null)
-  for (const file in newMockFiles) {
-    const dir = path.dirname(file)
-
-    if (!mockFiles[dir]) {
-      mockFiles[dir] = []
-    }
-    mockFiles[dir].push(path.basename(file))
-  }
+  mockFiles = newMockFiles
 }
 
-function __setDirsContents(contents) {
-  dirContents = contents
+function __setDirsContents(mockDirs) {
+  dirContents = mockDirs
 }
 
 // A custom version of `readFileSync` that reads from the special mocked out
@@ -32,9 +22,7 @@ function readFileSync(filePath) {
 
   Object.keys(mockFiles).forEach((file) => {
     const fileRE = new RegExp(file)
-
     if (fileRE.test(filePath)) {
-      console.log('Returning file contents...', mockFiles[file])
       return contents = mockFiles[file]
     }
   })
@@ -43,7 +31,7 @@ function readFileSync(filePath) {
 }
 
 // A custom version of `readdirSync` that reads from the special mocked out
-// file list set via __setDirsContents
+// dir list set via __setDirsContents
 function readdirSync(directoryPath) {
   let contents = []
 
