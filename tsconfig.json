@@ -7,9 +7,10 @@
     "typeRoots": [
       "node_modules/@types",
       "typings.d.ts"
-    ]
+    ],
+    "skipLibCheck": true
   },
   "include": [
-    "./src/**/*"
+    "./src/**/*",
   ]
 }
