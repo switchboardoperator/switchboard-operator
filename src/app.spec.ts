@@ -1,6 +1,10 @@
 import request from 'supertest'
 import SwitchBoardOperator from './app'
 
+afterAll(() => {
+  SwitchBoardOperator.app.close();
+})
+
 describe('main app', () => {
   it('expressjs should listen on port 3000', (done) => {
     request(SwitchBoardOperator.app)
