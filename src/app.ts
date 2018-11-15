@@ -18,6 +18,7 @@ class SwitchBoardOperator {
   topology: Topology
   rabbotClient: any
   public app: any
+  public server: any
 
   constructor() {
     this.mergedConfig = Object.assign(config.get('topology'), {
@@ -69,7 +70,7 @@ class SwitchBoardOperator {
       })
     })
 
-    app.listen(3000, () => {
+    this.server = app.listen(3000, () => {
       logger.info('SwitchBoard Operator listening on port 3000!')
     })
 

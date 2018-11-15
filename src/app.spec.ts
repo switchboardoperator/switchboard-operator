@@ -2,7 +2,7 @@ import request from 'supertest'
 import SwitchBoardOperator from './app'
 
 afterAll(() => {
-  SwitchBoardOperator.app.close();
+  SwitchBoardOperator.server.close();
 })
 
 describe('main app', () => {
