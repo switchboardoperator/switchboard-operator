@@ -7,7 +7,7 @@ stages:
   before_script:
   - yarn
   script:
-  - yarn test
+  - yarn test --detectOpenHandles
 
 node-7:
   <<: *test
