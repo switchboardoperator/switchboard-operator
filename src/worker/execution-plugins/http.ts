@@ -1,27 +1,8 @@
+import { PluginOptionsSchema } from '../../schemas/PluginOptionsSchema'
+
 const debug = require('debug')('http-plugin')
-const SchemaObject = require('schema-object')
 const axios = require('axios')
 const nunjucks = require('nunjucks')
-
-const PluginOptionsSchema = new SchemaObject({
-  url: {
-    type: String,
-    required: true
-  },
-  method: {
-    type: String,
-    required: true,
-    enum: ['GET', 'POST', 'PUT']
-  },
-  merge: {
-    type: Boolean,
-    required: false
-  },
-  mergeTarget: {
-    type: String,
-    required: false
-  }
-})
 
 export default class HttpPlugin {
   msg: any
