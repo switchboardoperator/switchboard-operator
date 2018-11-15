@@ -42,7 +42,6 @@ describe('http', () => {
 
     expect(typeof result).toEqual('string')
     expect(result).toEqual('http://localhost:3000/topology')
-
   })
 
   it('should embed request response to the previous value', () => {

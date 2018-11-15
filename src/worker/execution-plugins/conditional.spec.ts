@@ -22,7 +22,7 @@ describe('conditional', () => {
   const conditionalPlugin = new ConditionalPlugin(msg, action, '')
 
   it('should checkConditions() should make === operation', () => {
-    return expect(conditionalPlugin.checkConditions()).toBe(false)
+    return expect(conditionalPlugin.checkConditions()).toBeFalsy()
 
     const passingAction = new Action({
       name: 'testing-checks',
@@ -40,11 +40,11 @@ describe('conditional', () => {
     })
     const passingConditionalPlugin = new ConditionalPlugin(msg, passingAction, '')
 
-    expect(passingConditionalPlugin.checkConditions()).toBe(true)
+    expect(passingConditionalPlugin.checkConditions()).toBeTruthy()
   })
 
   it('should checkConditions() should make !== operation', () => {
-    return expect(conditionalPlugin.checkConditions()).toBe(false)
+    return expect(conditionalPlugin.checkConditions()).toBeFalsy()
 
     const passingAction = new Action({
       name: 'testing-checks',
@@ -62,7 +62,7 @@ describe('conditional', () => {
     })
     const passingConditionalPlugin = new ConditionalPlugin(msg, passingAction, '')
 
-    return expect(passingConditionalPlugin.checkConditions()).toBe(false)
+    return expect(passingConditionalPlugin.checkConditions()).toBeFalsy()
   })
 
   it('should return false if the field doesn\'t exists', () => {
@@ -88,7 +88,7 @@ describe('conditional', () => {
     })
     const passingConditionalPlugin = new ConditionalPlugin(msg, passingAction, '')
 
-    return expect(passingConditionalPlugin.checkConditions()).toBe(false)
+    return expect(passingConditionalPlugin.checkConditions()).toBeFalsy()
   })
 
   it('should return false if one of the checks fails', () => {
@@ -119,6 +119,6 @@ describe('conditional', () => {
 
     const nonPassingConditionalPlugin = new ConditionalPlugin(msg, nonPassingAction, '')
 
-    return expect(nonPassingConditionalPlugin.checkConditions()).toBe(false)
+    return expect(nonPassingConditionalPlugin.checkConditions()).toBeFalsy()
   })
 })

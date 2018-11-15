@@ -80,5 +80,8 @@ describe('ActionCreator', () => {
       .then((results) => {
         return expect(typeof results).toBe('object')
       })
+      .catch((e) => {
+        return expect(e).toBeFalsy()
+      })
   })
 })
