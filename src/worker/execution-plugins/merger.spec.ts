@@ -82,10 +82,10 @@ describe('merger', () => {
 
     expect.assertions(3)
 
-    objTransformer.execute((err, mergedObj) => {
+    return objTransformer.execute((err, mergedObj) => {
       expect(err).toBe(null)
       expect(Array.isArray(mergedObj.newBody.deep)).toBeTruthy()
-      expect(Object.keys(mergedObj.newBody.deep).length).toBeFalsy()
+      return expect(Object.keys(mergedObj.newBody.deep).length).toBeFalsy()
     })
   })
 
@@ -104,7 +104,7 @@ describe('merger', () => {
     return objTransformer.execute((err, mergedObj) => {
       expect(err).toBe(null)
       expect(typeof mergedObj.newBody.deep).toBe('string')
-      expect(mergedObj.newBody.deep).toEqual('whatever')
+      return expect(mergedObj.newBody.deep).toEqual('whatever')
     })
   })
 })
