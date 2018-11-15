@@ -429,6 +429,9 @@ The tester should look like:
 }
 ~~~
 
+Running `yarn test-operators`:
+
+[![asciicast](https://asciinema.org/a/anUUbfqvuI7XoOjnmmB1RZFMe.svg)](https://asciinema.org/a/anUUbfqvuI7XoOjnmmB1RZFMe)
 
 ## Usage with docker
 
