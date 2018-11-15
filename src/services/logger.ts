@@ -6,7 +6,9 @@ const Logger = new (winston.Logger)({
       timestamp: () => {
         return Date.now()
       },
-    })
+      colorize: true,
+      silent: process.env.NODE_ENV === 'test',
+    }),
   ]
 })
 
