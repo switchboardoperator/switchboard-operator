@@ -1,5 +1,5 @@
 const topologyExampleConf = require('./test/configurationFixtures.json')
-import * as rabbit from 'rabbot'
+import rabbit from 'rabbot'
 
 import Topology from './Topology'
 import RabbotClient from './RabbotClient'
