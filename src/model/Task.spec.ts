@@ -1,5 +1,3 @@
-import { expect } from 'chai'
-
 import Task from "./Task"
 
 describe('Task', () => {
@@ -10,9 +8,9 @@ describe('Task', () => {
       route: 'testRoute'
     })
 
-    expect(task.name).to.equals('testing')
-    expect(task.eventName).to.equals('testTarget')
-    expect(task.route).to.equals('testRoute')
+    expect(task.name).toEqual('testing')
+    expect(task.eventName).toEqual('testTarget')
+    expect(task.route).toEqual('testRoute')
 
     done()
   })
