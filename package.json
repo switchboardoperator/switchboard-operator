@@ -4,7 +4,8 @@
   "description": "Handle the asyncronous communication between microservices using AMQP",
   "main": "built/app.js",
   "scripts": {
-    "test": "NODE_ENV=test jest",
+    "test": "NODE_ENV=test jest src/*",
+    "test-operators": "NODE_ENV=test-operators jest test/*",
     "build": "tsc",
     "start": "tsc && node built/app.js"
   },
@@ -70,7 +71,8 @@
   },
   "jest": {
     "roots": [
-      "<rootDir>/src"
+      "<rootDir>/src",
+      "<rootDir>/test"
     ],
     "transform": {
       "^.+\\.tsx?$": "ts-jest"
