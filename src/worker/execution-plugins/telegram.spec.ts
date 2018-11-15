@@ -12,7 +12,8 @@ describe('telegram', () => {
     options: {
       chatId: '1324',
       template: 'Test'
-    }
+    },
+    event: 'event-name',
   })
 
   it('should allow to be initialized with passed configurations', () => {

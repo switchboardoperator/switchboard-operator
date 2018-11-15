@@ -46,12 +46,14 @@ describe('ActionCreator', () => {
     const action = new Action({
       name: 'mapper1',
       type: 'mapper',
+      event: 'event-name',
       options
     })
 
     const action2 = new Action({
       name: 'mapper2',
       type: 'mapper',
+      event: 'event-name',
       options
     })
 

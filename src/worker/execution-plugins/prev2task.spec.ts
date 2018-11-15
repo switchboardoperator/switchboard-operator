@@ -10,7 +10,8 @@ describe('prev2task', () => {
       options: {
         target: 'some-queue',
         targetRoute: 'some-route'
-      }
+      },
+      event: 'event-name',
     })
     const rabbit = {
       publish: () => Promise.resolve({})

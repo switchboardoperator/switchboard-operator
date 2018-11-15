@@ -7,6 +7,7 @@ describe('Action', () => {
   const params = {
     name: 'testAction',
     type: 'some-type',
+    event: 'name-event',
     options: {}
   }
   const testAction = new Action(params)

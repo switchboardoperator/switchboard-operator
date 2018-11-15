@@ -6,7 +6,8 @@ describe('log', () => {
     const action = new Action({
       name: 'log',
       type: 'log',
-      options: {}
+      options: {},
+      event: 'event-name',
     })
 
     const logPlugin = new LogPlugin({test: 'value', test2: 'value2'}, action, 'preLog')

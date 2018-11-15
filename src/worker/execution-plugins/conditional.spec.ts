@@ -16,7 +16,8 @@ describe('conditional', () => {
           checkValue: 'test'
         }
       ]
-    }
+    },
+    event: 'event-name',
   })
   const conditionalPlugin = new ConditionalPlugin(msg, action, '')
 
@@ -34,7 +35,8 @@ describe('conditional', () => {
             checkValue: 'world'
           }
         ]
-      }
+      },
+      event: 'event-name',
     })
     const passingConditionalPlugin = new ConditionalPlugin(msg, passingAction, '')
 
@@ -55,7 +57,8 @@ describe('conditional', () => {
             checkValue: 'world'
           }
         ]
-      }
+      },
+      event: 'event-name',
     })
     const passingConditionalPlugin = new ConditionalPlugin(msg, passingAction, '')
 
@@ -80,7 +83,8 @@ describe('conditional', () => {
             operation: 'defined'
           }
         ]
-      }
+      },
+      event: 'event-name',
     })
     const passingConditionalPlugin = new ConditionalPlugin(msg, passingAction, '')
 
@@ -109,7 +113,8 @@ describe('conditional', () => {
             operation: 'defined'
           }
         ]
-      }
+      },
+      event: 'event-name',
     })
 
     const nonPassingConditionalPlugin = new ConditionalPlugin(msg, nonPassingAction, '')

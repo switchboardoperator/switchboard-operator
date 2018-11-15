@@ -15,7 +15,8 @@ describe('http', () => {
       url: 'http://localhost:3000/{{ hello }}',
       method: 'GET',
       merge: true
-    }
+    },
+    event: 'name-event',
   })
   const httpPlugin = new HttpPlugin(msg, action, 'test')
   const mock = new MockAdapter(axios)
@@ -64,7 +65,8 @@ describe('http', () => {
         method: 'GET',
         merge: true,
         mergeTarget: 'response'
-      }
+      },
+      event: 'name-event',
     })
     const httpPlugin = new HttpPlugin(msg, action, 'test')
 

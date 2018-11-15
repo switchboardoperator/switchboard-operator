@@ -4,7 +4,7 @@
 // Start listening to defined rabbitmq event and execute
 // the action based on type and options
 
-import * as rabbit from 'rabbot'
+import rabbit from 'rabbot'
 import debug = require('debug')
 import logger from '../services/logger'
 import ActionExecuter from './ActionExecuter'
@@ -73,7 +73,7 @@ export default class ActionCreator {
 
   // Make a Promise array and execute all the actions in serial
   // fashion
-  executeActions (msg) {
+  async executeActions (msg) {
     const rabbit = this.rabbit
     const contents = extractMessage(msg)
 
@@ -81,7 +81,10 @@ export default class ActionCreator {
 
     // Iterate over all actions passing the lastResult
     this.event.actions.forEach((action, index) => {
-      const executer = new ActionExecuter(action, rabbit, this.event)
+      const executer = new ActionExecuter({
+        ...action,
+        event: this.event.name,
+      }, rabbit, this.event)
 
       const executionPromise = (lastValue, preLog, eventsLenght) => {
         if (lastValue.id) {

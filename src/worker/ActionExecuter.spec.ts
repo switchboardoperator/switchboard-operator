@@ -1,4 +1,4 @@
-import * as rabbit from 'rabbot'
+import rabbit from 'rabbot'
 import ActionExecuter from './ActionExecuter'
 import Action from '../model/Action'
 import Event from '../model/Event'
@@ -11,7 +11,8 @@ describe('ActionExecuter', () => {
       options: {
         target: 'test',
         targetRoute: 'someroute'
-      }
+      },
+      event: 'event-name',
     })
 
     const actionExecuter = new ActionExecuter(action, rabbit, new Event({
@@ -43,7 +44,8 @@ describe('ActionExecuter', () => {
           field: 'test',
           operation: 'defined'
         }
-      }
+      },
+      event: 'event-name',
     })
 
     const actionExecuter = new ActionExecuter(action, rabbit, new Event({name: 'test', eventName: 'test', route: 'test', actions: []}))
