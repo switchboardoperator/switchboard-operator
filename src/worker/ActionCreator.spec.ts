@@ -25,7 +25,8 @@ describe('ActionCreator', () => {
     const actionCreator = new ActionCreator(rabbit, event)
     actionCreator.createHandler()
 
-    expect(actionCreator.executeActions(msg)).resolves.toBeFalsy()
+    expect.assertions(1)
+    return expect(actionCreator.executeActions(msg)).resolves.toBeFalsy()
   })
 
   it('should handle coming events', () => {
