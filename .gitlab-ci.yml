@@ -9,12 +9,6 @@ stages:
   script:
   - yarn test
 
-
-node-6:
-  <<: *test
-  variables:
-    NODE_VERSION: '6'
-
 node-7:
   <<: *test
   variables:
