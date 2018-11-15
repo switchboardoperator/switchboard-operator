@@ -9,7 +9,7 @@
     "tasks": [
       {
         "name": "emailsReceiver",
-        "eventName": "cfs-emails",
+        "eventName": "emails",
         "route": "send"
       },
       {
