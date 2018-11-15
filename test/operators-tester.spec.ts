@@ -1,13 +1,12 @@
 import fs from 'fs'
-import logger from 'winston'
 
-import { loadOperators } from './services/OperatorsLoader'
-import ActionCreator from './worker/ActionCreator'
-import Event from './model/Event'
+import { loadOperators } from '../src/services/OperatorsLoader'
+import ActionCreator from '../src/worker/ActionCreator'
+import Event from '../src/model/Event'
 
-jest.mock('./worker/execution-plugins/telegram')
-jest.mock('./worker/execution-plugins/prev2task')
-jest.mock('./worker/execution-plugins/http')
+jest.mock('../src/worker/execution-plugins/telegram')
+jest.mock('../src/worker/execution-plugins/prev2task')
+jest.mock('../src/worker/execution-plugins/http')
 
 async function processEvents(json, rabbit, events) {
   const resultsObject = {}
