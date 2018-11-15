@@ -13,7 +13,7 @@ export default class TelegramPlugin {
   }
 
   execute(cb) {
-    logger.info('Running telegram plugin mock')
+    logger.info(this.preLog, 'Running telegram plugin mock')
     cb(null, this.msg)
   }
 }

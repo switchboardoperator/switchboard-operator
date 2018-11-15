@@ -13,7 +13,7 @@ export default class Prev2TaskPlugin {
   }
 
   execute(cb) {
-    logger.info('Running prev2task plugin mock')
+    logger.info(this.preLog, 'Running prev2task plugin mock')
     cb(null, this.msg)
   }
 }
