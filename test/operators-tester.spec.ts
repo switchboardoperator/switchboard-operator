@@ -21,7 +21,7 @@ async function processEvents(json, rabbit, events) {
 
       resultsObject[eventObj.name] = results
     } else {
-      //console.info('Ignoring event %s, test payload not defined', eventObj.name)
+      console.info('Ignoring event %s, test payload not defined', eventObj.name)
     }
   }
   return resultsObject
