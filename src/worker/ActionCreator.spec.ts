@@ -8,25 +8,23 @@ describe('ActionCreator', () => {
   it('should fail if one of the steps fails', () => {
     const msg = {
       content: {
-        toString: function () {
-          return '{"test": "value"}'
-        }
+        toString: () => '{"test": "value"}'
       },
-      ack: function () {}
+      ack: function () {},
     }
 
     const event = new Event({
       name: 'test',
       eventName: 'memberships',
       route: 'created',
-      actions: []
+      actions: [],
     })
 
     const actionCreator = new ActionCreator(rabbit, event)
     actionCreator.createHandler()
 
     expect.assertions(1)
-    return expect(actionCreator.executeActions(msg)).resolves.toBeFalsy()
+    return expect(actionCreator.executeActions(msg)).rejects.toBeTruthy()
   })
 
   it('should handle coming events', () => {
@@ -80,9 +78,6 @@ describe('ActionCreator', () => {
     return actionCreator.executeActions(msg)
       .then((results) => {
         return expect(typeof results).toBe('object')
-      })
-      .catch((e) => {
-        return expect(e).toBeFalsy()
       })
   })
 })

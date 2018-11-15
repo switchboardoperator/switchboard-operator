@@ -57,13 +57,14 @@ export default class ActionCreator {
         .catch((err) => {
           debug('Error in serial execution', err)
           // The plugin executed is asking to abort operation and
-          // discard the message, preventing to be send to dead-letter queue
+          // discard the message, preventing to be sent to dead-letter queue
           if (err.action && err.action === 'abort') {
             logger.error(this.preLog, 'The execution of operator has been aborted', err)
             return msg.ack()
           }
           logger.error(this.preLog, 'An error has been ocurred executing the handler actions', err)
-          // return msg.nack()
+
+          // send message to dead-letter
           return msg.reject()
         })
     })
@@ -78,6 +79,10 @@ export default class ActionCreator {
     const contents = extractMessage(msg)
 
     let promiseChain = Promise.resolve([]).then(() => contents)
+
+    if (!this.event.actions.length) {
+      return Promise.reject(new Error('Empty actions object'))
+    }
 
     // Iterate over all actions passing the lastResult
     this.event.actions.forEach((action, index) => {
