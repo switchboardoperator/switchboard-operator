@@ -386,43 +386,41 @@ The tester should look like:
         }
       },
       "output": {
-        {
-          "subject": "Welcome {{ vars._email.name }}!",
-          "template": "members/signups",
-          "to": "john@doe.com",
-          "transport": "sendgrid",
-          "apikey": "Our awesome sendgrid api key ;)",
-          "vars": [
-            {
-              "_account": {
-                "meta": {
-                  "emailConfig": {
-                    "apikey": "Our awesome sendgrid api key ;)",
-                    "template": "alvarium/default",
-                    "transport": "sendgrid"
-                  }
-                }
-              },
-              "_email": {
-                "apikey": "Our awesome sendgrid api key ;)",
-                "subject": "Welcome {{ vars._email.name }}!",
-                "template": "members/signups",
-                "transport": "sendgrid"
-              },
-              "member": {
-                "account": "3a696232-b214-4d58-af8b-01e793c2a424",
-                "email": "john@doe.com",
-                "name": "John Doe"
-              },
-              "privateMeta": {
+        "subject": "Welcome {{ vars._email.name }}!",
+        "template": "members/signups",
+        "to": "john@doe.com",
+        "transport": "sendgrid",
+        "apikey": "Our awesome sendgrid api key ;)",
+        "vars": [
+          {
+            "_account": {
+              "meta": {
                 "emailConfig": {
-                  "subject": "Welcome {{ vars._email.name }}!",
-                  "template": "members/signups"
+                  "apikey": "Our awesome sendgrid api key ;)",
+                  "template": "alvarium/default",
+                  "transport": "sendgrid"
                 }
               }
+            },
+            "_email": {
+              "apikey": "Our awesome sendgrid api key ;)",
+              "subject": "Welcome {{ vars._email.name }}!",
+              "template": "members/signups",
+              "transport": "sendgrid"
+            },
+            "member": {
+              "account": "3a696232-b214-4d58-af8b-01e793c2a424",
+              "email": "john@doe.com",
+              "name": "John Doe"
+            },
+            "privateMeta": {
+              "emailConfig": {
+                "subject": "Welcome {{ vars._email.name }}!",
+                "template": "members/signups"
+              }
             }
-          ]
-        }
+          }
+        ]
       }
     }
   ]
