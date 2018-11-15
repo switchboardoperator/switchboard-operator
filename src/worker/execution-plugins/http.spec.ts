@@ -26,13 +26,14 @@ describe('http', () => {
   })
 
   it('should make the http request', () => {
-    httpPlugin.execute((err, result) => {
+    expect.assertions(2)
+    return httpPlugin.execute((err, result) => {
       if (err) {
         throw err
       }
 
       expect(typeof result).toEqual('object')
-      expect(result.myTopology).toEqual('test')
+      return expect(result.myTopology).toEqual('test')
     })
   })
 
@@ -45,14 +46,15 @@ describe('http', () => {
   })
 
   it('should embed request response to the previous value', () => {
-    httpPlugin.execute((err, result) => {
+    expect.assertions(3)
+    return httpPlugin.execute((err, result) => {
       if (err) {
         throw err
       }
 
       expect(typeof result).toEqual('object')
       expect(result.myTopology).toEqual('test')
-      expect(result.hello).toEqual('topology')
+      return expect(result.hello).toEqual('topology')
     })
   })
 
@@ -70,12 +72,12 @@ describe('http', () => {
     })
     const httpPlugin = new HttpPlugin(msg, action, 'test')
 
-    httpPlugin.execute((err, result) => {
+    return httpPlugin.execute((err, result) => {
       if (err) {
         throw err
       }
 
-      expect(result.response.myTopology).toEqual('test')
+      return expect(result.response.myTopology).toEqual('test')
     })
   })
 })
