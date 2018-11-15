@@ -1,5 +1,4 @@
 const fs = require('fs')
-// const { loadOperators } = require('./OperatorsLoader')
 
 jest.mock('fs')
 
