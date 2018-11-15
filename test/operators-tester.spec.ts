@@ -27,8 +27,8 @@ async function processEvents(json, rabbit, events) {
   return resultsObject
 }
 
-describe('switchboard-operator', () => {
-  it('test', async () => {
+describe('Test operators', () => {
+  it('all operators work as expected', async () => {
     const events = loadOperators()
     const rabbit: any = {
       handle: (queue, cb) => cb(),
