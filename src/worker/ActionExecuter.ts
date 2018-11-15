@@ -1,6 +1,3 @@
-import * as fs from 'fs'
-import * as path from 'path'
-
 import Action from "../model/Action"
 import Event from "../model/Event"
 import logger from '../services/logger'
