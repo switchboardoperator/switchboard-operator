@@ -35,7 +35,7 @@ async function processEvents(json, rabbit, events) {
 
 describe('Test operators', () => {
   it('all operators work as expected', async () => {
-    const events = loadOperators()
+    // const events = loadOperators()
     const rabbit: any = {
       handle: (queue, cb) => cb(),
     }
@@ -54,8 +54,28 @@ describe('Test operators', () => {
       fileContents.push(fs.readFileSync(location, 'utf8'))
     }
 
+    const operators = loadOperators()
     const tests = yaml.safeLoad(fileContents.join(''))
-    const results = await processEvents(tests, rabbit, events)
+
+    const jobs = []
+    for (const test of tests) {
+      const job = {
+        test,
+        operator: operators.find(({name}) => name === test.name)
+      }
+      jobs.push(job)
+    }
+
+    for (const job of jobs) {
+      const { test, operator } = job
+
+      console.log('test', test)
+      console.log('operator', operator)
+      console.log('event', new Event(operator))
+    }
+
+
+    // const results = await processEvents(tests, rabbit, events)
 
     // if (fs.statSync(filename).isFile()) {
     //   const json = JSON.parse(fs.readFileSync(filename).toString())
