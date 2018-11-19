@@ -2,14 +2,17 @@ const debug = require('debug')('http-plugin')
 import axios from 'axios'
 import nunjucks from 'nunjucks'
 import { HTTPPluginOptionsSchema } from '../../schemas/PluginOptionsSchema'
+import { ExecutionPluginInterface } from '../ExecutionPluginInterface'
 
-export default class HttpPlugin {
+export default class HttpPlugin implements ExecutionPluginInterface {
   msg: any
   options: any
+  action: string
   preLog: string
 
   constructor(msg: any, action: any, preLog: string) {
     this.msg = msg
+    this.action = action.name
 
     this.options = new HTTPPluginOptionsSchema(action.options)
     if (this.options.isErrors()) {
@@ -28,9 +31,10 @@ export default class HttpPlugin {
     return this.msg
   }
 
-  execute(callback) {
+  execute() {
     const method = this.options.method.toLowerCase()
-    axios({
+
+    return axios({
       method: method,
       url: this.renderUrl(),
       data: method !== 'get' ? this.populateData() : {}
@@ -48,10 +52,10 @@ export default class HttpPlugin {
           result[this.options.mergeTarget] = response.data
         }
 
-        return callback(null, result)
+        return result
       })
       .catch((err) => {
-        return callback(new Error(`Error in the request ${err}`))
+        throw new Error(`Error in the request ${JSON.stringify(err)}`)
       })
   }
 }

@@ -25,13 +25,13 @@ describe('http', () => {
     myTopology: 'test'
   })
 
+  it('should return a promise', () => {
+    expect(httpPlugin.execute()).toBeInstanceOf(Promise)
+  })
+
   it('should make the http request', () => {
     expect.assertions(2)
-    return httpPlugin.execute((err, result) => {
-      if (err) {
-        throw err
-      }
-
+    return httpPlugin.execute().then((result: any) => {
       expect(typeof result).toEqual('object')
       return expect(result.myTopology).toEqual('test')
     })
@@ -46,13 +46,11 @@ describe('http', () => {
 
   it('should embed request response to the previous value', () => {
     expect.assertions(3)
-    return httpPlugin.execute((err, result) => {
-      if (err) {
-        throw err
-      }
 
+    return httpPlugin.execute().then((result: any) => {
       expect(typeof result).toEqual('object')
       expect(result.myTopology).toEqual('test')
+
       return expect(result.hello).toEqual('topology')
     })
   })
@@ -71,11 +69,7 @@ describe('http', () => {
     })
     const httpPlugin = new HttpPlugin(msg, action, 'test')
 
-    return httpPlugin.execute((err, result) => {
-      if (err) {
-        throw err
-      }
-
+    return httpPlugin.execute().then((result: any) => {
       return expect(result.response.myTopology).toEqual('test')
     })
   })
