@@ -5,7 +5,7 @@ import Action from '../../model/Action'
 import TelegramPlugin from './telegram'
 
 
-describe('telegram', () => {
+describe('execution-plugins :: telegram', () => {
   const action = new Action({
     name: 'log',
     type: 'telegram',
@@ -16,17 +16,19 @@ describe('telegram', () => {
     event: 'event-name',
   })
 
-  it('should allow to be initialized with passed configurations', () => {
-    const mock = new MockAdapter(axios)
-    mock.onPost(/sendMessage/).reply(200, {})
+  const mock = new MockAdapter(axios)
+  mock.onPost(/sendMessage/).reply(200, {})
 
+  it('should be a Promise', () => {
+    const telegram = new TelegramPlugin({test: 'value', test2: 'value2'}, action, '')
+
+    return expect(telegram.execute()).toBeInstanceOf(Promise)
+  })
+
+  it('should allow to be initialized with passed configurations', () => {
     const telegramPlugin = new TelegramPlugin({test: 'value', test2: 'value2'}, action, '')
 
-    return telegramPlugin.execute((err, msg) => {
-      if (err) {
-        throw err
-      }
-
+    return telegramPlugin.execute().then((msg) => {
       return expect(typeof msg).toBe('object')
     })
   })

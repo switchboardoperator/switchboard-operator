@@ -1,11 +1,13 @@
 const debug = require('debug')('mapper-plugin')
 import objectMapper from 'object-mapper'
-import { MapperPluginOptionsSchema } from '../../schemas/PluginOptionsSchema'
+
 import Action from '../../model/Action'
 import logger from '../../services/logger'
+import { MapperPluginOptionsSchema } from '../../schemas/PluginOptionsSchema'
+import { ExecutionPluginInterface } from '../ExecutionPluginInterface'
 
 
-export default class ObjectTransformerPlugin {
+export default class MapperPlugin implements ExecutionPluginInterface {
   msg: any
   action: Action
   options: any
@@ -33,7 +35,7 @@ export default class ObjectTransformerPlugin {
     this.preLog = preLog + ' > ' + action.name
   }
 
-  execute(callback) {
+  execute() {
     let transformedObj = objectMapper(
       this.msg,
       this.options.fields
@@ -49,9 +51,9 @@ export default class ObjectTransformerPlugin {
     logger.info(this.preLog, 'Object mapping applied')
 
     if (this.options.merge) {
-      return callback(null, Object.assign({}, this.msg, transformedObj))
-    } else {
-      return callback(null, transformedObj)
+      return Promise.resolve(Object.assign({}, this.msg, transformedObj))
     }
+
+    return Promise.resolve(transformedObj)
   }
 }

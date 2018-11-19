@@ -4,7 +4,7 @@ import MockAdapter from 'axios-mock-adapter'
 import ActionSchema from '../../model/Action'
 import HttpPlugin from './http'
 
-describe('http', () => {
+describe('execution-plugins :: http', () => {
   const msg = {
     hello: 'topology'
   }

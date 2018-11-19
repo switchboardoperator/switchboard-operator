@@ -10,4 +10,8 @@ export default class Action {
     this.options = options
     this.event = event
   }
+
+  toString() {
+    return this.name
+  }
 }

@@ -1,7 +1,7 @@
 import Action from '../../model/Action'
 import LogPlugin from './log'
 
-describe('log', () => {
+describe('execution-plugins :: log', () => {
   const action = new Action({
     name: 'log',
     type: 'log',

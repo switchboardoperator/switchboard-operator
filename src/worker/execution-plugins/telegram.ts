@@ -1,10 +1,12 @@
 import axios from 'axios'
 import config from 'config'
 import nunjucks from 'nunjucks'
-import { TelegramPluginOptionsSchema } from '../../schemas/PluginOptionsSchema'
-import Action from '../../model/Action'
 
-export default class TelegramPlugin {
+import Action from '../../model/Action'
+import { TelegramPluginOptionsSchema } from '../../schemas/PluginOptionsSchema'
+import { ExecutionPluginInterface } from '../ExecutionPluginInterface'
+
+export default class TelegramPlugin implements ExecutionPluginInterface {
   msg: string
   action: Action
   preLog: string
@@ -41,16 +43,10 @@ export default class TelegramPlugin {
     })
   }
 
-  execute(callback) {
+  execute() {
     const renderedTemplate = nunjucks.renderString(
       this.options.template, this.msg
     )
-    this.sendMessage(this.options.chatId, renderedTemplate)
-      .then(() => {
-        return callback(null, this.msg)
-      })
-      .catch((err) => {
-        return callback(err, this.msg)
-      })
+    return this.sendMessage(this.options.chatId, renderedTemplate)
   }
 }

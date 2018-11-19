@@ -2,11 +2,12 @@ const debug = require('debug')('merger-plugin')
 import merge from 'deepmerge'
 import objectMapper from 'object-mapper'
 
-import { MergerPluginOptionsSchema } from "../../schemas/PluginOptionsSchema"
 import Action from "../../model/Action"
 import logger from '../../services/logger'
+import { MergerPluginOptionsSchema } from "../../schemas/PluginOptionsSchema"
+import { ExecutionPluginInterface } from '../ExecutionPluginInterface'
 
-export default class MergerPlugin {
+export default class MergerPlugin implements ExecutionPluginInterface {
   msg: string
   action: Action
   options: any
@@ -34,7 +35,7 @@ export default class MergerPlugin {
     this.preLog = preLog + ' > ' + action.name
   }
 
-  execute(callback) {
+  execute() {
     const slicedObjects = []
     this.options.sourceFields.forEach((key) => {
       const slicedObj = objectMapper.getKeyValue(this.msg, key)
@@ -54,7 +55,7 @@ export default class MergerPlugin {
     const result = objectMapper.setKeyValue(this.msg, this.options.targetField, mergedResult)
 
     logger.info(this.preLog, 'Object merged applied')
-    return callback(null, result)
-  }
 
+    return Promise.resolve(result)
+  }
 }

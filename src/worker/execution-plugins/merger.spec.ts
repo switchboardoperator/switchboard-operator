@@ -1,6 +1,6 @@
 import MergerPlugin from './merger'
 
-describe('merger', () => {
+describe('execution-plugins :: merger', () => {
   const msg = {
     payload: {
       someValue: 'test',
@@ -28,83 +28,93 @@ describe('merger', () => {
     }
   }
 
-  it('should merge the specified source keys to target one', () => {
-    const options = {
-      sourceFields: [
-        'payload',
-        'payload2',
-        'payload3'
-      ],
-      targetField: 'newBody.deep'
-    }
+  describe('execute', () => {
+    it('should return a promise', () => {
+      const options = {
+        sourceFields: [
+          'payload',
+          'payload2',
+          'payload3'
+        ],
+        targetField: 'newBody.deep'
+      }
 
-    const objTransformer = new MergerPlugin(msg, {options}, '')
+      const transformer = new MergerPlugin(msg, {options}, '')
 
-    expect.assertions(5)
-
-    objTransformer.execute((err, mergedObj) => {
-      expect(err).toBe(null)
-      expect(typeof mergedObj.newBody.deep).toBe('object')
-      expect(mergedObj.newBody.deep.someValue).toEqual('test2')
-      expect(Object.keys(mergedObj.newBody.deep.nestedValues).length).toEqual(5)
-      expect(mergedObj.valueNotToBeMerged.iMust).toEqual('be on result')
+      return expect(transformer.execute()).toBeInstanceOf(Promise)
     })
-  })
+    it('should merge the specified source keys to target one', () => {
+      const options = {
+        sourceFields: [
+          'payload',
+          'payload2',
+          'payload3'
+        ],
+        targetField: 'newBody.deep'
+      }
 
-  it('merging keys should return strings, not objects', () => {
-    const options = {
-      sourceFields: [
-        'invented',
-        'payload.nestedValues.one',
-      ],
-      targetField: 'newBody.deep'
-    }
+      const objTransformer = new MergerPlugin(msg, {options}, '')
 
-    const objTransformer = new MergerPlugin(msg, {options}, '')
+      expect.assertions(4)
 
-    expect.assertions(2)
-
-    objTransformer.execute((err, mergedObj) => {
-      expect(err).toBe(null)
-      expect(typeof mergedObj.newBody.deep).toBe('string')
+      objTransformer.execute().then((mergedObj) => {
+        expect(typeof mergedObj.newBody.deep).toBe('object')
+        expect(mergedObj.newBody.deep.someValue).toEqual('test2')
+        expect(Object.keys(mergedObj.newBody.deep.nestedValues).length).toEqual(5)
+        expect(mergedObj.valueNotToBeMerged.iMust).toEqual('be on result')
+      })
     })
-  })
 
-  it('should merge even with empty objects from previous merges', () => {
-    const options = {
-      sourceFields: [
-        'invented',
-      ],
-      targetField: 'newBody.deep'
-    }
+    it('merging keys should return strings, not objects', () => {
+      const options = {
+        sourceFields: [
+          'invented',
+          'payload.nestedValues.one',
+        ],
+        targetField: 'newBody.deep'
+      }
 
-    const objTransformer = new MergerPlugin(msg, {options}, '')
+      const objTransformer = new MergerPlugin(msg, {options}, '')
 
-    expect.assertions(3)
-
-    return objTransformer.execute((err, mergedObj) => {
-      expect(err).toBe(null)
-      expect(Array.isArray(mergedObj.newBody.deep)).toBeTruthy()
-      return expect(Object.keys(mergedObj.newBody.deep).length).toBeFalsy()
+      return objTransformer.execute().then((mergedObj) => {
+        return expect(typeof mergedObj.newBody.deep).toBe('string')
+      })
     })
-  })
 
-  it('should properly merge strings', () => {
-    const options = {
-      sourceFields: [
-        'payload.nestedValues.one',
-        'payload4.nestedValues.one',
-      ],
-      targetField: 'newBody.deep'
-    }
+    it('should merge even with empty objects from previous merges', () => {
+      const options = {
+        sourceFields: [
+          'invented',
+        ],
+        targetField: 'newBody.deep'
+      }
 
-    const objTransformer = new MergerPlugin(msg, {options}, '')
+      const objTransformer = new MergerPlugin(msg, {options}, '')
 
-    expect.assertions(3)
-    return objTransformer.execute((err, mergedObj) => {
-      expect(err).toBe(null)
-      expect(typeof mergedObj.newBody.deep).toBe('string')
-      return expect(mergedObj.newBody.deep).toEqual('whatever')
+      expect.assertions(2)
+
+      return objTransformer.execute().then((mergedObj) => {
+        expect(Array.isArray(mergedObj.newBody.deep)).toBeTruthy()
+        return expect(Object.keys(mergedObj.newBody.deep).length).toBeFalsy()
+      })
+    })
+
+    it('should properly merge strings', () => {
+      const options = {
+        sourceFields: [
+          'payload.nestedValues.one',
+          'payload4.nestedValues.one',
+        ],
+        targetField: 'newBody.deep'
+      }
+
+      const objTransformer = new MergerPlugin(msg, {options}, '')
+
+      expect.assertions(2)
+      return objTransformer.execute().then((mergedObj) => {
+        expect(typeof mergedObj.newBody.deep).toBe('string')
+        return expect(mergedObj.newBody.deep).toEqual('whatever')
+      })
     })
   })
 })

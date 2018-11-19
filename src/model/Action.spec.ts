@@ -8,12 +8,15 @@ describe('Action', () => {
     options: {}
   }
   const testAction = new Action(params)
-  it('should must be a model instance', () => {
+  it('must be a model instance', () => {
     expect(testAction instanceof Action).toBeTruthy()
   })
   it('should be set the params passed by', () => {
     expect(testAction.name).toEqual('testAction')
     expect(testAction.type).toEqual('some-type')
     expect(typeof testAction.options).toBe('object')
+  })
+  it('returns the action name in case we try to stringify the class', () => {
+    expect(String(testAction)).toEqual('testAction')
   })
 })

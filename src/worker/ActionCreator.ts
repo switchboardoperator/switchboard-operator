@@ -9,6 +9,7 @@ import debug from 'debug'
 import logger from '../services/logger'
 import ActionExecuter from './ActionExecuter'
 import Event from '../model/Event'
+import Action from '../model/Action'
 
 // If the message received is the one get from AMQP
 // extract only the contents.
@@ -86,28 +87,23 @@ export default class ActionCreator {
 
     // Iterate over all actions passing the lastResult
     this.event.actions.forEach((action, index) => {
-      const executer = new ActionExecuter(action, rabbit, this.event)
+      const executer = new ActionExecuter(new Action(action), rabbit, this.event)
 
       const executionPromise = (lastValue, preLog, eventsLenght) => {
         if (lastValue.id) {
           preLog = '[' + lastValue.id + '] > ' + preLog
         }
         debug('Last value received is: ', lastValue)
-        return new Promise((resolve, reject) => {
-          logger.info(preLog, 'Running action ', index + 1 , ' of ', eventsLenght)
-          if (lastValue === undefined) {
-            reject(new Error('Previous plugin returned undefined'))
-          }
 
-          executer.execute(contents, lastValue, (err, result) => {
-            if (err) {
-              logger.error(preLog, 'Step has failed so ignoring next ones')
-              return reject(err)
-            }
+        logger.info(preLog, `Running action ${index + 1} of ${eventsLenght}`)
 
-            debug('Resolving with: ', result)
-            return resolve(result)
-          })
+        if (lastValue === undefined) {
+          return Promise.reject(new Error('Previous plugin returned undefined'))
+        }
+
+        return executer.execute(contents, lastValue).catch((err) => {
+          logger.error(preLog, 'Step has failed so ignoring next ones')
+          return Promise.reject(err)
         })
       }
 

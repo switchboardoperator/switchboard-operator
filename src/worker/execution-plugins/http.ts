@@ -1,19 +1,20 @@
 const debug = require('debug')('http-plugin')
 import axios from 'axios'
 import nunjucks from 'nunjucks'
+
+import Action from '../../model/Action'
 import { HTTPPluginOptionsSchema } from '../../schemas/PluginOptionsSchema'
 import { ExecutionPluginInterface } from '../ExecutionPluginInterface'
 
 export default class HttpPlugin implements ExecutionPluginInterface {
   msg: any
   options: any
-  action: string
+  action: Action
   preLog: string
 
   constructor(msg: any, action: any, preLog: string) {
     this.msg = msg
-    this.action = action.name
-
+    this.action = action
     this.options = new HTTPPluginOptionsSchema(action.options)
     if (this.options.isErrors()) {
       throw new Error('The options provided are not valid ' + JSON.stringify(this.options.getErrors()))

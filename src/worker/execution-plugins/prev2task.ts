@@ -1,11 +1,12 @@
 const debug = require('debug')('prev2task-plugin')
 
-import { Prev2TaskPluginOptionsSchema } from '../../schemas/PluginOptionsSchema'
 import RabbotClient from "../../amqp/RabbotClient"
 import Action from "../../model/Action"
 import logger from '../../services/logger'
+import { Prev2TaskPluginOptionsSchema } from '../../schemas/PluginOptionsSchema'
+import { ExecutionPluginInterface } from '../ExecutionPluginInterface'
 
-export default class Prev2TaskPlugin {
+export default class Prev2TaskPlugin implements ExecutionPluginInterface {
   options: any
   msg: any
   action: Action
@@ -28,27 +29,22 @@ export default class Prev2TaskPlugin {
     this.preLog = preLog + ' > ' + action.name
   }
 
-  execute(callback) {
-    const { rabbit } = this
-    const exchange = this.action.options.target
+  execute() {
+    const { rabbit, action: { options } } = this
+    const exchange = options.target
+    const route = options.targetRoute
+
     debug('Exchange selected %s', exchange)
-    const route = this.action.options.targetRoute
     debug('Route selected %s', route)
     debug('Sending the next message: %j', this.msg)
 
     const payload = this.msg.body || this.msg
 
-    rabbit.publish(exchange, {
+    return rabbit.publish(exchange, {
       routingKey: route,
       contentType: 'application/json',
       body: payload,
       replyTimeout: 3000
-    }).then(() => {
-      logger.info(this.preLog, ': event2task executed')
-      return callback(null, this.msg)
-    }, (err) => {
-      logger.info(this.preLog, ': event2task failed')
-      return callback(new Error(`Error publishing to the quque ${err}`))
     })
   }
 }

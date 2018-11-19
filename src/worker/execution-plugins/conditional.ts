@@ -1,5 +1,6 @@
 const debug = require('debug')('conditional-plugin')
 
+import Action from '../../model/Action'
 import logger from '../../services/logger'
 import { ConditionalPluginOptionsSchema } from '../../schemas/PluginOptionsSchema'
 import { ExecutionPluginInterface } from '../ExecutionPluginInterface'
@@ -31,14 +32,14 @@ const flattenObject = (ob) => {
 
 export default class ConditionalPlugin implements ExecutionPluginInterface {
   msg: string
-  action: string
+  action: Action
   preLog: string
   parsedMessage: object
   options: any
 
   constructor(msg, action, preLog) {
     this.msg = msg
-    this.action = action.name
+    this.action = action
     this.preLog = preLog + ' > ' + action.name
     this.parsedMessage = flattenObject(
       this.msg

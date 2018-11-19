@@ -1,10 +1,11 @@
 const debug = require('debug')('setter-plugin')
 
-import { SetterPluginOptionsSchema } from '../../schemas/PluginOptionsSchema'
 import logger from '../../services/logger'
 import Action from "../../model/Action"
+import { SetterPluginOptionsSchema } from '../../schemas/PluginOptionsSchema'
+import { ExecutionPluginInterface } from '../ExecutionPluginInterface'
 
-export default class SetterPlugin {
+export default class SetterPlugin implements ExecutionPluginInterface {
   msg: string
   action: Action
   options: any
@@ -32,9 +33,10 @@ export default class SetterPlugin {
     this.preLog = preLog + ' > ' + action.name
   }
 
-  execute(callback) {
+  execute() {
     const setObj = Object.assign({}, this.msg, this.options.fields)
     logger.info(this.preLog, 'Object setter applied')
-    return callback(null, setObj)
+
+    return Promise.resolve(setObj)
   }
 }

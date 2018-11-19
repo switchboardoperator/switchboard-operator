@@ -1,16 +1,17 @@
 import Action from '../../model/Action'
 import logger from '../../services/logger'
+
 import { ExecutionPluginInterface } from '../ExecutionPluginInterface'
 
 export default class LogPlugin implements ExecutionPluginInterface {
   msg: string
-  action: string
+  action: Action
   preLog: string
   options: any
 
-  constructor(msg, action, preLog) {
+  constructor(msg: any, action: Action, preLog: string) {
     this.msg = msg
-    this.action = action.name
+    this.action = action
     this.preLog = preLog + ' > ' + action.name + ': %j'
   }
 
