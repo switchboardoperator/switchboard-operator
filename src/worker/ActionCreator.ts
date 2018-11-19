@@ -5,7 +5,7 @@
 // the action based on type and options
 
 import rabbit from 'rabbot'
-import debug = require('debug')
+import debug from 'debug'
 import logger from '../services/logger'
 import ActionExecuter from './ActionExecuter'
 import Event from '../model/Event'
@@ -86,10 +86,7 @@ export default class ActionCreator {
 
     // Iterate over all actions passing the lastResult
     this.event.actions.forEach((action, index) => {
-      const executer = new ActionExecuter({
-        ...action,
-        event: this.event.name,
-      }, rabbit, this.event)
+      const executer = new ActionExecuter(action, rabbit, this.event)
 
       const executionPromise = (lastValue, preLog, eventsLenght) => {
         if (lastValue.id) {

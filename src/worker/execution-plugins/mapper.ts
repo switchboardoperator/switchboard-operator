@@ -1,25 +1,9 @@
-import Action from "../../model/Action";
+const debug = require('debug')('mapper-plugin')
+import objectMapper from 'object-mapper'
+import { MapperPluginOptionsSchema } from '../../schemas/PluginOptionsSchema'
+import Action from '../../model/Action'
 import logger from '../../services/logger'
 
-const debug = require('debug')('mapper-plugin')
-const objectMapper = require('object-mapper')
-const SchemaObject = require('schema-object')
-
-
-const PluginOptionsSchema = new SchemaObject({
-  merge: {
-    type: Boolean,
-    required: false
-  },
-  copy: {
-    type: Array,
-    required: false
-  },
-  fields: {
-    type: Object,
-    required: true
-  }
-})
 
 export default class ObjectTransformerPlugin {
   msg: any
@@ -34,7 +18,7 @@ export default class ObjectTransformerPlugin {
     debug('received next action: %j', this.action)
 
     // Getting the last of previous results comming from previous plugins
-    this.options = new PluginOptionsSchema(action.options)
+    this.options = new MapperPluginOptionsSchema(action.options)
 
     debug(
       'Instance transformer plugin with options: %j and msg: %j',

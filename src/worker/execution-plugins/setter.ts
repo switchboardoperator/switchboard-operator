@@ -1,16 +1,8 @@
-import Action from "../../model/Action";
-
 const debug = require('debug')('setter-plugin')
-const SchemaObject = require('schema-object')
 
+import { SetterPluginOptionsSchema } from '../../schemas/PluginOptionsSchema'
 import logger from '../../services/logger'
-
-const PluginOptionsSchema = new SchemaObject({
-  fields: {
-    type: Object,
-    required: true
-  }
-})
+import Action from "../../model/Action"
 
 export default class SetterPlugin {
   msg: string
@@ -25,7 +17,7 @@ export default class SetterPlugin {
     debug('received next action: %j', this.action)
 
     // Getting the last of previous results comming from previous plugins
-    this.options = new PluginOptionsSchema(action.options)
+    this.options = new SetterPluginOptionsSchema(action.options)
 
     debug(
       'Instance transformer plugin with options: %j and msg: %j',

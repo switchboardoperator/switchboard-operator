@@ -1,20 +1,8 @@
-import Action from "../../model/Action";
-
-const SchemaObject = require('schema-object')
-const axios = require('axios')
-const config = require('config')
-const nunjucks = require('nunjucks')
-
-const PluginOptionsSchema = new SchemaObject({
-  chatId: {
-    type: String,
-    required: true
-  },
-  template: {
-    type: String,
-    required: true
-  }
-})
+import axios from 'axios'
+import config from 'config'
+import nunjucks from 'nunjucks'
+import { TelegramPluginOptionsSchema } from '../../schemas/PluginOptionsSchema'
+import Action from '../../model/Action'
 
 export default class TelegramPlugin {
   msg: string
@@ -27,7 +15,7 @@ export default class TelegramPlugin {
     this.msg = msg
     this.action = action
     this.preLog = preLog + ' > ' + action.name + ': %j'
-    this.options = new PluginOptionsSchema(action.options)
+    this.options = new TelegramPluginOptionsSchema(action.options)
 
     if (this.options.isErrors()) {
       throw new Error('The options provided are not valid '+ JSON.stringify(this.options.getErrors()))

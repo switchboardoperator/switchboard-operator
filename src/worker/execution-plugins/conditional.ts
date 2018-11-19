@@ -1,6 +1,6 @@
-const SchemaObject = require('schema-object')
 const debug = require('debug')('conditional-plugin')
 
+import { ConditionalPluginOptionsSchema } from '../../schemas/PluginOptionsSchema'
 import logger from '../../services/logger'
 
 // Convert objecto to one level of deepness
@@ -28,29 +28,6 @@ const flattenObject = (ob) => {
   return toReturn
 }
 
-const ConditionSchema = new SchemaObject({
-  field: {
-    type: String,
-    required: true
-  },
-  operation: {
-    type: String,
-    required: true,
-    enum: ['===', '!==', 'defined', 'undefined', 'isTrue']
-  },
-  checkValue: {
-    type: String
-  }
-})
-
-const PluginOptionsSchema = new SchemaObject({
-  conditions: {
-    type: Array,
-    arrayType: ConditionSchema,
-    required: true
-  }
-})
-
 export default class ConditionalPlugin {
   msg: string
   action: string
@@ -60,13 +37,13 @@ export default class ConditionalPlugin {
 
   constructor(msg, action, preLog) {
     this.msg = msg
-    this.action = action
+    this.action = action.name
     this.preLog = preLog + ' > ' + action.name
     this.parsedMessage = flattenObject(
       this.msg
     )
 
-    this.options = new PluginOptionsSchema(action.options)
+    this.options = new ConditionalPluginOptionsSchema(action.options)
   }
 
   // Execute the conditions logic

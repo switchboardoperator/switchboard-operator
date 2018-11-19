@@ -1,8 +1,7 @@
-import { PluginOptionsSchema } from '../../schemas/PluginOptionsSchema'
-
 const debug = require('debug')('http-plugin')
-const axios = require('axios')
-const nunjucks = require('nunjucks')
+import axios from 'axios'
+import nunjucks from 'nunjucks'
+import { HTTPPluginOptionsSchema } from '../../schemas/PluginOptionsSchema'
 
 export default class HttpPlugin {
   msg: any
@@ -12,7 +11,7 @@ export default class HttpPlugin {
   constructor(msg: any, action: any, preLog: string) {
     this.msg = msg
 
-    this.options = new PluginOptionsSchema(action.options)
+    this.options = new HTTPPluginOptionsSchema(action.options)
     if (this.options.isErrors()) {
       throw new Error('The options provided are not valid ' + JSON.stringify(this.options.getErrors()))
     }

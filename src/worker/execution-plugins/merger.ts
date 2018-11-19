@@ -1,23 +1,10 @@
-import Action from "../../model/Action";
-
 const debug = require('debug')('merger-plugin')
-const SchemaObject = require('schema-object')
-const objectMapper = require('object-mapper')
-const merge = require('deepmerge')
+import merge from 'deepmerge'
+import objectMapper from 'object-mapper'
 
+import { MergerPluginOptionsSchema } from "../../schemas/PluginOptionsSchema"
+import Action from "../../model/Action"
 import logger from '../../services/logger'
-
-const PluginOptionsSchema = new SchemaObject({
-  sourceFields: {
-    type: Array,
-    required: true
-  },
-  targetField: {
-    type: String,
-    required: true
-  }
-})
-
 
 export default class MergerPlugin {
   msg: string
@@ -32,7 +19,7 @@ export default class MergerPlugin {
     debug('received next action: %j', this.action)
 
     // Getting the last of previous results comming from previous plugins
-    this.options = new PluginOptionsSchema(action.options)
+    this.options = new MergerPluginOptionsSchema(action.options)
 
     debug(
       'Instance merger plugin with options: %j and msg: %j',
