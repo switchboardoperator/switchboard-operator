@@ -21,104 +21,124 @@ describe('conditional', () => {
   })
   const conditionalPlugin = new ConditionalPlugin(msg, action, '')
 
-  it('should checkConditions() should make === operation', () => {
-    return expect(conditionalPlugin.checkConditions()).toBeFalsy()
+  describe('checkConditions', () => {
+    it('should make === operation', () => {
+      const passingAction = new Action({
+        name: 'testing-checks',
+        type: 'conditional',
+        options: {
+          conditions: [
+            {
+              field: 'hello',
+              operation: '===',
+              checkValue: 'world'
+            }
+          ]
+        },
+        event: 'event-name',
+      })
+      const passingConditionalPlugin = new ConditionalPlugin(msg, passingAction, '')
 
-    const passingAction = new Action({
-      name: 'testing-checks',
-      type: 'conditional',
-      options: {
-        conditions: [
-          {
-            field: 'hello',
-            operation: '===',
-            checkValue: 'world'
-          }
-        ]
-      },
-      event: 'event-name',
+      expect(passingConditionalPlugin.checkConditions()).toBeTruthy()
     })
-    const passingConditionalPlugin = new ConditionalPlugin(msg, passingAction, '')
 
-    expect(passingConditionalPlugin.checkConditions()).toBeTruthy()
-  })
+    it('should make !== operation', () => {
+      const passingAction = new Action({
+        name: 'testing-checks',
+        type: 'conditional',
+        options: {
+          conditions: [
+            {
+              field: 'hello',
+              operation: '!==',
+              checkValue: 'world'
+            }
+          ]
+        },
+        event: 'event-name',
+      })
+      const passingConditionalPlugin = new ConditionalPlugin(msg, passingAction, '')
 
-  it('should checkConditions() should make !== operation', () => {
-    return expect(conditionalPlugin.checkConditions()).toBeFalsy()
-
-    const passingAction = new Action({
-      name: 'testing-checks',
-      type: 'conditional',
-      options: {
-        conditions: [
-          {
-            field: 'hello',
-            operation: '!==',
-            checkValue: 'world'
-          }
-        ]
-      },
-      event: 'event-name',
+      return expect(passingConditionalPlugin.checkConditions()).toBeFalsy()
     })
-    const passingConditionalPlugin = new ConditionalPlugin(msg, passingAction, '')
 
-    return expect(passingConditionalPlugin.checkConditions()).toBeFalsy()
-  })
-
-  it('should return false if the field doesn\'t exists', () => {
-
-    const msg = {
-      content: {
-        toString: () => '{"test": "value"}'
+    it('should return false if the field doesn\'t exist', () => {
+      const msg = {
+        content: {
+          toString: () => '{"test": "value"}'
+        }
       }
-    }
 
-    const passingAction = new Action({
-      name: 'testing-checks',
-      type: 'conditional',
-      options: {
-        conditions: [
-          {
-            field: 'hello',
-            operation: 'defined'
-          }
-        ]
-      },
-      event: 'event-name',
+      const passingAction = new Action({
+        name: 'testing-checks',
+        type: 'conditional',
+        options: {
+          conditions: [
+            {
+              field: 'hello',
+              operation: 'defined'
+            }
+          ]
+        },
+        event: 'event-name',
+      })
+      const passingConditionalPlugin = new ConditionalPlugin(msg, passingAction, '')
+
+      return expect(passingConditionalPlugin.checkConditions()).toBeFalsy()
     })
-    const passingConditionalPlugin = new ConditionalPlugin(msg, passingAction, '')
 
-    return expect(passingConditionalPlugin.checkConditions()).toBeFalsy()
+    it('should return false if one of the checks fails', () => {
+      const msg = {}
+
+      const nonPassingAction = new Action({
+        name: 'testing-checks',
+        type: 'conditional',
+        options: {
+          conditions: [
+            {
+              field: 'status',
+              operation: 'defined'
+            },
+            {
+              field: 'status',
+              operation: '===',
+              checkValue: 'paid'
+            },
+            {
+              field: 'details.okCallbacks.purchase.setPaid.purchaseId',
+              operation: 'defined'
+            }
+          ]
+        },
+        event: 'event-name',
+      })
+
+      const nonPassingConditionalPlugin = new ConditionalPlugin(msg, nonPassingAction, '')
+
+      return expect(nonPassingConditionalPlugin.checkConditions()).toBeFalsy()
+    })
   })
 
-  it('should return false if one of the checks fails', () => {
-    const msg = {}
+  describe('execute', () => {
+    it('should return a promise', () => {
+      const passingAction = new Action({
+        name: 'testing-checks',
+        type: 'conditional',
+        options: {
+          conditions: [
+            {
+              field: 'hello',
+              operation: '===',
+              checkValue: 'world'
+            }
+          ]
+        },
+        event: 'event-name',
+      })
+      const passingConditionalPlugin = new ConditionalPlugin(msg, passingAction, '')
 
-    const nonPassingAction = new Action({
-      name: 'testing-checks',
-      type: 'conditional',
-      options: {
-        conditions: [
-          {
-            field: 'status',
-            operation: 'defined'
-          },
-          {
-            field: 'status',
-            operation: '===',
-            checkValue: 'paid'
-          },
-          {
-            field: 'details.okCallbacks.purchase.setPaid.purchaseId',
-            operation: 'defined'
-          }
-        ]
-      },
-      event: 'event-name',
+      // It'll reject, as it does not receive proper options
+      return expect(passingConditionalPlugin.execute()).toBeInstanceOf(Promise)
     })
-
-    const nonPassingConditionalPlugin = new ConditionalPlugin(msg, nonPassingAction, '')
-
-    return expect(nonPassingConditionalPlugin.checkConditions()).toBeFalsy()
   })
 })

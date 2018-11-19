@@ -1,7 +1,8 @@
 const debug = require('debug')('conditional-plugin')
 
-import { ConditionalPluginOptionsSchema } from '../../schemas/PluginOptionsSchema'
 import logger from '../../services/logger'
+import { ConditionalPluginOptionsSchema } from '../../schemas/PluginOptionsSchema'
+import { ExecutionPluginInterface } from '../ExecutionPluginInterface'
 
 // Convert objecto to one level of deepness
 const flattenObject = (ob) => {
@@ -28,7 +29,7 @@ const flattenObject = (ob) => {
   return toReturn
 }
 
-export default class ConditionalPlugin {
+export default class ConditionalPlugin implements ExecutionPluginInterface {
   msg: string
   action: string
   preLog: string
@@ -86,13 +87,15 @@ export default class ConditionalPlugin {
     return retValue
   }
 
-  execute(callback) {
-    if (!this.checkConditions()) {
-      logger.info(this.preLog, 'Some conditional check has failed')
-      return callback({action: 'abort'})
-    }
+  execute() {
+    return new Promise((resolve, reject) => {
+      if (!this.checkConditions()) {
+        logger.info(this.preLog, 'Some conditional check has failed')
+        return reject({action: 'abort'})
+      }
 
-    logger.info(this.preLog, ': All conditional checks has been passed')
-    return callback(null, this.msg)
+      logger.info(this.preLog, ': All conditional checks has been passed')
+      return resolve(this.msg)
+    })
   }
 }

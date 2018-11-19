@@ -1,20 +1,22 @@
-import Action from "../../model/Action";
-
+import Action from '../../model/Action'
 import logger from '../../services/logger'
+import { ExecutionPluginInterface } from '../ExecutionPluginInterface'
 
-export default class LogPlugin {
+export default class LogPlugin implements ExecutionPluginInterface {
   msg: string
-  action: Action
+  action: string
   preLog: string
+  options: any
 
   constructor(msg, action, preLog) {
     this.msg = msg
-    this.action = action
+    this.action = action.name
     this.preLog = preLog + ' > ' + action.name + ': %j'
   }
 
-  execute(callback) {
+  execute() {
     logger.info(this.preLog, this.msg)
-    return callback(null, this.msg)
+
+    return Promise.resolve(this.msg)
   }
 }
