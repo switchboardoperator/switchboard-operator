@@ -11,7 +11,7 @@ const loadPlugin = (prevMessage: string, action: Action, preLog: string, rabbit:
     return new plugins[action.type](prevMessage, action, preLog, rabbit)
   }
 
-  return
+  return false
 }
 
 export default class ActionExecuter {
@@ -19,7 +19,7 @@ export default class ActionExecuter {
   rabbit: any
   event: Event
   preLog: string
-  plugin: ExecutionPluginInterface
+  public plugin: ExecutionPluginInterface
 
   constructor(action: Action, rabbit: any, event: Event) {
     debug('action executer action received: %j', action)
@@ -27,6 +27,7 @@ export default class ActionExecuter {
     this.rabbit = rabbit
     this.event = event
     this.preLog = event.name + ' >'
+
     this.plugin = loadPlugin(
       prevMessage,
       this.action,
@@ -38,34 +39,28 @@ export default class ActionExecuter {
   }
 
   // Instantiate the proper plugin with proper parameters and execute it
-  execute(originalMsg, prevMessage, callback) {
+  execute(originalMsg, prevMessage) {
     // starting with originalMsg
     if (!prevMessage) {
       prevMessage = originalMsg
     }
 
-    const executionPlugin = loadPlugin(
-      prevMessage,
-      this.action,
-      this.preLog,
-      this.rabbit
-    )
-    debug('Loaded the next modules: %j', executionPlugin)
-
-    if (!executionPlugin) {
+    if (!this.plugin) {
       debug(`The plugin cannot be loaded for action: ${this.action}`)
-      return callback(new Error(`The plugin cannot be loaded for action: ${JSON.stringify(this.action)}`))
+      return Promise.reject(new Error(`The plugin cannot be loaded for action: ${JSON.stringify(this.action)}`))
     }
 
     // Execute plugin and send result to callback
-    executionPlugin.execute((err, result) => {
-      if (err) {
-        debug('Action executed failed with %j', err)
-        return callback(err)
-      }
+    return this.plugin.execute()
+      .then((result) => {
+        debug('Executed plugin %s with the result %j', this.action.type, result)
 
-      debug('Executed plugin %s with the result %j', this.action.type, result)
-      return callback(null, result)
-    })
+        return result
+      })
+      .catch((err) => {
+        debug('Action executed failed with %j', err)
+
+        throw err
+      })
   }
 }

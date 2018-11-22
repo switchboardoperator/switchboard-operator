@@ -1,36 +1,47 @@
-import { PluginOptionsSchema } from '../../../schemas/PluginOptionsSchema'
+import { HTTPPluginOptionsSchema } from '../../../schemas/PluginOptionsSchema'
 import json from '../../../../test/operators-tester.json'
-import Logger from '../../../services/logger'
+import logger from '../../../services/logger'
 
 export default class HttpPlugin {
   msg: any
   options: any
   preLog: string
   action: any
+  response: any
 
   constructor(msg, action, preLog) {
     this.msg = msg,
-    this.options = new PluginOptionsSchema(action.options)
+    this.options = new HTTPPluginOptionsSchema(action.options)
     if (this.options.isErrors()) {
       throw new Error('The options provided are not valid ' + JSON.stringify(this.options.getErrors()))
     }
     this.preLog = preLog + ' > ' + action.name
     this.action = action
+    this.response = null
   }
 
-  execute(cb) {
-    Logger.info(this.preLog, 'Running telegram plugin mock')
+  injectResponse(response) {
+    this.response = response
+  }
+
+  execute() {
+    logger.info(this.preLog, 'Running HTTP plugin mock')
+
+    if (!this.response) {
+      return Promise.reject('HTTP response not speecified')
+    }
+
     let result = {}
-    const data = json[this.action.event].response[this.action.name]
 
     if (this.options.merge && !this.options.mergeTarget) {
-      result = {...this.msg, ...data}
+      result = {...this.msg, ...this.response}
     }
 
     if (this.options.merge && this.options.mergeTarget) {
       result = {...this.msg}
-      result[this.options.mergeTarget] = data
+      result[this.options.mergeTarget] = this.response
     }
-    cb(null, result)
+
+    return Promise.resolve(result)
   }
 }

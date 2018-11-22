@@ -90,16 +90,16 @@ export default class ActionCreator {
       const executer = new ActionExecuter(new Action(action), rabbit, this.event)
 
       const executionPromise = (lastValue, preLog, eventsLenght) => {
+        if (lastValue === undefined) {
+          return Promise.reject(new Error('Previous plugin returned undefined'))
+        }
+
         if (lastValue.id) {
           preLog = '[' + lastValue.id + '] > ' + preLog
         }
         debug('Last value received is: ', lastValue)
 
         logger.info(preLog, `Running action ${index + 1} of ${eventsLenght}`)
-
-        if (lastValue === undefined) {
-          return Promise.reject(new Error('Previous plugin returned undefined'))
-        }
 
         return executer.execute(contents, lastValue).catch((err) => {
           logger.error(preLog, 'Step has failed so ignoring next ones')
