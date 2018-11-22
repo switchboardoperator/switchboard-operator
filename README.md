@@ -356,7 +356,7 @@ actions:
       targetRoute: email.send
 ~~~
 
-The tester should look like:
+The tester should look like (working on a yaml implementation..):
 
 ~~~json
 {
