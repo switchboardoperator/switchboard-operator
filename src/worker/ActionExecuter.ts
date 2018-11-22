@@ -19,9 +19,10 @@ export default class ActionExecuter {
   rabbit: any
   event: Event
   preLog: string
+  message: string
   public plugin: ExecutionPluginInterface
 
-  constructor(action: Action, rabbit: any, event: Event) {
+  constructor(action: Action, rabbit: any, event: Event, msg: any) {
     debug('action executer action received: %j', action)
     this.action = action
     this.rabbit = rabbit
@@ -39,12 +40,7 @@ export default class ActionExecuter {
   }
 
   // Instantiate the proper plugin with proper parameters and execute it
-  execute(originalMsg, prevMessage) {
-    // starting with originalMsg
-    if (!prevMessage) {
-      prevMessage = originalMsg
-    }
-
+  execute() {
     if (!this.plugin) {
       debug(`The plugin cannot be loaded for action: ${this.action}`)
       return Promise.reject(new Error(`The plugin cannot be loaded for action: ${JSON.stringify(this.action)}`))

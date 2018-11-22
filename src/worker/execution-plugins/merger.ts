@@ -8,7 +8,7 @@ import { MergerPluginOptionsSchema } from "../../schemas/PluginOptionsSchema"
 import { ExecutionPluginInterface } from '../ExecutionPluginInterface'
 
 export default class MergerPlugin implements ExecutionPluginInterface {
-  msg: string
+  msg: any
   action: Action
   options: any
   preLog: string

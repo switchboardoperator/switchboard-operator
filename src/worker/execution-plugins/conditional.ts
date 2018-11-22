@@ -31,7 +31,7 @@ const flattenObject = (ob) => {
 }
 
 export default class ConditionalPlugin implements ExecutionPluginInterface {
-  msg: string
+  msg: any
   action: Action
   preLog: string
   parsedMessage: object

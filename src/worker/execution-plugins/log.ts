@@ -4,7 +4,7 @@ import logger from '../../services/logger'
 import { ExecutionPluginInterface } from '../ExecutionPluginInterface'
 
 export default class LogPlugin implements ExecutionPluginInterface {
-  msg: string
+  msg: any
   action: Action
   preLog: string
   options: any

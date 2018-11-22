@@ -6,7 +6,7 @@ import { SetterPluginOptionsSchema } from '../../schemas/PluginOptionsSchema'
 import { ExecutionPluginInterface } from '../ExecutionPluginInterface'
 
 export default class SetterPlugin implements ExecutionPluginInterface {
-  msg: string
+  msg: any
   action: Action
   options: any
   preLog: string
