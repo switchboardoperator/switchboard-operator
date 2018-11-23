@@ -15,7 +15,7 @@ describe('execution-plugins :: telegram', () => {
     },
     event: 'event-name',
   })
-  const msg = {test: 'value', test2: 'value2'}
+  const message = {test: 'value', test2: 'value2'}
 
   const mock = new MockAdapter(axios)
   mock.onPost(/sendMessage/).reply(200, {})
@@ -23,14 +23,22 @@ describe('execution-plugins :: telegram', () => {
   it('should be a Promise', () => {
     const telegram = new TelegramPlugin(action, '')
 
-    return expect(telegram.execute(msg)).toBeInstanceOf(Promise)
+    return expect(telegram.execute(message)).toBeInstanceOf(Promise)
   })
 
   it('should allow to be initialized with passed configurations', () => {
     const telegramPlugin = new TelegramPlugin(action, '')
 
-    return telegramPlugin.execute(msg).then((msg) => {
+    return telegramPlugin.execute(message).then((msg) => {
       return expect(typeof msg).toBe('object')
+    })
+  })
+
+  it('should return the exact same message passed', () => {
+    const telegramPlugin = new TelegramPlugin(action, '')
+
+    return telegramPlugin.execute(message).then((msg) => {
+      return expect(msg).toEqual(message)
     })
   })
 })

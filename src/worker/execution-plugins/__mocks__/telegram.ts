@@ -12,8 +12,9 @@ export default class TelegramPlugin {
     this.preLog = preLog
   }
 
-  execute(cb) {
+  execute(message) {
     logger.info(this.preLog, 'Running telegram plugin mock')
-    cb(null, this.msg)
+
+    return Promise.resolve(message)
   }
 }

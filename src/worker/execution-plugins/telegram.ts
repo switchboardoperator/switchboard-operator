@@ -35,6 +35,7 @@ export default class TelegramPlugin implements ExecutionPluginInterface {
       chat_id: chatId,
       text: message
     }
+
     return axios({
       method: 'POST',
       url: apiUrl,
@@ -55,5 +56,6 @@ export default class TelegramPlugin implements ExecutionPluginInterface {
     )
 
     return this.sendMessage(this.options.chatId, renderedTemplate)
+      .then(() => message)
   }
 }
