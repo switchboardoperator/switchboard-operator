@@ -6,7 +6,9 @@ COPY . /app
 
 WORKDIR /app
 
-RUN yarn && yarn build
+RUN yarn && yarn build && \
+  rm -fr src node_modules && \
+  yarn --production
 
 ENV NODE_ENV production
 
