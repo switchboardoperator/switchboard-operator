@@ -15,10 +15,16 @@
   },
   "keywords": [
     "amqp",
-    "rabbitmq"
+    "rabbitmq",
+    "soa"
   ],
-  "author": "Genar <genar@cirici.com>",
+  "author": "Alvarium <hello@alvarium.io>",
   "contributors": [
+    {
+      "name": "Genar Trias",
+      "email": "genar@acs.li",
+      "url": "https://github.com/gtrias"
+    },
     {
       "name": "Òscar Casajuana",
       "email": "oscar@alvarium.io",
