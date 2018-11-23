@@ -299,7 +299,7 @@ You have a full operator example in the [`operators`][operators] dir, named [`me
 
 Running `yarn test-operators`:
 
-[![asciicast](https://asciinema.org/a/anUUbfqvuI7XoOjnmmB1RZFMe.svg)](https://asciinema.org/a/anUUbfqvuI7XoOjnmmB1RZFMe)
+[![asciicast](https://asciinema.org/a/2ITM6bcoPEeDVwJwX9BxgMjFo.svg)](https://asciinema.org/a/2ITM6bcoPEeDVwJwX9BxgMjFo)
 
 ## Usage with docker
 
