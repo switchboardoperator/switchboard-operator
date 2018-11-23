@@ -43,6 +43,14 @@ export default class Prev2TaskPlugin implements ExecutionPluginInterface {
       contentType: 'application/json',
       body: payload,
       replyTimeout: 3000
+    }).then(() => {
+      logger.info(this.preLog, ': event2task executed')
+
+      return message
+    }).catch((err) => {
+      logger.error(this.preLog, ': event2task failed')
+
+      throw err
     })
   }
 }
