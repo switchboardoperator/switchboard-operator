@@ -6,8 +6,7 @@ export default class TelegramPlugin {
   action: Action
   preLog: string
 
-  constructor(msg, action, preLog) {
-    this.msg = msg,
+  constructor(action, preLog) {
     this.action = action,
     this.preLog = preLog
   }
