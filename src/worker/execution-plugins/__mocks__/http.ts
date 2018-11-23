@@ -26,7 +26,7 @@ export default class HttpPlugin {
     logger.info(this.preLog, 'Running HTTP plugin mock')
 
     if (!this.response) {
-      return Promise.reject('HTTP response not specified')
+      this.response = {}
     }
 
     let result = {}
