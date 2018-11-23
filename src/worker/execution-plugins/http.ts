@@ -67,7 +67,15 @@ export default class HttpPlugin implements ExecutionPluginInterface {
         return result
       })
       .catch((err) => {
-        throw new Error(`Error in the request ${JSON.stringify(err)}`)
+        let message = 'Unknown error'
+        if (err.toString().length) {
+          message = err.toString()
+        } else {
+          try {
+            message = JSON.stringify(err)
+          } finally {}
+        }
+        throw new Error(`Error in the request ${message}`)
       })
   }
 }
