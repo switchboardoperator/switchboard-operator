@@ -5,7 +5,7 @@
   "main": "built/app.js",
   "scripts": {
     "test": "NODE_ENV=test jest src/*",
-    "test-operators": "NODE_ENV=test-operators jest test/*",
+    "test-operators": "NODE_ENV=test-operators jest operators-tester.spec",
     "build": "tsc",
     "start": "tsc && node built/app.js"
   },

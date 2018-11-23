@@ -295,7 +295,7 @@ yarn test-operators
 
 ### Test example
 
-You have a full operator example in the [`operators`][operators] dir, named [`membersSignupDemo.yaml`][], and two tests for it in the [`test`][test] folder, named [`members-signup-1.yml`][] and [`members-signup-2.yml`][].
+You have a full operator example in the [`operators`][operators] dir, named [`membersSignupDemo.yaml`][], and two tests for it in the [`test/files`][test] folder, named [`members-signup-1.yml`][] and [`members-signup-2.yml`][].
 
 Running `yarn test-operators`:
 
@@ -333,7 +333,7 @@ MIT
 [gitlab-ci build svg]: https://gitlab.com/alvarium.io/switchboard-operator/badges/master/pipeline.svg
 [gitlab-ci build status]: https://gitlab.com/alvarium.io/switchboard-operator/commits/master
 [operators]: ./operators
-[test]: ./test
+[test]: ./test/files
 [`membersSignupDemo.yaml`]: ./operators/membersSignupDemo.yaml
-[`members-signup-1.yml`]: ./test/members-signup-1.yml
-[`members-signup-2.yml`]: ./test/members-signup-2.yml
+[`members-signup-1.yml`]: ./test/files/members-signup-1.yml
+[`members-signup-2.yml`]: ./test/files/members-signup-2.yml

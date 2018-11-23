@@ -60,8 +60,7 @@ describe('Test operators', () => {
     const rabbit: any = {
       handle: (queue, cb) => cb(),
     }
-    const dirname = `${__dirname}/../test`
-    const filename = `${__dirname}/../test/operators-tester.json`
+    const dirname = `${__dirname}/../test/files`
 
     const contents = fs.readdirSync(dirname)
 
