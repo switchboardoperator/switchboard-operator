@@ -30,7 +30,6 @@ const executeActions = async (operator, {input, response}) => {
     }
 
     const executionPromise = (contents, preLog) => {
-      // console.log('Execution promise, received contents:', contents)
       if (contents === undefined) {
         return Promise.reject(new Error('Previous plugin returned undefined'))
       }
