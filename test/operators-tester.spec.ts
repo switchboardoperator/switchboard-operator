@@ -60,9 +60,12 @@ describe('Test operators', () => {
     const rabbit: any = {
       handle: (queue, cb) => cb(),
     }
-    const dirname = `${__dirname}/../test/files`
+    let path = `${__dirname}/../test/files`
+    if (process.env.OPERATORS_TEST_DIR) {
+      path = process.env.OPERATORS_TEST_DIR
+    }
 
-    const contents = fs.readdirSync(dirname)
+    const contents = fs.readdirSync(path)
 
     const fileContents = []
     for (const filename of contents) {
@@ -70,12 +73,18 @@ describe('Test operators', () => {
         continue
       }
 
-      const location = `${dirname}/${filename}`
+      const location = `${path}/${filename}`
       fileContents.push(fs.readFileSync(location, 'utf8'))
     }
 
     const operators = loadOperators()
     const tests = yaml.safeLoad(fileContents.join(''))
+
+    if (!tests || (tests && !tests.length)) {
+      process.stdout.write(chalk.yellow(`No operator test files found at ${path}\n\n`))
+
+      return false
+    }
 
     const jobs = []
     for (const test of tests) {

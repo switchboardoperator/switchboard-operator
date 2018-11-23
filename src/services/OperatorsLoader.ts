@@ -1,7 +1,7 @@
 const fs = require('fs')
 const yaml = require('js-yaml')
 
-const operatorsDir = __dirname + '/../../operators'
+const operatorsDir = process.env.OPERATORS_DIR || __dirname + '/../../operators'
 
 // List all operator files detected
 const loadOperatorFiles = () => {
