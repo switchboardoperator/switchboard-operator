@@ -39,9 +39,9 @@ describe('execution-plugins :: merger', () => {
         targetField: 'newBody.deep'
       }
 
-      const transformer = new MergerPlugin(msg, {options}, '')
+      const transformer = new MergerPlugin({options}, '')
 
-      return expect(transformer.execute()).toBeInstanceOf(Promise)
+      return expect(transformer.execute(msg)).toBeInstanceOf(Promise)
     })
     it('should merge the specified source keys to target one', () => {
       const options = {
@@ -53,11 +53,11 @@ describe('execution-plugins :: merger', () => {
         targetField: 'newBody.deep'
       }
 
-      const objTransformer = new MergerPlugin(msg, {options}, '')
+      const objTransformer = new MergerPlugin({options}, '')
 
       expect.assertions(4)
 
-      objTransformer.execute().then((mergedObj) => {
+      objTransformer.execute(msg).then((mergedObj) => {
         expect(typeof mergedObj.newBody.deep).toBe('object')
         expect(mergedObj.newBody.deep.someValue).toEqual('test2')
         expect(Object.keys(mergedObj.newBody.deep.nestedValues).length).toEqual(5)
@@ -74,9 +74,9 @@ describe('execution-plugins :: merger', () => {
         targetField: 'newBody.deep'
       }
 
-      const objTransformer = new MergerPlugin(msg, {options}, '')
+      const objTransformer = new MergerPlugin({options}, '')
 
-      return objTransformer.execute().then((mergedObj) => {
+      return objTransformer.execute(msg).then((mergedObj) => {
         return expect(typeof mergedObj.newBody.deep).toBe('string')
       })
     })
@@ -89,11 +89,11 @@ describe('execution-plugins :: merger', () => {
         targetField: 'newBody.deep'
       }
 
-      const objTransformer = new MergerPlugin(msg, {options}, '')
+      const objTransformer = new MergerPlugin({options}, '')
 
       expect.assertions(2)
 
-      return objTransformer.execute().then((mergedObj) => {
+      return objTransformer.execute(msg).then((mergedObj) => {
         expect(Array.isArray(mergedObj.newBody.deep)).toBeTruthy()
         return expect(Object.keys(mergedObj.newBody.deep).length).toBeFalsy()
       })
@@ -108,10 +108,10 @@ describe('execution-plugins :: merger', () => {
         targetField: 'newBody.deep'
       }
 
-      const objTransformer = new MergerPlugin(msg, {options}, '')
+      const objTransformer = new MergerPlugin({options}, '')
 
       expect.assertions(2)
-      return objTransformer.execute().then((mergedObj) => {
+      return objTransformer.execute(msg).then((mergedObj) => {
         expect(typeof mergedObj.newBody.deep).toBe('string')
         return expect(mergedObj.newBody.deep).toEqual('whatever')
       })

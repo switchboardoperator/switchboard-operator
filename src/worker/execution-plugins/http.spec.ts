@@ -18,7 +18,7 @@ describe('execution-plugins :: http', () => {
     },
     event: 'name-event',
   })
-  const httpPlugin = new HttpPlugin(msg, action, 'test')
+  const httpPlugin = new HttpPlugin(action, 'test')
   const mock = new MockAdapter(axios)
 
   mock.onGet(/topology/).reply(200, {
@@ -26,12 +26,12 @@ describe('execution-plugins :: http', () => {
   })
 
   it('should return a promise', () => {
-    expect(httpPlugin.execute()).toBeInstanceOf(Promise)
+    expect(httpPlugin.execute(msg)).toBeInstanceOf(Promise)
   })
 
   it('should make the http request', () => {
     expect.assertions(2)
-    return httpPlugin.execute().then((result: any) => {
+    return httpPlugin.execute(msg).then((result: any) => {
       expect(typeof result).toEqual('object')
       return expect(result.myTopology).toEqual('test')
     })
@@ -47,7 +47,7 @@ describe('execution-plugins :: http', () => {
   it('should embed request response to the previous value', () => {
     expect.assertions(3)
 
-    return httpPlugin.execute().then((result: any) => {
+    return httpPlugin.execute(msg).then((result: any) => {
       expect(typeof result).toEqual('object')
       expect(result.myTopology).toEqual('test')
 
@@ -67,9 +67,9 @@ describe('execution-plugins :: http', () => {
       },
       event: 'name-event',
     })
-    const httpPlugin = new HttpPlugin(msg, action, 'test')
+    const httpPlugin = new HttpPlugin(action, 'test')
 
-    return httpPlugin.execute().then((result: any) => {
+    return httpPlugin.execute(msg).then((result: any) => {
       return expect(result.response.myTopology).toEqual('test')
     })
   })

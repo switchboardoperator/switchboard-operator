@@ -9,14 +9,14 @@ describe('execution-plugins :: setter', () => {
       }
     }
     it('should return a promise', () => {
-      const transformer = new SetterPlugin(msg, {options}, '')
-      expect(transformer.execute()).toBeInstanceOf(Promise)
+      const transformer = new SetterPlugin({options}, '')
+      expect(transformer.execute(msg)).toBeInstanceOf(Promise)
     })
 
     it('should convert msg payload to transformed object', () => {
-      const objTransformer = new SetterPlugin(msg, {options}, '')
+      const objTransformer = new SetterPlugin({options}, '')
 
-      return objTransformer.execute().then((setObj) => {
+      return objTransformer.execute(msg).then((setObj) => {
         return expect(setObj.test).toEqual('value')
       })
     })

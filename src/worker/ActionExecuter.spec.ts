@@ -30,34 +30,32 @@ describe('ActionExecuter', () => {
       }
     }
 
-    return expect(actionExecuter.execute(msg, {})).resolves
+    return expect(actionExecuter.execute(msg)).resolves.toBeTruthy()
   })
 
-  // it('should handle conditional type action', () => {
-  //   const action = new Action({
-  //     name: 'myConditionalAction',
-  //     type: 'conditional',
-  //     options: {
-  //       conditions: {
-  //         field: 'test',
-  //         operation: 'defined'
-  //       }
-  //     },
-  //     event: 'event-name',
-  //   })
+  it('should handle conditional type action', () => {
+    const action = new Action({
+      name: 'myConditionalAction',
+      type: 'conditional',
+      options: {
+        conditions: {
+          field: 'test',
+          operation: 'defined'
+        }
+      },
+      event: 'event-name',
+    })
 
-  //   const actionExecuter = new ActionExecuter(action, rabbit, new Event({name: 'test', eventName: 'test', route: 'test', actions: []}))
+    const actionExecuter = new ActionExecuter(action, rabbit, new Event({name: 'test', eventName: 'test', route: 'test', actions: []}))
 
-  //   const msg = {
-  //     body: {
-  //       test: 'Test',
-  //       test2: 'Test2',
-  //       toString: () => '{test1: "Test", test2: "Test2"}'
-  //     }
-  //   }
+    const msg = {
+      body: {
+        test: 'Test',
+        test2: 'Test2',
+        toString: () => '{test1: "Test", test2: "Test2"}'
+      }
+    }
 
-  //   actionExecuter.execute(msg, {}, (err) => {
-  //     expect(err).toBe(null)
-  //   })
-  // })
+    return expect(actionExecuter.execute(msg)).resolves.toBeTruthy()
+  })
 })

@@ -6,9 +6,9 @@ import { ExecutionPluginInterface } from "./ExecutionPluginInterface"
 
 const debug = require('debug')('action-executer')
 
-const loadPlugin = (prevMessage: string, action: Action, preLog: string, rabbit: any) => {
+const loadPlugin = (action: Action, preLog: string, rabbit: any) => {
   if (plugins[action.type]) {
-    return new plugins[action.type](prevMessage, action, preLog, rabbit)
+    return new plugins[action.type](action, preLog, rabbit)
   }
 
   return false
@@ -22,7 +22,7 @@ export default class ActionExecuter {
   message: string
   public plugin: ExecutionPluginInterface
 
-  constructor(action: Action, rabbit: any, event: Event, msg: any) {
+  constructor(action: Action, rabbit: any, event: Event) {
     debug('action executer action received: %j', action)
     this.action = action
     this.rabbit = rabbit
@@ -30,7 +30,6 @@ export default class ActionExecuter {
     this.preLog = event.name + ' >'
 
     this.plugin = loadPlugin(
-      prevMessage,
       this.action,
       this.preLog,
       this.rabbit
@@ -40,14 +39,14 @@ export default class ActionExecuter {
   }
 
   // Instantiate the proper plugin with proper parameters and execute it
-  execute() {
+  execute(message: any) {
     if (!this.plugin) {
       debug(`The plugin cannot be loaded for action: ${this.action}`)
       return Promise.reject(new Error(`The plugin cannot be loaded for action: ${JSON.stringify(this.action)}`))
     }
 
     // Execute plugin and send result to callback
-    return this.plugin.execute()
+    return this.plugin.execute(message)
       .then((result) => {
         debug('Executed plugin %s with the result %j', this.action.type, result)
 

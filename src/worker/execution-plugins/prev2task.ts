@@ -8,12 +8,11 @@ import { ExecutionPluginInterface } from '../ExecutionPluginInterface'
 
 export default class Prev2TaskPlugin implements ExecutionPluginInterface {
   options: any
-  msg: any
   action: Action
   rabbit: any
   preLog: string
 
-  constructor(msg, action, preLog, rabbit) {
+  constructor(action, preLog, rabbit) {
     if (!rabbit) {
       throw new Error('You must provide a rabbitmq instance')
     }
@@ -23,22 +22,21 @@ export default class Prev2TaskPlugin implements ExecutionPluginInterface {
       throw new Error('The options provided are not valid '+ JSON.stringify(this.options.getErrors()))
     }
 
-    this.msg = msg
     this.action = action
     this.rabbit = rabbit
     this.preLog = preLog + ' > ' + action.name
   }
 
-  execute() {
+  execute(message: any) {
     const { rabbit, action: { options } } = this
     const exchange = options.target
     const route = options.targetRoute
 
     debug('Exchange selected %s', exchange)
     debug('Route selected %s', route)
-    debug('Sending the next message: %j', this.msg)
+    debug('Sending the next message: %j', message)
 
-    const payload = this.msg.body || this.msg
+    const payload = message.body || message
 
     return rabbit.publish(exchange, {
       routingKey: route,

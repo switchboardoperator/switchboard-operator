@@ -31,19 +31,14 @@ const flattenObject = (ob) => {
 }
 
 export default class ConditionalPlugin implements ExecutionPluginInterface {
-  msg: any
   action: Action
   preLog: string
   parsedMessage: object
   options: any
 
-  constructor(msg, action, preLog) {
-    this.msg = msg
+  constructor(action, preLog) {
     this.action = action
     this.preLog = preLog + ' > ' + action.name
-    this.parsedMessage = flattenObject(
-      this.msg
-    )
 
     this.options = new ConditionalPluginOptionsSchema(action.options)
   }
@@ -88,7 +83,9 @@ export default class ConditionalPlugin implements ExecutionPluginInterface {
     return retValue
   }
 
-  execute() {
+  execute(message: any) {
+    this.parsedMessage = flattenObject(message)
+
     return new Promise((resolve, reject) => {
       if (!this.checkConditions()) {
         logger.info(this.preLog, 'Some conditional check has failed')
@@ -96,7 +93,7 @@ export default class ConditionalPlugin implements ExecutionPluginInterface {
       }
 
       logger.info(this.preLog, ': All conditional checks has been passed')
-      return resolve(this.msg)
+      return resolve(message)
     })
   }
 }

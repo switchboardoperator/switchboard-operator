@@ -7,14 +7,12 @@ import { TelegramPluginOptionsSchema } from '../../schemas/PluginOptionsSchema'
 import { ExecutionPluginInterface } from '../ExecutionPluginInterface'
 
 export default class TelegramPlugin implements ExecutionPluginInterface {
-  msg: string
   action: Action
   preLog: string
   telegramToken: string
   options: any
 
-  constructor(msg, action, preLog) {
-    this.msg = msg
+  constructor(action, preLog) {
     this.action = action
     this.preLog = preLog + ' > ' + action.name + ': %j'
     this.options = new TelegramPluginOptionsSchema(action.options)
@@ -26,7 +24,7 @@ export default class TelegramPlugin implements ExecutionPluginInterface {
     if (config.has('plugins.telegram.token')) {
       this.telegramToken = config.get('plugins.telegram.token')
     } else {
-      throw new Error('To use Telegram plugin you must provide token, talk to @BotFather to get yours.')
+      throw new Error('To use Telegram plugin you must provide a token. Talk to @BotFather to get yours.')
     }
   }
 
@@ -43,10 +41,12 @@ export default class TelegramPlugin implements ExecutionPluginInterface {
     })
   }
 
-  execute() {
+  execute(message: any) {
     const renderedTemplate = nunjucks.renderString(
-      this.options.template, this.msg
+      this.options.template,
+      message
     )
+
     return this.sendMessage(this.options.chatId, renderedTemplate)
   }
 }

@@ -8,14 +8,15 @@ describe('execution-plugins :: log', () => {
     options: {},
     event: 'event-name',
   })
+  const message = {test: 'value', test2: 'value2'}
 
-  const logPlugin = new LogPlugin({test: 'value', test2: 'value2'}, action, 'preLog')
+  const logPlugin = new LogPlugin(action, 'preLog')
 
   it('should return a promise', () => {
-    return expect(logPlugin.execute()).toBeInstanceOf(Promise)
+    return expect(logPlugin.execute(message)).toBeInstanceOf(Promise)
   })
 
   it('should log messages', () => {
-    return logPlugin.execute().then((msg: any) => expect(typeof msg).toEqual('object'))
+    return logPlugin.execute(message).then((msg: any) => expect(typeof msg).toEqual('object'))
   })
 })

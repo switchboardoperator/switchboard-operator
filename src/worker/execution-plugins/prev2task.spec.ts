@@ -17,9 +17,9 @@ describe('execution-plugins :: prev2task', () => {
       const rabbit = {
         publish: () => Promise.resolve({})
       }
-      const event2Task = new Prev2TaskPlugin(msg, action, '', rabbit)
+      const event2Task = new Prev2TaskPlugin(action, '', rabbit)
 
-      return event2Task.execute().then((msg) => expect(typeof msg).toBe('object'))
+      return event2Task.execute(msg).then((msg) => expect(typeof msg).toBe('object'))
     })
   })
 })

@@ -89,27 +89,28 @@ export default class ActionCreator {
     this.event.actions.forEach((action, index) => {
       const executer = new ActionExecuter(new Action(action), rabbit, this.event)
 
-      const executionPromise = (lastValue, preLog, eventsLenght) => {
-        if (lastValue === undefined) {
+      const executionPromise = (contents, preLog, eventsLenght) => {
+        if (contents === undefined) {
           return Promise.reject(new Error('Previous plugin returned undefined'))
         }
 
-        if (lastValue.id) {
-          preLog = '[' + lastValue.id + '] > ' + preLog
+        if (contents.id) {
+          preLog = '[' + contents.id + '] > ' + preLog
         }
-        debug('Last value received is: ', lastValue)
+
+        debug('Last value received is: ', contents)
 
         logger.info(preLog, `Running action ${index + 1} of ${eventsLenght}`)
 
-        return executer.execute(contents, lastValue).catch((err) => {
+        return executer.execute(contents).catch((err) => {
           logger.error(preLog, 'Step has failed so ignoring next ones')
           return Promise.reject(err)
         })
       }
 
       promiseChain = promiseChain.then(
-        (lastValue) => executionPromise(
-          lastValue,
+        (contents) => executionPromise(
+          contents,
           this.preLog,
           this.event.actions.length
         )

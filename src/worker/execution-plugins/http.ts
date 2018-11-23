@@ -12,8 +12,7 @@ export default class HttpPlugin implements ExecutionPluginInterface {
   action: Action
   preLog: string
 
-  constructor(msg: any, action: any, preLog: string) {
-    this.msg = msg
+  constructor(action: any, preLog: string) {
     this.action = action
     this.options = new HTTPPluginOptionsSchema(action.options)
     if (this.options.isErrors()) {
@@ -32,7 +31,9 @@ export default class HttpPlugin implements ExecutionPluginInterface {
     return this.msg
   }
 
-  execute() {
+  execute(message: any) {
+    this.msg = message
+
     const method = this.options.method.toLowerCase()
 
     return axios({

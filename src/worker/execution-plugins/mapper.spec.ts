@@ -19,8 +19,8 @@ describe('execution-plugins :: mapper', () => {
   describe('execute', () => {
     it('should return a Promise', () => {
       const options = {fields: {}}
-      const mapper = new Mapper(msg, {options}, '')
-      return expect(mapper.execute()).toBeInstanceOf(Promise)
+      const mapper = new Mapper({options}, '')
+      return expect(mapper.execute(msg)).toBeInstanceOf(Promise)
     })
     it('should convert msg payload to transformed object', () => {
       const options = {
@@ -32,10 +32,10 @@ describe('execution-plugins :: mapper', () => {
         }
       }
 
-      const objTransformer = new Mapper(msg, {options}, '')
+      const objTransformer = new Mapper({options}, '')
 
       expect.assertions(4)
-      return objTransformer.execute().then((transformedObj) => {
+      return objTransformer.execute(msg).then((transformedObj) => {
         expect(typeof transformedObj).toEqual('object')
         expect(typeof transformedObj.vars).toEqual('object')
         expect(transformedObj.vars.nom).toEqual('John')
@@ -54,10 +54,10 @@ describe('execution-plugins :: mapper', () => {
         }
       }
 
-      const objTransformer = new Mapper(msg, {options}, '')
+      const objTransformer = new Mapper({options}, '')
 
       expect.assertions(3)
-      return objTransformer.execute().then((transformedObj) => {
+      return objTransformer.execute(msg).then((transformedObj) => {
         expect(typeof transformedObj).toEqual('object')
         expect(transformedObj.name).toEqual('John')
         return expect(transformedObj.vars.nom).toEqual('John')
@@ -73,10 +73,10 @@ describe('execution-plugins :: mapper', () => {
         }
       }
 
-      const objTransformer = new Mapper(msg, {name:'convert-all', options}, '')
+      const objTransformer = new Mapper({name:'convert-all', options}, '')
 
       expect.assertions(4)
-      return objTransformer.execute().then((transformedObj) => {
+      return objTransformer.execute(msg).then((transformedObj) => {
         expect(typeof transformedObj).toEqual('object')
         expect(typeof transformedObj.vars).toEqual('object')
         expect(transformedObj.vars.name).toEqual('John')
