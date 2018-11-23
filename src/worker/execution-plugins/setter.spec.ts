@@ -1,25 +1,24 @@
-import * as chai from 'chai'
-
 import SetterPlugin from './setter'
 
-const expect = chai.expect
-
-describe('setter', () => {
-  const msg = {}
-
-  it('should convert msg payload to transformed object', (done) => {
+describe('execution-plugins :: setter', () => {
+  describe('execute', () => {
+    const msg = {}
     const options = {
       fields: {
         test: 'value'
       }
     }
+    it('should return a promise', () => {
+      const transformer = new SetterPlugin({options}, '')
+      expect(transformer.execute(msg)).toBeInstanceOf(Promise)
+    })
 
-    const objTransformer = new SetterPlugin(msg, {options}, '')
+    it('should convert msg payload to transformed object', () => {
+      const objTransformer = new SetterPlugin({options}, '')
 
-    objTransformer.execute((err, setObj) => {
-      expect(err).to.be.null
-      expect(setObj.test).to.equal('value')
-      done()
+      return objTransformer.execute(msg).then((setObj) => {
+        return expect(setObj.test).toEqual('value')
+      })
     })
   })
 })

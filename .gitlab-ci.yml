@@ -1,0 +1,31 @@
+stages:
+- test
+
+.test: &test
+  image: node:${NODE_VERSION}
+  stage: test
+  before_script:
+  - yarn
+  script:
+  - yarn test
+  - yarn test-operators
+
+node-7:
+  <<: *test
+  variables:
+    NODE_VERSION: '7'
+
+node-8:
+  <<: *test
+  variables:
+    NODE_VERSION: '8'
+
+node-9:
+  <<: *test
+  variables:
+    NODE_VERSION: '9'
+
+node-10:
+  <<: *test
+  variables:
+    NODE_VERSION: '10'

@@ -1,33 +1,22 @@
-import Action from "../../model/Action";
+const debug = require('debug')('sbo-plugin-telegram')
+import axios from 'axios'
+import config from 'config'
+import nunjucks from 'nunjucks'
 
-const SchemaObject = require('schema-object')
-const axios = require('axios')
-const config = require('config')
-const nunjucks = require('nunjucks')
+import Action from '../../model/Action'
+import { TelegramPluginOptionsSchema } from '../../schemas/PluginOptionsSchema'
+import { ExecutionPluginInterface } from '../ExecutionPluginInterface'
 
-const PluginOptionsSchema = new SchemaObject({
-  chatId: {
-    type: String,
-    required: true
-  },
-  template: {
-    type: String,
-    required: true
-  }
-})
-
-export default class TelegramPlugin {
-  msg: string
+export default class TelegramPlugin implements ExecutionPluginInterface {
   action: Action
   preLog: string
   telegramToken: string
   options: any
 
-  constructor(msg, action, preLog) {
-    this.msg = msg
+  constructor(action, preLog) {
     this.action = action
     this.preLog = preLog + ' > ' + action.name + ': %j'
-    this.options = new PluginOptionsSchema(action.options)
+    this.options = new TelegramPluginOptionsSchema(action.options)
 
     if (this.options.isErrors()) {
       throw new Error('The options provided are not valid '+ JSON.stringify(this.options.getErrors()))
@@ -36,7 +25,7 @@ export default class TelegramPlugin {
     if (config.has('plugins.telegram.token')) {
       this.telegramToken = config.get('plugins.telegram.token')
     } else {
-      throw new Error('To use Telegram plugin you must provide token, talk to @BotFather to get yours.')
+      throw new Error('To use Telegram plugin you must provide a token. Talk to @BotFather to get yours.')
     }
   }
 
@@ -53,16 +42,18 @@ export default class TelegramPlugin {
     })
   }
 
-  execute(callback) {
-    const renderedTemplate = nunjucks.renderString(
-      this.options.template, this.msg
+  execute(message: any) {
+    debug(
+      'Running telegram plugin with options: %j and msg: %j',
+      this.options,
+      message
     )
-    this.sendMessage(this.options.chatId, renderedTemplate)
-      .then(() => {
-        return callback(null, this.msg)
-      })
-      .catch((err) => {
-        return callback(err, this.msg)
-      })
+
+    const renderedTemplate = nunjucks.renderString(
+      this.options.template,
+      message
+    )
+
+    return this.sendMessage(this.options.chatId, renderedTemplate)
   }
 }

@@ -1,8 +1,5 @@
 import Event from './Event'
 
-import { expect } from 'chai'
-import 'mocha'
-
 describe('Event', () => {
   const params = {
     name: 'testEvent',
@@ -17,11 +14,12 @@ describe('Event', () => {
     actions: []
   }
   const testEvent = new Event(params)
+
   it('should must be a model instance', () => {
-    expect(testEvent instanceof Event).to.be.true
+    expect(testEvent instanceof Event).toBeTruthy()
   })
 
-  it('should has event queue properties', (done) => {
+  it('should have event queue properties', () => {
     const event = new Event({
       name: 'testing',
       eventName: 'testing',
@@ -29,27 +27,25 @@ describe('Event', () => {
       actions: []
     })
 
-    expect(event.eventName).to.equals('testing')
-    expect(event.route).to.equals('created')
+    expect(event.eventName).toEqual('testing')
+    expect(event.route).toEqual('created')
 
     // Converting event to exchange
     const generatedExchange = event.toExchange()
-    expect(generatedExchange).to.be.a('object')
-    expect(generatedExchange.name).to.equals('testing')
-    expect(generatedExchange.type).to.equals('direct')
+    expect(typeof generatedExchange).toBe('object')
+    expect(generatedExchange.name).toEqual('testing')
+    expect(generatedExchange.type).toEqual('direct')
 
     // Getting event queue
     const generatedQueue = event.toQueue()
-    expect(generatedQueue).to.be.a('object')
-    expect(generatedQueue.name).to.be.a('string')
+    expect(typeof generatedQueue).toBe('object')
+    expect(typeof generatedQueue.name).toBe('string')
 
     // Getting event binding
     const generatedBinding = event.toBinding()
-    expect(generatedBinding).to.be.a('object')
-    expect(generatedBinding.exchange).to.equals('testing')
-    expect(generatedBinding.target).to.equals('sbo-ms.testing.testing.created')
-    expect(generatedBinding.keys).to.equals('created')
-
-    done()
+    expect(typeof generatedBinding).toBe('object')
+    expect(generatedBinding.exchange).toEqual('testing')
+    expect(generatedBinding.target).toEqual('sbo-ms.testing.testing.created')
+    expect(generatedBinding.keys).toEqual('created')
   })
 })

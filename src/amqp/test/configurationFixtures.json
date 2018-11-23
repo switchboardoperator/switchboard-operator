@@ -16,7 +16,7 @@
           "type": "event2task",
           "eventName": "members",
           "options": {
-            "target": "cfs-emails"
+            "target": "emails"
           }
         },
         {

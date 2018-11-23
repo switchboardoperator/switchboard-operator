@@ -1,7 +1,9 @@
-const SchemaObject = require('schema-object')
 const debug = require('debug')('conditional-plugin')
 
+import Action from '../../model/Action'
 import logger from '../../services/logger'
+import { ConditionalPluginOptionsSchema } from '../../schemas/PluginOptionsSchema'
+import { ExecutionPluginInterface } from '../ExecutionPluginInterface'
 
 // Convert objecto to one level of deepness
 const flattenObject = (ob) => {
@@ -28,45 +30,17 @@ const flattenObject = (ob) => {
   return toReturn
 }
 
-const ConditionSchema = new SchemaObject({
-  field: {
-    type: String,
-    required: true
-  },
-  operation: {
-    type: String,
-    required: true,
-    enum: ['===', '!==', 'defined', 'undefined', 'isTrue']
-  },
-  checkValue: {
-    type: String
-  }
-})
-
-const PluginOptionsSchema = new SchemaObject({
-  conditions: {
-    type: Array,
-    arrayType: ConditionSchema,
-    required: true
-  }
-})
-
-export default class ConditionalPlugin {
-  msg: string
-  action: string
+export default class ConditionalPlugin implements ExecutionPluginInterface {
+  action: Action
   preLog: string
   parsedMessage: object
   options: any
 
-  constructor(msg, action, preLog) {
-    this.msg = msg
+  constructor(action, preLog) {
     this.action = action
     this.preLog = preLog + ' > ' + action.name
-    this.parsedMessage = flattenObject(
-      this.msg
-    )
 
-    this.options = new PluginOptionsSchema(action.options)
+    this.options = new ConditionalPluginOptionsSchema(action.options)
   }
 
   // Execute the conditions logic
@@ -109,13 +83,23 @@ export default class ConditionalPlugin {
     return retValue
   }
 
-  execute(callback) {
-    if (!this.checkConditions()) {
-      logger.info(this.preLog, 'Some conditional check has failed')
-      return callback({action: 'abort'})
-    }
+  execute(message: any) {
+    this.parsedMessage = flattenObject(message)
 
-    logger.info(this.preLog, ': All conditional checks has been passed')
-    return callback(null, this.msg)
+    debug(
+      'Running conditional plugin with options: %j and msg: %j',
+      this.options,
+      message
+    )
+
+    return new Promise((resolve, reject) => {
+      if (!this.checkConditions()) {
+        logger.info(this.preLog, 'Some conditional check has failed')
+        return reject({action: 'abort'})
+      }
+
+      logger.info(this.preLog, ': All conditional checks has been passed')
+      return resolve(message)
+    })
   }
 }

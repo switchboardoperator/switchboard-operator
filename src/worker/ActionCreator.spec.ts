@@ -1,40 +1,33 @@
-import chai = require('chai')
-const expect = chai.expect
-const rabbit = require('rabbot')
+import rabbit from 'rabbot'
 
 import Event from '../model/Event'
 import Action from '../model/Action'
 import ActionCreator from './ActionCreator'
 
 describe('ActionCreator', () => {
-  it('should fail if one of the steps fails', (done) => {
+  it('should fail if one of the steps fails', () => {
     const msg = {
       content: {
-        toString: function () {
-          return '{"test": "value"}'
-        }
+        toString: () => '{"test": "value"}'
       },
-      ack: function () {}
+      ack: function () {},
     }
 
     const event = new Event({
       name: 'test',
       eventName: 'memberships',
       route: 'created',
-      actions: []
+      actions: [],
     })
 
     const actionCreator = new ActionCreator(rabbit, event)
     actionCreator.createHandler()
 
-    actionCreator.executeActions(msg).then((err) => {
-      expect(err).to.not.be.null
-      done()
-    })
+    expect.assertions(1)
+    return expect(actionCreator.executeActions(msg)).rejects.toBeTruthy()
   })
 
-  it('should handle coming events', (done) => {
-
+  it('should handle coming events', () => {
     const options = {
       fields: {
         name: 'vars.nom',
@@ -46,12 +39,14 @@ describe('ActionCreator', () => {
     const action = new Action({
       name: 'mapper1',
       type: 'mapper',
+      event: 'event-name',
       options
     })
 
     const action2 = new Action({
       name: 'mapper2',
       type: 'mapper',
+      event: 'event-name',
       options
     })
 
@@ -66,9 +61,10 @@ describe('ActionCreator', () => {
     actionCreator.createHandler()
 
     const handler = actionCreator.getHandler()
-    expect(handler).to.be.an('object')
+    expect.assertions(3)
 
-    expect(handler.topic).to.equals('sbo-ms-test-memberships-created.#')
+    expect(typeof handler).toBe('object')
+    expect(handler.topic).toEqual('sbo-ms-test-memberships-created.#')
 
     const msg = {
       content: {
@@ -79,14 +75,9 @@ describe('ActionCreator', () => {
       ack: function () {}
     }
 
-    actionCreator.executeActions(msg)
+    return actionCreator.executeActions(msg)
       .then((results) => {
-        expect(results).to.be.an('object')
-        done()
-      })
-      .catch((err) => {
-        done(err)
+        return expect(typeof results).toBe('object')
       })
   })
-
 })

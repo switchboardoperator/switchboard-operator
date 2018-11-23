@@ -1,37 +1,21 @@
 const debug = require('debug')('http-plugin')
-const SchemaObject = require('schema-object')
-const axios = require('axios')
-const nunjucks = require('nunjucks')
+import axios from 'axios'
+import nunjucks from 'nunjucks'
 
-const PluginOptionsSchema = new SchemaObject({
-  url: {
-    type: String,
-    required: true
-  },
-  method: {
-    type: String,
-    required: true,
-    enum: ['GET', 'POST', 'PUT']
-  },
-  merge: {
-    type: Boolean,
-    required: false
-  },
-  mergeTarget: {
-    type: String,
-    required: false
-  }
-})
+import logger from '../../services/logger'
+import Action from '../../model/Action'
+import { HTTPPluginOptionsSchema } from '../../schemas/PluginOptionsSchema'
+import { ExecutionPluginInterface } from '../ExecutionPluginInterface'
 
-export default class HttpPlugin {
+export default class HttpPlugin implements ExecutionPluginInterface {
   msg: any
   options: any
+  action: Action
   preLog: string
 
-  constructor(msg: any, action: any, preLog: string) {
-    this.msg = msg
-
-    this.options = new PluginOptionsSchema(action.options)
+  constructor(action: any, preLog: string) {
+    this.action = action
+    this.options = new HTTPPluginOptionsSchema(action.options)
     if (this.options.isErrors()) {
       throw new Error('The options provided are not valid ' + JSON.stringify(this.options.getErrors()))
     }
@@ -48,9 +32,19 @@ export default class HttpPlugin {
     return this.msg
   }
 
-  execute(callback) {
+  execute(message: any) {
+    this.msg = message
+
+    debug(
+      'Running HTTP plugin with options: %j and msg: %j',
+      this.options,
+      message
+    )
+
     const method = this.options.method.toLowerCase()
-    axios({
+    logger.info(this.preLog, 'Making HTTP request')
+
+    return axios({
       method: method,
       url: this.renderUrl(),
       data: method !== 'get' ? this.populateData() : {}
@@ -68,10 +62,20 @@ export default class HttpPlugin {
           result[this.options.mergeTarget] = response.data
         }
 
-        return callback(null, result)
+        logger.info(this.preLog, 'HTTP request was successful')
+
+        return result
       })
       .catch((err) => {
-        return callback(new Error(`Error in the request ${err}`))
+        let message = 'Unknown error'
+        if (err.toString().length) {
+          message = err.toString()
+        } else {
+          try {
+            message = JSON.stringify(err)
+          } finally {}
+        }
+        throw new Error(`Error in the request ${message}`)
       })
   }
 }

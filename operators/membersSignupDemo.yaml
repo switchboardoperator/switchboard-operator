@@ -1,0 +1,57 @@
+# Execute every time a purchase is update
+name: membersSignup
+eventName: members.signup
+route: created
+# true by default, but here you can see you're able to disable them just adding this key.
+enabled: true
+actions:
+  # Print everything to the log
+  - name: print-log
+    type: log
+
+  # Getting account info
+  - name: getMetaInfo
+    type: http
+    options:
+      url: http://your-awesome-endpoint.io/{{ member.account }}
+      method: GET
+      merge: true
+      mergeTarget: _account
+
+  # Copy all contents to vars to be used in email
+  - name: copyAllToVars
+    type: mapper
+    options:
+      copy:
+      - vars
+
+  # Merge email configuration
+  - name: mergeTransportSettings
+    type: merger
+    options:
+      sourceFields:
+      - vars._account.meta.emailConfig
+      - vars.privateMeta.emailConfig
+      targetField: vars._email
+
+  # Convert event to email
+  - name: mapEmailFields
+    # Type mapper gets the previous action result and converts its fields to a new object with the specified structure.
+    type: mapper
+    options:
+      fields:
+        vars.member.email: to
+        vars._email.transport: transport
+        vars._email.template: template
+        vars._email.subject: subject
+        vars._email.apikey: apikey
+        vars._email.from: from
+        # map every other var in the scope to `vars`, so the mail template has access to them.
+        '*': vars
+
+  # Send members to emails queue applying
+  - name: sendSignupConfirmationEmail
+    type: prev2task
+    options:
+      target: emails
+      targetRoute: email.send

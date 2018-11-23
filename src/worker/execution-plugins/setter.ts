@@ -1,37 +1,21 @@
-import Action from "../../model/Action";
-
-const debug = require('debug')('setter-plugin')
-const SchemaObject = require('schema-object')
+const debug = require('debug')('sbo-plugin-setter')
 
 import logger from '../../services/logger'
+import Action from "../../model/Action"
+import { SetterPluginOptionsSchema } from '../../schemas/PluginOptionsSchema'
+import { ExecutionPluginInterface } from '../ExecutionPluginInterface'
 
-const PluginOptionsSchema = new SchemaObject({
-  fields: {
-    type: Object,
-    required: true
-  }
-})
-
-export default class SetterPlugin {
-  msg: string
+export default class SetterPlugin implements ExecutionPluginInterface {
   action: Action
   options: any
   preLog: string
 
-  constructor(msg, action, preLog) {
-    this.msg = msg
+  constructor(action, preLog) {
     this.action = action
-    debug('received next msg: %j', this.msg)
-    debug('received next action: %j', this.action)
 
     // Getting the last of previous results comming from previous plugins
-    this.options = new PluginOptionsSchema(action.options)
+    this.options = new SetterPluginOptionsSchema(action.options)
 
-    debug(
-      'Instance transformer plugin with options: %j and msg: %j',
-      this.options,
-      this.msg
-    )
 
     if (this.options.isErrors()) {
       throw new Error('The options provided are not valid '+ JSON.stringify(this.options.getErrors()))
@@ -40,9 +24,16 @@ export default class SetterPlugin {
     this.preLog = preLog + ' > ' + action.name
   }
 
-  execute(callback) {
-    const setObj = Object.assign({}, this.msg, this.options.fields)
+  execute(message: any) {
+    debug(
+      'Running setter plugin with options: %j and msg: %j',
+      this.options,
+      message
+    )
+
+    const setObj = Object.assign({}, message, this.options.fields)
     logger.info(this.preLog, 'Object setter applied')
-    return callback(null, setObj)
+
+    return Promise.resolve(setObj)
   }
 }

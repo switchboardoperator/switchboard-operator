@@ -1,44 +1,22 @@
-import Action from "../../model/Action";
+const debug = require('debug')('sbo-plugin-merger')
+import merge from 'deepmerge'
+import objectMapper from 'object-mapper'
 
-const debug = require('debug')('merger-plugin')
-const SchemaObject = require('schema-object')
-const objectMapper = require('object-mapper')
-const merge = require('deepmerge')
-
+import Action from "../../model/Action"
 import logger from '../../services/logger'
+import { MergerPluginOptionsSchema } from "../../schemas/PluginOptionsSchema"
+import { ExecutionPluginInterface } from '../ExecutionPluginInterface'
 
-const PluginOptionsSchema = new SchemaObject({
-  sourceFields: {
-    type: Array,
-    required: true
-  },
-  targetField: {
-    type: String,
-    required: true
-  }
-})
-
-
-export default class MergerPlugin {
-  msg: string
+export default class MergerPlugin implements ExecutionPluginInterface {
   action: Action
   options: any
   preLog: string
 
-  constructor(msg, action, preLog) {
-    this.msg = msg
+  constructor(action, preLog) {
     this.action = action
-    debug('received next msg: %j', this.msg)
-    debug('received next action: %j', this.action)
 
     // Getting the last of previous results comming from previous plugins
-    this.options = new PluginOptionsSchema(action.options)
-
-    debug(
-      'Instance merger plugin with options: %j and msg: %j',
-      this.options,
-      this.msg
-    )
+    this.options = new MergerPluginOptionsSchema(action.options)
 
     if (this.options.isErrors()) {
       throw new Error('The options provided are not valid '+ JSON.stringify(this.options.getErrors()))
@@ -47,10 +25,16 @@ export default class MergerPlugin {
     this.preLog = preLog + ' > ' + action.name
   }
 
-  execute(callback) {
+  execute(message: any) {
+    debug(
+      'Running merger plugin with options: %j and msg: %j',
+      this.options,
+      message
+    )
+
     const slicedObjects = []
     this.options.sourceFields.forEach((key) => {
-      const slicedObj = objectMapper.getKeyValue(this.msg, key)
+      const slicedObj = objectMapper.getKeyValue(message, key)
       if (slicedObj) {
         slicedObjects.push(slicedObj)
       }
@@ -64,10 +48,10 @@ export default class MergerPlugin {
       return merge(prevObj, currObj)
     }, [])
 
-    const result = objectMapper.setKeyValue(this.msg, this.options.targetField, mergedResult)
+    const result = objectMapper.setKeyValue(message, this.options.targetField, mergedResult)
 
     logger.info(this.preLog, 'Object merged applied')
-    return callback(null, result)
-  }
 
+    return Promise.resolve(result)
+  }
 }

@@ -4,15 +4,16 @@
 // Start listening to defined rabbitmq event and execute
 // the action based on type and options
 
-import * as rabbit from 'rabbot'
-import debug = require('debug')
+import rabbit from 'rabbot'
+import debug from 'debug'
 import logger from '../services/logger'
 import ActionExecuter from './ActionExecuter'
 import Event from '../model/Event'
+import Action from '../model/Action'
 
 // If the message received is the one get from AMQP
 // extract only the contents.
-const extractMessage = (prevMessage) => {
+export const extractMessage = (prevMessage) => {
   debug('Get message info %j', prevMessage)
 
   let lastPrevMessage = prevMessage
@@ -57,13 +58,14 @@ export default class ActionCreator {
         .catch((err) => {
           debug('Error in serial execution', err)
           // The plugin executed is asking to abort operation and
-          // discard the message, preventing to be send to dead-letter queue
+          // discard the message, preventing to be sent to dead-letter queue
           if (err.action && err.action === 'abort') {
             logger.error(this.preLog, 'The execution of operator has been aborted', err)
             return msg.ack()
           }
           logger.error(this.preLog, 'An error has been ocurred executing the handler actions', err)
-          // return msg.nack()
+
+          // send message to dead-letter
           return msg.reject()
         })
     })
@@ -79,36 +81,36 @@ export default class ActionCreator {
 
     let promiseChain = Promise.resolve([]).then(() => contents)
 
+    if (!this.event.actions.length) {
+      return Promise.reject(new Error('Empty actions object'))
+    }
+
     // Iterate over all actions passing the lastResult
     this.event.actions.forEach((action, index) => {
-      const executer = new ActionExecuter(action, rabbit, this.event)
+      const executer = new ActionExecuter(new Action(action), rabbit, this.event)
 
-      const executionPromise = (lastValue, preLog, eventsLenght) => {
-        if (lastValue.id) {
-          preLog = '[' + lastValue.id + '] > ' + preLog
+      const executionPromise = (contents, preLog, eventsLenght) => {
+        if (contents === undefined) {
+          return Promise.reject(new Error('Previous plugin returned undefined'))
         }
-        debug('Last value received is: ', lastValue)
-        return new Promise((resolve, reject) => {
-          logger.info(preLog, 'Running action ', index + 1 , ' of ', eventsLenght)
-          if (lastValue === undefined) {
-            reject(new Error('Previous plugin returned undefined'))
-          }
 
-          executer.execute(contents, lastValue, (err, result) => {
-            if (err) {
-              logger.error(preLog, 'Step has failed so ignoring next ones')
-              return reject(err)
-            }
+        if (contents.id) {
+          preLog = '[' + contents.id + '] > ' + preLog
+        }
 
-            debug('Resolving with: ', result)
-            return resolve(result)
-          })
+        debug('Last value received is: ', contents)
+
+        logger.info(preLog, `Running action ${index + 1} of ${eventsLenght}`)
+
+        return executer.execute(contents).catch((err) => {
+          logger.error(preLog, 'Step has failed so ignoring next ones')
+          return Promise.reject(err)
         })
       }
 
       promiseChain = promiseChain.then(
-        (lastValue) => executionPromise(
-          lastValue,
+        (contents) => executionPromise(
+          contents,
           this.preLog,
           this.event.actions.length
         )

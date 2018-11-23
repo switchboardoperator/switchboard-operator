@@ -1,12 +1,12 @@
 FROM node
 
-MAINTAINER Genar Trias <genar@alvarium.io>
+LABEL maintainer="Alvarium.io <hello@alvarium.io>"
 
 COPY . /app
 
 WORKDIR /app
 
-RUN npm install && npm run build
+RUN yarn && yarn build
 
 ENV NODE_ENV production
 

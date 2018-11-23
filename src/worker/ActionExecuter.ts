@@ -1,6 +1,3 @@
-import * as fs from 'fs'
-import * as path from 'path'
-
 import Action from "../model/Action"
 import Event from "../model/Event"
 import logger from '../services/logger'
@@ -8,12 +5,12 @@ import plugins from './execution-plugins'
 
 const debug = require('debug')('action-executer')
 
-const loadPlugin = (prevMessage: string, action: Action, preLog: string, rabbit: any) => {
+const loadPlugin = (action: Action, preLog: string, rabbit: any) => {
   if (plugins[action.type]) {
-    return new plugins[action.type](prevMessage, action, preLog, rabbit)
+    return new plugins[action.type](action, preLog, rabbit)
   }
 
-  return
+  return false
 }
 
 export default class ActionExecuter {
@@ -21,6 +18,8 @@ export default class ActionExecuter {
   rabbit: any
   event: Event
   preLog: string
+  message: string
+  public plugin: any
 
   constructor(action: Action, rabbit: any, event: Event) {
     debug('action executer action received: %j', action)
@@ -28,37 +27,34 @@ export default class ActionExecuter {
     this.rabbit = rabbit
     this.event = event
     this.preLog = event.name + ' >'
-  }
 
-  // Instantiate the proper plugin with proper parameters and execute it
-  execute(originalMsg, prevMessage, callback) {
-    // starting with originalMsg
-    if (!prevMessage) {
-      prevMessage = originalMsg
-    }
-
-    const executionPlugin = loadPlugin(
-      prevMessage,
+    this.plugin = loadPlugin(
       this.action,
       this.preLog,
       this.rabbit
     )
-    debug('Loaded the next modules: %j', executionPlugin)
 
-    if (!executionPlugin) {
+    debug('Loaded the next modules: %j', this.plugin)
+  }
+
+  // Instantiate the proper plugin with proper parameters and execute it
+  execute(message: any) {
+    if (!this.plugin) {
       debug(`The plugin cannot be loaded for action: ${this.action}`)
-      return callback(new Error(`The plugin cannot be loaded for action: ${JSON.stringify(this.action)}`))
+      return Promise.reject(new Error(`The plugin cannot be loaded for action: ${JSON.stringify(this.action)}`))
     }
 
     // Execute plugin and send result to callback
-    executionPlugin.execute((err, result) => {
-      if (err) {
-        debug('Action executed failed with %j', err)
-        return callback(err)
-      }
+    return this.plugin.execute(message)
+      .then((result) => {
+        debug('Executed plugin %s with the result %j', this.action.type, result)
 
-      debug('Executed plugin %s with the result %j', this.action.type, result)
-      return callback(null, result)
-    })
+        return result
+      })
+      .catch((err) => {
+        debug('Action executed failed with %j', err)
+
+        throw err
+      })
   }
 }

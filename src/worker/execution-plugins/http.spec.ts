@@ -1,13 +1,10 @@
 import axios from 'axios'
-import * as chai from 'chai'
 import MockAdapter from 'axios-mock-adapter'
 
 import ActionSchema from '../../model/Action'
 import HttpPlugin from './http'
 
-const expect = chai.expect
-
-describe('http', () => {
+describe('execution-plugins :: http', () => {
   const msg = {
     hello: 'topology'
   }
@@ -18,50 +15,47 @@ describe('http', () => {
       url: 'http://localhost:3000/{{ hello }}',
       method: 'GET',
       merge: true
-    }
+    },
+    event: 'name-event',
   })
-  const httpPlugin = new HttpPlugin(msg, action, 'test')
+  const httpPlugin = new HttpPlugin(action, 'test')
   const mock = new MockAdapter(axios)
 
   mock.onGet(/topology/).reply(200, {
     myTopology: 'test'
   })
 
-  it('should make the http request', (done) => {
-    httpPlugin.execute((err, result) => {
-      if (err) {
-        done(err)
-      }
+  it('should return a promise', () => {
+    expect(httpPlugin.execute(msg)).toBeInstanceOf(Promise)
+  })
 
-      expect(result).to.be.an('object')
-      expect(result.myTopology).to.be.equal('test')
-      done()
+  it('should make the http request', () => {
+    expect.assertions(2)
+    return httpPlugin.execute(msg).then((result: any) => {
+      expect(typeof result).toEqual('object')
+      return expect(result.myTopology).toEqual('test')
     })
   })
 
-  it('should apply templating to provided url', (done) => {
+  it('should apply templating to provided url', () => {
     const result = httpPlugin.renderUrl()
 
-    expect(result).to.be.a('String')
-    expect(result).to.equal('http://localhost:3000/topology')
-
-    done()
+    expect(typeof result).toEqual('string')
+    expect(result).toEqual('http://localhost:3000/topology')
   })
 
-  it('should embed request response to the previous value', (done) => {
-    httpPlugin.execute((err, result) => {
-      if (err) {
-        done(err)
-      }
+  it('should embed request response to the previous value', () => {
+    expect.assertions(3)
 
-      expect(result).to.be.an('object')
-      expect(result.myTopology).to.be.equal('test')
-      expect(result.hello).to.be.equal('topology')
-      done()
+    return httpPlugin.execute(msg).then((result: any) => {
+      expect(typeof result).toEqual('object')
+      expect(result.myTopology).toEqual('test')
+
+      return expect(result.hello).toEqual('topology')
     })
   })
 
-  it('should save the request response to the defined field', (done) => {
+  it('should save the request response to the defined field', () => {
     const action = new ActionSchema({
       name: 'makeHttpRequest',
       type: 'http',
@@ -70,17 +64,13 @@ describe('http', () => {
         method: 'GET',
         merge: true,
         mergeTarget: 'response'
-      }
+      },
+      event: 'name-event',
     })
-    const httpPlugin = new HttpPlugin(msg, action, 'test')
+    const httpPlugin = new HttpPlugin(action, 'test')
 
-    httpPlugin.execute((err, result) => {
-      if (err) {
-        done(err)
-      }
-
-      expect(result.response.myTopology).to.be.equal('test')
-      done()
+    return httpPlugin.execute(msg).then((result: any) => {
+      return expect(result.response.myTopology).toEqual('test')
     })
   })
 })

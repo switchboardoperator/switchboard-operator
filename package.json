@@ -4,7 +4,8 @@
   "description": "Handle the asyncronous communication between microservices using AMQP",
   "main": "built/app.js",
   "scripts": {
-    "test": "NODE_ENV=test node_modules/.bin/mocha --recursive --require ts-node/register --exit './src/**/*.spec.ts'",
+    "test": "NODE_ENV=test jest src/*",
+    "test-operators": "NODE_ENV=test-operators jest operators-tester.spec",
     "build": "tsc",
     "start": "tsc && node built/app.js"
   },
@@ -14,21 +15,37 @@
   },
   "keywords": [
     "amqp",
-    "rabbitmq"
+    "rabbitmq",
+    "soa"
   ],
-  "author": "Genar <genar@cirici.com>",
+  "author": "Alvarium <hello@alvarium.io>",
+  "contributors": [
+    {
+      "name": "Genar Trias",
+      "email": "genar@acs.li",
+      "url": "https://github.com/gtrias"
+    },
+    {
+      "name": "Òscar Casajuana",
+      "email": "oscar@alvarium.io",
+      "url": "https://sourcerer.io/elboletaire"
+    },
+    {
+      "name": "Alexander Arce",
+      "email": "alexander@alvarium.io"
+    }
+  ],
   "license": "MIT",
   "devDependencies": {
-    "@types/chai": "^4.1.4",
-    "@types/chai-http": "^3.0.5",
     "@types/config": "^0.0.34",
     "@types/express": "^4.16.0",
-    "@types/mocha": "^5.2.5",
+    "@types/jest": "^23.3.9",
+    "@types/js-yaml": "^3.11.2",
     "@types/node": "^10.5.2",
-    "chai": "^4.1.2",
-    "chai-as-promised": "^7.1.1",
-    "chai-http": "^3.0.0",
-    "mocha": "^5.2.0",
+    "jest": "^23.6.0",
+    "superagent": "^4.0.0-beta.5",
+    "supertest": "^3.3.0",
+    "ts-jest": "^23.10.4",
     "ts-node": "^7.0.0",
     "tslint-config-standard": "^7.1.0",
     "typescript": "^2.9.2",
@@ -37,6 +54,7 @@
   "dependencies": {
     "axios": "^0.18.0",
     "axios-mock-adapter": "^1.15.0",
+    "chalk": "^2.4.1",
     "config": "^1.27.0",
     "deepmerge": "^2.2.1",
     "express": "^4.16.2",
@@ -48,8 +66,25 @@
     "object-transformer": "0.0.5",
     "rabbot": "^2.1.0",
     "schema-object": "^4.0.11",
-    "sinon": "^4.4.2",
     "storm-react-diagrams": "^5.2.1",
     "winston": "^2.4.0"
+  },
+  "jest": {
+    "roots": [
+      "<rootDir>/src",
+      "<rootDir>/test"
+    ],
+    "transform": {
+      "^.+\\.tsx?$": "ts-jest"
+    },
+    "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.tsx?$",
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "jsx",
+      "json",
+      "node"
+    ]
   }
 }

@@ -2,10 +2,16 @@ export default class Action {
   name: string
   type: string
   options: any
+  event: string
 
-  constructor({name, type, options}: {name: string, type: string, options: any}) {
+  constructor({name, type, options, event}: {name: string, type: string, options: any, event: string}) {
     this.name = name
     this.type = type
     this.options = options
+    this.event = event
+  }
+
+  toString() {
+    return this.name
   }
 }
