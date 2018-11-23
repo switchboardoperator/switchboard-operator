@@ -135,12 +135,12 @@ If you'd like to add new plugins you'll need to add them to `src/worker/executor
 
 BTW we've created a bunch of plugins that may be useful to you:
 
-#### `print-log`
+#### `log`
 
 Just prints the received object to stdout.
 
 ~~~yaml
-- name: print-log
+- name: printLogToStdOut
   type: log
 ~~~
 
