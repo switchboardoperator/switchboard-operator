@@ -2,35 +2,56 @@ import fs from 'fs'
 import yaml from 'js-yaml'
 
 import { loadOperators } from '../src/services/OperatorsLoader'
-import ActionCreator from '../src/worker/ActionCreator'
+import ActionCreator, { extractMessage } from '../src/worker/ActionCreator'
 import Event from '../src/model/Event'
+import ActionExecuter from '../src/worker/ActionExecuter'
+import Action from '../src/model/Action'
 
 jest.mock('../src/worker/execution-plugins/telegram')
 jest.mock('../src/worker/execution-plugins/prev2task')
 jest.mock('../src/worker/execution-plugins/http')
 
-async function processEvents(json, rabbit, events) {
-  const resultsObject = {}
-  // Instead of looping for our operators, let's loop for our tests, which makes more sense
-  for (const test of json) {
-      console.log(test)
+const executeActions = async (operator, {input, response}) => {
+  const contents = extractMessage(input)
+
+  let promiseChain = Promise.resolve([]).then(() => contents)
+
+  if (!operator.actions.length) {
+    return Promise.reject(new Error('Empty actions object'))
   }
-  // for (const event of events) {
-  //   const eventObj = new Event(event)
-  //   const actionCreator = new ActionCreator(
-  //     rabbit,
-  //     eventObj
-  //   )
 
-  //   if (json[eventObj.name] && json[eventObj.name].input) {
-  //     const results = await actionCreator.executeActions(json[eventObj.name].input)
+  // Iterate over all actions passing the lastResult
+  operator.actions.forEach((action, index) => {
+    const executer = new ActionExecuter(new Action(action), {}, operator)
 
-  //     resultsObject[eventObj.name] = results
-  //   } else {
-  //     console.info('Ignoring event %s, test payload not defined', eventObj.name)
-  //   }
-  // }
-  return resultsObject
+    if (response && response[action.name]) {
+      executer.plugin.injectResponse(response[action.name])
+    }
+
+    const executionPromise = (contents, preLog) => {
+      // console.log('Execution promise, received contents:', contents)
+      if (contents === undefined) {
+        return Promise.reject(new Error('Previous plugin returned undefined'))
+      }
+
+      if (contents.id) {
+        preLog = '[' + contents.id + '] > ' + preLog
+      }
+
+      return executer.execute(contents).catch((err) => {
+        return Promise.reject(err)
+      })
+    }
+
+    promiseChain = promiseChain.then(
+      (contents) => executionPromise(
+        contents,
+        this.preLog
+      )
+    )
+  })
+
+  return promiseChain
 }
 
 describe('Test operators', () => {
@@ -66,28 +87,14 @@ describe('Test operators', () => {
       jobs.push(job)
     }
 
-    for (const job of jobs) {
+    expect.assertions(Object.keys(jobs).length)
+    for (const key in jobs) {
+      const job = jobs[key]
       const { test, operator } = job
 
-      console.log('test', test)
-      console.log('operator', operator)
-      console.log('event', new Event(operator))
+      const results = await executeActions(new Event(operator), test)
+
+      expect(results).toEqual(test.output)
     }
-
-
-    // const results = await processEvents(tests, rabbit, events)
-
-    // if (fs.statSync(filename).isFile()) {
-    //   const json = JSON.parse(fs.readFileSync(filename).toString())
-    //   const results = await processEvents(json, rabbit, events)
-    //   expect.assertions(Object.keys(results).length)
-
-    //   return Object.keys(results).forEach((event) => {
-    //     //console.log('Expect result for event %s %j to equal output %j', event, results[event], json[event].output)
-    //     return expect(results[event]).toEqual(json[event].output)
-    //   })
-    // } else {
-    //   console.log('There\'s no operators test file')
-    // }
   })
 })

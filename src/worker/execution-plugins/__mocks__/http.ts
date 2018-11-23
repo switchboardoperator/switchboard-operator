@@ -9,8 +9,7 @@ export default class HttpPlugin {
   action: any
   response: any
 
-  constructor(msg, action, preLog) {
-    this.msg = msg,
+  constructor(action, preLog) {
     this.options = new HTTPPluginOptionsSchema(action.options)
     if (this.options.isErrors()) {
       throw new Error('The options provided are not valid ' + JSON.stringify(this.options.getErrors()))
@@ -20,25 +19,25 @@ export default class HttpPlugin {
     this.response = null
   }
 
-  injectResponse(response) {
+  public injectResponse(response) {
     this.response = response
   }
 
-  execute() {
+  execute(msg) {
     logger.info(this.preLog, 'Running HTTP plugin mock')
 
     if (!this.response) {
-      return Promise.reject('HTTP response not speecified')
+      return Promise.reject('HTTP response not specified')
     }
 
     let result = {}
 
     if (this.options.merge && !this.options.mergeTarget) {
-      result = {...this.msg, ...this.response}
+      result = {...msg, ...this.response}
     }
 
     if (this.options.merge && this.options.mergeTarget) {
-      result = {...this.msg}
+      result = {...msg}
       result[this.options.mergeTarget] = this.response
     }
 

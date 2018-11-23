@@ -261,23 +261,22 @@ Then you can define your operator actions as follows:
 
 We've added a custom jest method to test your operators without the need of a rabbit endpoint.
 
-To test them, you'll need to add an `operators-tester.json` file under `tests` folder with the following structure:
+To test them, you'll need to add a yaml file (or files, as you can define as many as you want) with the following structure:
 
-~~~json
-{
-  "operatorName": [
-    {
-      "input": {},
-      "output": {},
-      "response": {
-        "actionName": {}
-      }
-    }
-  ],
-}
+~~~yaml
+- name: operatorName
+  input:
+    # ...
+  output:
+    # ...
+  response:
+    actionName:
+      # ...
+    otherActionName:
+      # ...
 ~~~
 
-Note that it's an array, so you can set as many tests as you want for each operator.
+Note that it's an array, so you can set as many tests as you want for each operator. You can also define you tests in different files, just remember to start always with `-` the first part of the entry, to ensure you use an array for testing them.
 
 Let's see what's every part:
 
@@ -294,139 +293,7 @@ yarn test-operators
 
 ### Test example
 
-Given the next operator file:
-
-~~~yaml
-# Execute every time a purchase is update
-name: membersSignup
-eventName: members.signup
-route: created
-# true by default, but here you can see you're able to disable them just adding this key.
-enabled: true
-actions:
-  # Print everything to the log
-  - name: print-log
-    type: log
-
-  # Getting account info
-  - name: getMetaInfo
-    type: http
-    options:
-      url: http://your-awesome-endpoint.io/{{ member.account }}
-      method: GET
-      merge: true
-      mergeTarget: _account
-
-  # Copy all contents to vars to be used in email
-  - name: copyAllToVars
-    type: mapper
-    options:
-      copy:
-      - vars
-
-  # Merge email configuration
-  - name: mergeTransportSettings
-    type: merger
-    options:
-      sourceFields:
-      - vars._account.meta.emailConfig
-      - vars.privateMeta.emailConfig
-      targetField: vars._email
-
-  # Convert event to email
-  - name: mapEmailFields
-    # Type mapper gets the previous action result and converts its fields to a new object with the specified structure.
-    type: mapper
-    options:
-      fields:
-        vars.member.email: to
-        vars._email.transport: transport
-        vars._email.template: template
-        vars._email.subject: subject
-        vars._email.apikey: apikey
-        vars._email.from: from
-        # map every other var in the scope to `vars`, so the mail template has access to them.
-        '*': vars
-
-  # Send members to emails queue applying
-  - name: sendSignupConfirmationEmail
-    type: prev2task
-    options:
-      target: emails
-      targetRoute: email.send
-~~~
-
-The tester should look like (working on a yaml implementation..):
-
-~~~json
-{
-  "membersSignup": [
-    {
-      "input": {
-        "member": {
-          "name": "John Doe",
-          "email": "john@doe.com",
-          "account": "3a696232-b214-4d58-af8b-01e793c2a424"
-        },
-        "privateMeta": {
-          "emailConfig": {
-            "template": "members/signups",
-            "subject": "Welcome {{ vars._email.name }}!"
-          }
-        }
-      },
-      "response": {
-        "getMetaInfo": {
-          "meta": {
-            "emailConfig": {
-              "transport": "sendgrid",
-              "template": "alvarium/default",
-              "apikey": "Our awesome sendgrid api key ;)"
-            }
-          }
-        }
-      },
-      "output": {
-        "subject": "Welcome {{ vars._email.name }}!",
-        "template": "members/signups",
-        "to": "john@doe.com",
-        "transport": "sendgrid",
-        "apikey": "Our awesome sendgrid api key ;)",
-        "vars": [
-          {
-            "_account": {
-              "meta": {
-                "emailConfig": {
-                  "apikey": "Our awesome sendgrid api key ;)",
-                  "template": "alvarium/default",
-                  "transport": "sendgrid"
-                }
-              }
-            },
-            "_email": {
-              "apikey": "Our awesome sendgrid api key ;)",
-              "subject": "Welcome {{ vars._email.name }}!",
-              "template": "members/signups",
-              "transport": "sendgrid"
-            },
-            "member": {
-              "account": "3a696232-b214-4d58-af8b-01e793c2a424",
-              "email": "john@doe.com",
-              "name": "John Doe"
-            },
-            "privateMeta": {
-              "emailConfig": {
-                "subject": "Welcome {{ vars._email.name }}!",
-                "template": "members/signups"
-              }
-            }
-          }
-        ]
-      }
-    }
-  ]
-}
-~~~
+You have a full operator example in the [`operators`][operators] dir, named [`membersSignupDemo.yaml`][], and two tests for it in the [`test`][test] folder, named [`members-signup-1.yml`][] and [`members-signup-2.yml`][].
 
 Running `yarn test-operators`:
 
@@ -463,3 +330,8 @@ MIT
 [build svg]: https://img.shields.io/travis/alvarium/switchboard-operator/master.svg?style=flat-square
 [gitlab-ci build svg]: https://gitlab.com/alvarium.io/switchboard-operator/badges/master/pipeline.svg
 [gitlab-ci build status]: https://gitlab.com/alvarium.io/switchboard-operator/commits/master
+[operators]: ./operators
+[test]: ./test
+[`membersSignupDemo.yaml`]: ./operators/membersSignupDemo.yaml
+[`members-signup-1.yml`]: ./test/members-signup-1.yml
+[`members-signup-2.yml`]: ./test/members-signup-2.yml

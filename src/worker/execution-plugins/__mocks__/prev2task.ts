@@ -6,14 +6,14 @@ export default class Prev2TaskPlugin {
   action: Action
   preLog: string
 
-  constructor(msg, action, preLog) {
-    this.msg = msg,
+  constructor(action, preLog) {
     this.action = action,
     this.preLog = preLog
   }
 
-  execute(cb) {
+  execute(message) {
     logger.info(this.preLog, 'Running prev2task plugin mock')
-    cb(null, this.msg)
+
+    return Promise.resolve(message)
   }
 }

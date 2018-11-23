@@ -2,7 +2,6 @@ import Action from "../model/Action"
 import Event from "../model/Event"
 import logger from '../services/logger'
 import plugins from './execution-plugins'
-import { ExecutionPluginInterface } from "./ExecutionPluginInterface"
 
 const debug = require('debug')('action-executer')
 
@@ -20,7 +19,7 @@ export default class ActionExecuter {
   event: Event
   preLog: string
   message: string
-  public plugin: ExecutionPluginInterface
+  public plugin: any
 
   constructor(action: Action, rabbit: any, event: Event) {
     debug('action executer action received: %j', action)

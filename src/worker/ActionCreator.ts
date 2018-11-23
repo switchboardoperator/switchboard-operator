@@ -13,7 +13,7 @@ import Action from '../model/Action'
 
 // If the message received is the one get from AMQP
 // extract only the contents.
-const extractMessage = (prevMessage) => {
+export const extractMessage = (prevMessage) => {
   debug('Get message info %j', prevMessage)
 
   let lastPrevMessage = prevMessage
@@ -75,7 +75,7 @@ export default class ActionCreator {
 
   // Make a Promise array and execute all the actions in serial
   // fashion
-  async executeActions (msg) {
+  executeActions (msg) {
     const rabbit = this.rabbit
     const contents = extractMessage(msg)
 
