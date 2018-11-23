@@ -73,7 +73,7 @@ test-docker-image:
   - master
   variables:
     DOCKER_FILE: test-operators.dockerfile
-    DOCKER_TAG: latest
+    DOCKER_TAG: latest-testing
 
 test-docker-image-tags:
   <<: *build
@@ -81,4 +81,4 @@ test-docker-image-tags:
   - tags
   variables:
     DOCKER_FILE: test-operators.dockerfile
-    DOCKER_TAG: ${CI_COMMIT_TAG}
+    DOCKER_TAG: ${CI_COMMIT_TAG}-testing
