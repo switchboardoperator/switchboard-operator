@@ -1,3 +1,4 @@
+const debug = require('debug')('sbo-plugin-telegram')
 import axios from 'axios'
 import config from 'config'
 import nunjucks from 'nunjucks'
@@ -42,6 +43,12 @@ export default class TelegramPlugin implements ExecutionPluginInterface {
   }
 
   execute(message: any) {
+    debug(
+      'Running telegram plugin with options: %j and msg: %j',
+      this.options,
+      message
+    )
+
     const renderedTemplate = nunjucks.renderString(
       this.options.template,
       message

@@ -1,4 +1,4 @@
-const debug = require('debug')('merger-plugin')
+const debug = require('debug')('sbo-plugin-merger')
 import merge from 'deepmerge'
 import objectMapper from 'object-mapper'
 

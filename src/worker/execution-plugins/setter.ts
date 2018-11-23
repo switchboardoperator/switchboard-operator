@@ -1,4 +1,4 @@
-const debug = require('debug')('setter-plugin')
+const debug = require('debug')('sbo-plugin-setter')
 
 import logger from '../../services/logger'
 import Action from "../../model/Action"

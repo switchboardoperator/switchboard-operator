@@ -1,4 +1,4 @@
-const debug = require('debug')('prev2task-plugin')
+const debug = require('debug')('sbo-plugin-prev2task')
 
 import RabbotClient from "../../amqp/RabbotClient"
 import Action from "../../model/Action"

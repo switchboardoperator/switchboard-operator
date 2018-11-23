@@ -86,6 +86,12 @@ export default class ConditionalPlugin implements ExecutionPluginInterface {
   execute(message: any) {
     this.parsedMessage = flattenObject(message)
 
+    debug(
+      'Running conditional plugin with options: %j and msg: %j',
+      this.options,
+      message
+    )
+
     return new Promise((resolve, reject) => {
       if (!this.checkConditions()) {
         logger.info(this.preLog, 'Some conditional check has failed')

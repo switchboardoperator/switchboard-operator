@@ -2,6 +2,7 @@ const debug = require('debug')('http-plugin')
 import axios from 'axios'
 import nunjucks from 'nunjucks'
 
+import logger from '../../services/logger'
 import Action from '../../model/Action'
 import { HTTPPluginOptionsSchema } from '../../schemas/PluginOptionsSchema'
 import { ExecutionPluginInterface } from '../ExecutionPluginInterface'
@@ -34,7 +35,14 @@ export default class HttpPlugin implements ExecutionPluginInterface {
   execute(message: any) {
     this.msg = message
 
+    debug(
+      'Running HTTP plugin with options: %j and msg: %j',
+      this.options,
+      message
+    )
+
     const method = this.options.method.toLowerCase()
+    logger.info(this.preLog, 'Making HTTP request')
 
     return axios({
       method: method,
@@ -53,6 +61,8 @@ export default class HttpPlugin implements ExecutionPluginInterface {
           result = {...this.msg}
           result[this.options.mergeTarget] = response.data
         }
+
+        logger.info(this.preLog, 'HTTP request was successful')
 
         return result
       })

@@ -1,4 +1,4 @@
-const debug = require('debug')('mapper-plugin')
+const debug = require('debug')('sbo-plugin-mapper')
 import objectMapper from 'object-mapper'
 
 import Action from '../../model/Action'
@@ -27,7 +27,7 @@ export default class MapperPlugin implements ExecutionPluginInterface {
 
   execute(message: any) {
     debug(
-      'Running transformer plugin with options: %j and msg: %j',
+      'Running mapper plugin with options: %j and msg: %j',
       this.options,
       message
     )
@@ -43,7 +43,7 @@ export default class MapperPlugin implements ExecutionPluginInterface {
       })
     }
 
-    debug('Result mapped object is %j', transformedObj)
+    debug('Resulting mapped object is %j', transformedObj)
     logger.info(this.preLog, 'Object mapping applied')
 
     if (this.options.merge) {
