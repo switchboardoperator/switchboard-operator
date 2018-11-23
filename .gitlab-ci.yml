@@ -1,5 +1,6 @@
 stages:
 - test
+- build
 
 .test: &test
   image: node:${NODE_VERSION}
@@ -9,6 +10,25 @@ stages:
   script:
   - yarn test
   - yarn test-operators
+
+.build: &build
+  stage: build
+  image: docker:git
+  services:
+  - docker:dind
+  script:
+  - docker login
+    -u gitlab-ci-token
+    -p ${CI_JOB_TOKEN} ${CI_REGISTRY}
+  - docker login
+    -u ${DOCKER_USERNAME}
+    -p ${DOCKER_PASSWORD}
+  - docker build
+    -f ${DOCKER_FILE}
+    -t ${CI_REGISTRY_IMAGE}:${DOCKER_TAG}
+    -t alvarium/switchboard-operator:${DOCKER_TAG} .
+  - docker push ${CI_REGISTRY_IMAGE}:${DOCKER_TAG}
+  - docker push alvarium/switchboard-operator:${DOCKER_TAG}
 
 node-7:
   <<: *test
@@ -29,3 +49,36 @@ node-10:
   <<: *test
   variables:
     NODE_VERSION: '10'
+
+
+docker-image:
+  <<: *build
+  only:
+  - master
+  variables:
+    DOCKER_FILE: Dockerfile
+    DOCKER_TAG: latest
+
+docker-image-tags:
+  <<: *build
+  only:
+  - tags
+  variables:
+    DOCKER_FILE: Dockerfile
+    DOCKER_TAG: ${CI_COMMIT_TAG}
+
+test-docker-image:
+  <<: *build
+  only:
+  - master
+  variables:
+    DOCKER_FILE: test-operators.dockerfile
+    DOCKER_TAG: latest
+
+test-docker-image-tags:
+  <<: *build
+  only:
+  - tags
+  variables:
+    DOCKER_FILE: test-operators.dockerfile
+    DOCKER_TAG: ${CI_COMMIT_TAG}
