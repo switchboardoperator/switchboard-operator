@@ -5,10 +5,11 @@ stages:
 .test: &test
   image: node:${NODE_VERSION}
   stage: test
+  coverage: '/All files([^|]*\|){4}[^\d]+([\d|\.]+)/'
   before_script:
   - yarn
   script:
-  - yarn test
+  - yarn test --coverage --verbose
   - yarn test-operators
 
 .build: &build
