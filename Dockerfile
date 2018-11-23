@@ -6,7 +6,7 @@ COPY . /app
 
 WORKDIR /app
 
-RUN npm install && npm run build
+RUN yarn && yarn build
 
 ENV NODE_ENV production
 
