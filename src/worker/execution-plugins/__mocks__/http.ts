@@ -1,5 +1,4 @@
 import { HTTPPluginOptionsSchema } from '../../../schemas/PluginOptionsSchema'
-import json from '../../../../test/operators-tester.json'
 import logger from '../../../services/logger'
 
 export default class HttpPlugin {

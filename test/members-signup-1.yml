@@ -1,4 +1,5 @@
 - name: membersSignup
+  description: Case email template is specified in privateMeta
   input:
     member:
       name: John Doe

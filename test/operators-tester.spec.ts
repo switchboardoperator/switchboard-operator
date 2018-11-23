@@ -1,5 +1,6 @@
 import fs from 'fs'
 import yaml from 'js-yaml'
+import chalk from 'chalk'
 
 import { loadOperators } from '../src/services/OperatorsLoader'
 import ActionCreator, { extractMessage } from '../src/worker/ActionCreator'
@@ -91,6 +92,14 @@ describe('Test operators', () => {
     for (const key in jobs) {
       const job = jobs[key]
       const { test, operator } = job
+
+      process.stdout.write(`\n${chalk.yellow('━')} Running actions for operator ${operator.name}...\n`)
+
+      if (test.description) {
+        process.stdout.write(`${chalk.yellow('┗')} ${test.description}\n`)
+      }
+
+      process.stdout.write('\n')
 
       const results = await executeActions(new Event(operator), test)
 

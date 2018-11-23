@@ -265,6 +265,7 @@ To test them, you'll need to add a yaml file (or files, as you can define as man
 
 ~~~yaml
 - name: operatorName
+  description: An optional description of your test
   input:
     # ...
   output:
@@ -281,6 +282,7 @@ Note that it's an array, so you can set as many tests as you want for each opera
 Let's see what's every part:
 
 - `operatorName`: The operator name to be tested. Note that it must be `operatorName` not `operator-file-name`!
+- `description`: Is shown during the tests, so you can properly know where the logs come from.
 - `input`: The payload the queue should receive as input.
 - `output`: How should it look after exiting.
 - `response`: Used by the HTTP plugin mock. Mocks responses for every specified `actionName`.
