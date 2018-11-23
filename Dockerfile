@@ -1,4 +1,4 @@
-FROM node
+FROM node:8
 
 LABEL maintainer="Alvarium.io <hello@alvarium.io>"
 
