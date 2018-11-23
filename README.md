@@ -331,7 +331,7 @@ MIT
 [build status]: https://travis-ci.org/alvarium/switchboard-operator
 [build svg]: https://img.shields.io/travis/alvarium/switchboard-operator/master.svg?style=flat-square
 [gitlab-ci build svg]: https://gitlab.com/alvarium.io/switchboard-operator/badges/master/pipeline.svg
-[gitlab-ci build status]: https://gitlab.com/alvarium.io/switchboard-operator/commits/master
+[gitlab-ci build status]: https://gitlab.com/alvarium.io/switchboard-operator/pipelines
 [operators]: ./operators
 [test]: ./test/files
 [`membersSignupDemo.yaml`]: ./operators/membersSignupDemo.yaml
