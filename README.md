@@ -3,6 +3,9 @@ Switchboard Operator
 
 [![Build status][build svg]][build status]
 [![Gitlab build status][gitlab-ci build svg]][gitlab-ci build status]
+[![Coverage][coverage svg]][coverage]
+[![Pulls][release svg]][tags]
+[![Pulls][pulls svg]][docker hub]
 
 Switchboard Operator (a.k.a. SBO) is a production-ready service used to manage RabbitMQ flows between microservices.
 
@@ -328,10 +331,19 @@ MIT
 
 [switchboard operators]: https://upload.wikimedia.org/wikipedia/commons/8/8e/Photograph_of_Women_Working_at_a_Bell_System_Telephone_Switchboard_%283660047829%29.jpg "Switchboards operators"
 [event driven microservices using rabbitmq]: https://runnable.com/blog/event-driven-microservices-using-rabbitmq
+
+[build svg]: https://img.shields.io/travis/alvarium/switchboard-operator/master.svg?logo=travis
+[gitlab-ci build svg]: https://img.shields.io/gitlab/pipeline/alvarium.io/switchboard-operator.svg?logo=gitlab
+[coverage svg]: https://gitlab.com/alvarium.io/switchboard-operator/badges/master/coverage.svg
+[pulls svg]: https://img.shields.io/docker/pulls/alvarium/switchboard-operator.svg?logo=docker
+[release svg]: https://img.shields.io/github/release/alvarium/switchboard-operator.svg?logo=github
+
+[tags]: https://github.com/alvarium/switchboard-operator/releases
 [build status]: https://travis-ci.org/alvarium/switchboard-operator
-[build svg]: https://img.shields.io/travis/alvarium/switchboard-operator/master.svg?style=flat-square
-[gitlab-ci build svg]: https://gitlab.com/alvarium.io/switchboard-operator/badges/master/pipeline.svg
+[coverage]: https://gitlab.com/alvarium.io/switchboard-operator/-/jobs
+[docker hub]: https://hub.docker.com/r/alvarium/switchboard-operator/
 [gitlab-ci build status]: https://gitlab.com/alvarium.io/switchboard-operator/pipelines
+
 [operators]: ./operators
 [test]: ./test/files
 [`membersSignupDemo.yaml`]: ./operators/membersSignupDemo.yaml
