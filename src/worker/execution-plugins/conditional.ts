@@ -68,13 +68,16 @@ export default class ConditionalPlugin implements ExecutionPluginInterface {
 
       switch (condition.operation) {
         case 'isTrue':
-          retValue = field === true
+          retValue = this.parsedMessage[condition.field] === true
+          break
+        case 'isFalse':
+          retValue = this.parsedMessage[condition.field] === false
           break
         case 'defined':
-          retValue = field !== undefined
+          retValue = this.parsedMessage[condition.field] !== undefined
           break
         case 'undefined':
-          retValue = field === undefined
+          retValue = this.parsedMessage[condition.field] === undefined
           break
         case '===':
           retValue = field === value

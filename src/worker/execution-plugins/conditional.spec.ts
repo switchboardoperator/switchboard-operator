@@ -12,6 +12,10 @@ describe('execution-plugins :: conditional', () => {
     numbers: {
       zero: 0,
       five: 5,
+    },
+    booleans: {
+      true: true,
+      false: false,
     }
   }
   const action = new Action({
@@ -176,6 +180,84 @@ describe('execution-plugins :: conditional', () => {
         const passingConditionalPlugin = new ConditionalPlugin(passingAction, '')
 
         return expect(passingConditionalPlugin.execute(msg)).resolves.toBeTruthy()
+      })
+    })
+
+    describe('isTrue', () => {
+      it('should pass if the value is true', () => {
+        const passingAction = new Action({
+          name: 'testing-checks',
+          type: 'conditional',
+          options: {
+            conditions: [
+              {
+                field: 'booleans.true',
+                operation: 'isTrue'
+              }
+            ]
+          },
+          event: 'event-name',
+        })
+        const passingConditionalPlugin = new ConditionalPlugin(passingAction, '')
+
+        return expect(passingConditionalPlugin.execute(msg)).resolves.toBeTruthy()
+      })
+      it('should not pass if the value is other than true', () => {
+        const passingAction = new Action({
+          name: 'testing-checks',
+          type: 'conditional',
+          options: {
+            conditions: [
+              {
+                field: 'booleans.false',
+                operation: 'isTrue'
+              }
+            ]
+          },
+          event: 'event-name',
+        })
+        const passingConditionalPlugin = new ConditionalPlugin(passingAction, '')
+
+        return expect(passingConditionalPlugin.execute(msg)).rejects.toBeTruthy()
+      })
+    })
+
+    describe('isFalse', () => {
+      it('should pass if the value is false', () => {
+        const passingAction = new Action({
+          name: 'testing-checks',
+          type: 'conditional',
+          options: {
+            conditions: [
+              {
+                field: 'booleans.false',
+                operation: 'isFalse'
+              }
+            ]
+          },
+          event: 'event-name',
+        })
+        const passingConditionalPlugin = new ConditionalPlugin(passingAction, '')
+
+        return expect(passingConditionalPlugin.execute(msg)).resolves.toBeTruthy()
+      })
+      it('should not pass if the value is other than false', () => {
+        const passingAction = new Action({
+          name: 'testing-checks',
+          type: 'conditional',
+          options: {
+            conditions: [
+              {
+                field: 'booleans.true',
+                operation: 'isFalse'
+              }
+            ]
+          },
+          event: 'event-name',
+        })
+        const passingConditionalPlugin = new ConditionalPlugin(passingAction, '')
+
+        return expect(passingConditionalPlugin.execute(msg)).rejects.toBeTruthy()
       })
     })
   })
