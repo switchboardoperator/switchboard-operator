@@ -25,6 +25,11 @@ describe('execution-plugins :: merger', () => {
     },
     valueNotToBeMerged: {
       iMust: 'be on result'
+    },
+    emptyStrings: {
+      first: '',
+      second: '',
+      third: '',
     }
   }
 
@@ -114,6 +119,24 @@ describe('execution-plugins :: merger', () => {
       return objTransformer.execute(msg).then((mergedObj) => {
         expect(typeof mergedObj.newBody.deep).toBe('string')
         return expect(mergedObj.newBody.deep).toEqual('whatever')
+      })
+    })
+    it('should properly leave an empty string when all fields are empty', () => {
+      const options = {
+        sourceFields: [
+          'emptyStrings.first',
+          'emptyStrings.second',
+          'emptyStrings.third',
+        ],
+        targetField: 'newBody.deep'
+      }
+
+      const objTransformer = new MergerPlugin({options}, '')
+
+      expect.assertions(2)
+      return objTransformer.execute(msg).then((mergedObj) => {
+        expect(typeof mergedObj.newBody.deep).toBe('string')
+        return expect(mergedObj.newBody.deep).toEqual('')
       })
     })
   })
