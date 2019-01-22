@@ -51,6 +51,11 @@ node-10:
   variables:
     NODE_VERSION: '10'
 
+node-11:
+  <<: *test
+  variables:
+    NODE_VERSION: '11'
+
 
 docker-image:
   <<: *build
