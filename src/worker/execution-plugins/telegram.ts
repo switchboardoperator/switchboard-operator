@@ -33,7 +33,9 @@ export default class TelegramPlugin implements ExecutionPluginInterface {
     const apiUrl = `https://api.telegram.org/bot${this.telegramToken}/sendMessage`
     const data = {
       chat_id: chatId,
-      text: message
+      text: message,
+      disable_web_page_preview: true,
+      parse_mode: 'Markdown',
     }
 
     return axios({
