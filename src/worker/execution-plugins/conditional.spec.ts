@@ -3,7 +3,12 @@ import ConditionalPlugin from './conditional'
 
 describe('conditional', () => {
   const msg = {
-    hello: 'world'
+    hello: 'world',
+    array: [
+      {
+        name: 'Whatever',
+      },
+    ],
   }
   const action = new Action({
     name: 'testing-checks',
@@ -22,6 +27,26 @@ describe('conditional', () => {
   const conditionalPlugin = new ConditionalPlugin(action, '')
 
   describe('checkConditions', () => {
+
+    it('should properly take array values', () => {
+      const passingAction = new Action({
+        name: 'testing-checks',
+        type: 'conditional',
+        options: {
+          conditions: [
+            {
+              field: 'array.0.name',
+              operation: '===',
+              checkValue: 'Whatever'
+            }
+          ]
+        },
+        event: 'event-name',
+      })
+      const passingConditionalPlugin = new ConditionalPlugin(passingAction, '')
+      return expect(passingConditionalPlugin.execute(msg)).resolves.toEqual(msg)
+    })
+
     it('should make === operation', () => {
       const passingAction = new Action({
         name: 'testing-checks',
