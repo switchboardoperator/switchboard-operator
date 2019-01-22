@@ -57,22 +57,34 @@ export default class ConditionalPlugin implements ExecutionPluginInterface {
       debug(this.preLog, ': Checking next condition:', condition)
       debug(this.preLog, ': with value', this.parsedMessage[condition.field])
       debug(this.preLog, ': Against the next parsed message', this.parsedMessage)
+      let field = this.parsedMessage[condition.field]
+      let value = condition.checkValue
+      if (!isNaN(field)) {
+        field = Number(field)
+      }
+      if (!isNaN(value)) {
+        value = Number(value)
+      }
+
       switch (condition.operation) {
-      case 'isTrue':
-        retValue = this.parsedMessage[condition.field] === true
-        break
-      case 'defined':
-        retValue = this.parsedMessage[condition.field] !== undefined
-        break
-      case 'undefined':
-        retValue = this.parsedMessage[condition.field] === undefined
-        break
-      case '===':
-        retValue = this.parsedMessage[condition.field] === condition.checkValue
-        break
-      case '!==':
-        retValue = this.parsedMessage[condition.field] !== condition.checkValue
-        break
+        case 'isTrue':
+          retValue = field === true
+          break
+        case 'defined':
+          retValue = field !== undefined
+          break
+        case 'undefined':
+          retValue = field === undefined
+          break
+        case '===':
+          retValue = field === value
+          break
+        case '!==':
+          retValue = field !== value
+          break
+
+        default:
+          retValue = false
       }
     })
 
