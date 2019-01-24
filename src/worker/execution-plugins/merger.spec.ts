@@ -139,5 +139,22 @@ describe('execution-plugins :: merger', () => {
         return expect(mergedObj.newBody.deep).toEqual('')
       })
     })
+    it('should NOT leave an empty string when latest field is empty', () => {
+      const options = {
+        sourceFields: [
+          'payload.someValue',
+          'emptyStrings.first',
+        ],
+        targetField: 'newBody.deep'
+      }
+
+      const objTransformer = new MergerPlugin({options}, '')
+
+      expect.assertions(2)
+      return objTransformer.execute(msg).then((mergedObj) => {
+        expect(typeof mergedObj.newBody.deep).toBe('string')
+        return expect(mergedObj.newBody.deep).toEqual('test')
+      })
+    })
   })
 })

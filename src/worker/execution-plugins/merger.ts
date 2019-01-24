@@ -42,7 +42,10 @@ export default class MergerPlugin implements ExecutionPluginInterface {
 
     const mergedResult = slicedObjects.reduce((prevObj: any, currObj: any) => {
       if (typeof prevObj === 'string' && typeof currObj === 'string') {
-        return currObj
+        if (currObj.length) {
+          return currObj
+        }
+        return prevObj
       }
 
       return merge(prevObj, currObj)
