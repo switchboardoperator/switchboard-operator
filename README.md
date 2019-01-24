@@ -11,6 +11,30 @@ Switchboard Operator (a.k.a. SBO) is a production-ready service used to manage R
 
 ![Switchboard operators image][switchboard operators]
 
+TOC
+---
+
+- [Introduction](#introduction)
+- [Use case example](#use-case-example)
+- [Configuration example](#configuration-example)
+- [Operators](#operators)
+  * [Available actions to be defined in operators](#available-actions-to-be-defined-in-operators)
+    + [`log`](#log)
+    + [`http`](#http)
+    + [`conditional`](#conditional)
+    + [`mapper`](#mapper)
+    + [`prev2task`](#prev2task)
+    + [`setter`](#setter)
+    + [`merger`](#merger)
+    + [`telegram`](#telegram)
+  * [Testing your operators](#testing-your-operators)
+    + [Test example](#test-example)
+- [Usage with docker](#usage-with-docker)
+- [Visual representation of topology](#visual-representation-of-topology)
+- [Known limitations](#known-limitations)
+- [References](#references)
+- [Licence](#licence)
+
 Introduction
 ------------
 
@@ -36,6 +60,32 @@ You probably noticed we're using the word _Operator_ here. Operators are _recipe
 
 This library uses [rabbot](https://github.com/arobson/rabbot) node module to manage the connection with Rabbitmq.
 
+Use case example
+----------------
+
+You have a shop and payments, both as independent services. Until now they've been working pretty well just using REST calls and, but now you want to add e-mails here and there, without adding logic for the emails service here and there.
+
+Instead of adding specific logic for the emails, you can call rabbitmq exchanges for every action you do on every service, such as adding a new shop order, receiving a payment, confirming it, etc.
+
+Now you'll be thinking "you said without adding logic here and there", well yes, but this logic isn't content-aware. You ain't adding specific emails logic, instead you add a bunch of possible "events" which you can later listen to (or just ignore them).
+
+So now you have both services full of events, but have nothing defined to listen at them. Here's where Switchboar Operator comes in hand.
+
+You'll create an operator for each action you want to achieve. In this case, you may wanna send a confirmation e-mail after the order is made and another one after the payment has been confirmed. We'll create two operators for this:
+
+- `shop-order-confirm-email`
+- `shop-order-is-paid-email`
+
+> Note: dashed naming is optional. You can use camel or pascal case if you preffer to do so.
+
+Remember that the payment process is still working with REST, so in this case we only focus on the new service integration. Ofc you could also remove most of that REST logic and create new operators for things like marking an order as paid.
+
+So, going back to the operators, each one will be linked to a different event, respectively:
+
+- order.create: On order create we send an e-mail.
+- order.update: On order update, we send an e-mail if status is now set as 'paid'.
+
+As soon as we run switchboard operator with the just created operators it'll create four queues: one for each opertor plus one dead-letter for each too.
 
 Configuration example
 ---------------------
@@ -60,20 +110,8 @@ The service will automatically create dead-letter exchanges for failed messages,
 
 *NOTE*: You should declare all tasks where you want to send your message using `prev2task` or `event2task` plugin.
 
-Visual representation of topology
----------------------------------
-
-The project exports a visual representation of the configured topology. Just start the server with
-
-~~~bash
-node app.js
-~~~
-
-Open http://localhost:3000/topology
-
-> Note: this feature is not properly tested and may not be working.
-
-## Operators
+Operators
+---------
 
 The actions to be executed when a message is received in a subscribed queue are grouped in files called operators. They'll group common actions in a specific context.
 
@@ -296,7 +334,7 @@ Once you have your operator and your `operators-tester.json` properly filled, yo
 yarn test-operators
 ~~~
 
-### Test example
+#### Test example
 
 You have a full operator example in the [`operators`][operators] dir, named [`membersSignupDemo.yaml`][], and two tests for it in the [`test/files`][test] folder, named [`members-signup-1.yml`][] and [`members-signup-2.yml`][].
 
@@ -304,7 +342,8 @@ Running `yarn test-operators`:
 
 [![asciicast](https://asciinema.org/a/2ITM6bcoPEeDVwJwX9BxgMjFo.svg)](https://asciinema.org/a/2ITM6bcoPEeDVwJwX9BxgMjFo)
 
-## Usage with docker
+Usage with docker
+-----------------
 
 Create your own operators under the folder `operators` in yaml or json format. The service will autoload all operators.
 
@@ -314,20 +353,35 @@ Then just run docker-compose:
 docker-compose up -d
 ~~~
 
+Visual representation of topology
+---------------------------------
+
+The project exports a visual representation of the configured topology. Just start the server with
+
+~~~bash
+node app.js
+~~~
+
+Open http://localhost:3000/topology
+
+> Note: this feature is not properly tested and may not be working.
+
 Known limitations
 -----------------
 
 - This microservice is prepared to work only with `direct` type rabbitmq exchanges.
 
-## References
+References
+----------
 
 - [Event driven Microservices using RabbitMQ][event driven microservices using rabbitmq]
 - [RabbitMQ – Best Practices For Designing Exchanges, Queues And Bindings?](https://derickbailey.com/2015/09/02/rabbitmq-best-practices-for-designing-exchanges-queues-and-bindings/)
 - [Some tips about AMQP direct exchanges](http://blog.thedigitalcatonline.com/blog/2013/08/21/some-tips-about-amqp-direct-exchanges/#.Wd5CjR_nhhG)
 
-## Licence
+Licence
+-------
 
-MIT
+[MIT License](./LICENSE)
 
 [switchboard operators]: https://upload.wikimedia.org/wikipedia/commons/8/8e/Photograph_of_Women_Working_at_a_Bell_System_Telephone_Switchboard_%283660047829%29.jpg "Switchboards operators"
 [event driven microservices using rabbitmq]: https://runnable.com/blog/event-driven-microservices-using-rabbitmq
