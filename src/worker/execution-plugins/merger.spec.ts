@@ -169,7 +169,8 @@ describe('execution-plugins :: merger', () => {
 
       let objTransformer = new MergerPlugin({options}, '')
 
-      expect.assertions(4)
+      expect.assertions(6)
+
       objTransformer.execute(msg).then((mergedObj) => {
         expect(typeof mergedObj.newBody.deep).toBe('string')
         return expect(mergedObj.newBody.deep).toEqual('test')
@@ -180,6 +181,20 @@ describe('execution-plugins :: merger', () => {
           'withNull',
           'payload.someValue',
           'payload3',
+        ],
+        targetField: 'newBody.deep'
+      }
+
+      objTransformer = new MergerPlugin({options}, '')
+
+      objTransformer.execute(msg).then((mergedObj) => {
+        expect(typeof mergedObj.newBody.deep).toBe('string')
+        return expect(mergedObj.newBody.deep).toEqual('test')
+      })
+      options = {
+        sourceFields: [
+          'withNull',
+          'payload.someValue',
         ],
         targetField: 'newBody.deep'
       }
