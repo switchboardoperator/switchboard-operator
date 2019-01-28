@@ -35,7 +35,7 @@ export default class MergerPlugin implements ExecutionPluginInterface {
     const slicedObjects = []
     this.options.sourceFields.forEach((key) => {
       const slicedObj = objectMapper.getKeyValue(message, key)
-      if (slicedObj !== undefined) {
+      if (slicedObj !== undefined && slicedObj !== null) {
         slicedObjects.push(slicedObj)
       }
     })

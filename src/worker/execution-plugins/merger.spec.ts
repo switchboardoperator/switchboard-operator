@@ -30,7 +30,8 @@ describe('execution-plugins :: merger', () => {
       first: '',
       second: '',
       third: '',
-    }
+    },
+    withNull: null,
   }
 
   describe('execute', () => {
@@ -151,6 +152,40 @@ describe('execution-plugins :: merger', () => {
       const objTransformer = new MergerPlugin({options}, '')
 
       expect.assertions(2)
+      return objTransformer.execute(msg).then((mergedObj) => {
+        expect(typeof mergedObj.newBody.deep).toBe('string')
+        return expect(mergedObj.newBody.deep).toEqual('test')
+      })
+    })
+    it('shouldn\'t either leave an empty string when latest field is null', () => {
+      let options = {
+        sourceFields: [
+          'payload.someValue',
+          'payload3',
+          'withNull',
+        ],
+        targetField: 'newBody.deep'
+      }
+
+      let objTransformer = new MergerPlugin({options}, '')
+
+      expect.assertions(4)
+      objTransformer.execute(msg).then((mergedObj) => {
+        expect(typeof mergedObj.newBody.deep).toBe('string')
+        return expect(mergedObj.newBody.deep).toEqual('test')
+      })
+
+      options = {
+        sourceFields: [
+          'withNull',
+          'payload.someValue',
+          'payload3',
+        ],
+        targetField: 'newBody.deep'
+      }
+
+      objTransformer = new MergerPlugin({options}, '')
+
       return objTransformer.execute(msg).then((mergedObj) => {
         expect(typeof mergedObj.newBody.deep).toBe('string')
         return expect(mergedObj.newBody.deep).toEqual('test')
