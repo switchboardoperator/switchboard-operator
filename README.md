@@ -311,6 +311,11 @@ To test them, you'll need to add a yaml file (or files, as you can define as man
     # ...
   output:
     # ...
+  actions:
+    actionName:
+      description: An optional action check description
+      output:
+      # expected output in this exact point of the execution
   response:
     actionName:
       # ...
@@ -326,6 +331,7 @@ Let's see what's every part:
 - `description`: Is shown during the tests, so you can properly know where the logs come from.
 - `input`: The payload the queue should receive as input.
 - `output`: How should it look after exiting.
+- `actions`: Same as `output`, but action-specific. This way you can check any operator at any point of its execution. Each action must have an `output` definition. A `description` field is optional.
 - `response`: Used by the HTTP plugin mock. Mocks responses for every specified `actionName`.
 
 Once you have your operator and your `operators-tester.json` properly filled, you can test them with the specific `test-operators` task:

@@ -32,6 +32,7 @@ describe('execution-plugins :: merger', () => {
       third: '',
     },
     withNull: null,
+    emptyArray: [],
   }
 
   describe('execute', () => {
@@ -143,6 +144,24 @@ describe('execution-plugins :: merger', () => {
     it('should NOT leave an empty string when latest field is empty', () => {
       const options = {
         sourceFields: [
+          'payload.someValue',
+          'emptyStrings.first',
+        ],
+        targetField: 'newBody.deep'
+      }
+
+      const objTransformer = new MergerPlugin({options}, '')
+
+      expect.assertions(2)
+      return objTransformer.execute(msg).then((mergedObj) => {
+        expect(typeof mergedObj.newBody.deep).toBe('string')
+        return expect(mergedObj.newBody.deep).toEqual('test')
+      })
+    })
+    it('should NOT leave an empty string when latest field is empty', () => {
+      const options = {
+        sourceFields: [
+          'emptyArray',
           'payload.someValue',
           'emptyStrings.first',
         ],

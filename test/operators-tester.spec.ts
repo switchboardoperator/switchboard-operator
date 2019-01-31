@@ -12,7 +12,7 @@ jest.mock('../src/worker/execution-plugins/telegram')
 jest.mock('../src/worker/execution-plugins/prev2task')
 jest.mock('../src/worker/execution-plugins/http')
 
-const executeActions = async (operator, {input, response}) => {
+const executeActions = async (operator, {input, actions, response}) => {
   const contents = extractMessage(input)
 
   let promiseChain = Promise.resolve([]).then(() => contents)
@@ -38,7 +38,19 @@ const executeActions = async (operator, {input, response}) => {
         preLog = '[' + contents.id + '] > ' + preLog
       }
 
-      return executer.execute(contents).catch((err) => {
+      return executer.execute(contents).then((retorn) => {
+        if (actions && actions[action.name] !== undefined) {
+          const step = actions[action.name]
+
+          if (step.description) {
+            process.stdout.write(`${chalk.yellow('┗')} ${step.description}\n`)
+          }
+
+          expect(retorn).toEqual(step.output)
+        }
+
+        return retorn
+      }).catch((err) => {
         return Promise.reject(err)
       })
     }
@@ -55,62 +67,60 @@ const executeActions = async (operator, {input, response}) => {
 }
 
 describe('Test operators', () => {
-  it('all operators work as expected', async () => {
-    // const events = loadOperators()
-    const rabbit: any = {
-      handle: (queue, cb) => cb(),
-    }
-    let path = `${__dirname}/../test/files`
-    if (process.env.OPERATORS_TEST_DIR) {
-      path = process.env.OPERATORS_TEST_DIR
-    }
+  const rabbit: any = {
+    handle: (queue, cb) => cb(),
+  }
+  let path = `${__dirname}/../test/files`
+  if (process.env.OPERATORS_TEST_DIR) {
+    path = process.env.OPERATORS_TEST_DIR
+  }
 
-    const contents = fs.readdirSync(path)
+  const contents = fs.readdirSync(path)
 
-    const fileContents = []
-    for (const filename of contents) {
-      if (!filename.match(/\.ya?ml$/)) {
-        continue
-      }
-
-      const location = `${path}/${filename}`
-      fileContents.push(fs.readFileSync(location, 'utf8'))
+  const fileContents = []
+  for (const filename of contents) {
+    if (!filename.match(/\.ya?ml$/)) {
+      continue
     }
 
-    const operators = loadOperators()
-    const tests = yaml.safeLoad(fileContents.join(''))
+    const location = `${path}/${filename}`
+    fileContents.push(fs.readFileSync(location, 'utf8'))
+  }
 
-    if (!tests || (tests && !tests.length)) {
-      process.stdout.write(chalk.yellow(`No operator test files found at ${path}\n\n`))
+  const operators = loadOperators()
+  const tests = yaml.safeLoad(fileContents.join(''))
 
-      return false
+  if (!tests || (tests && !tests.length)) {
+    process.stdout.write(chalk.yellow(`No operator test files found at ${path}\n\n`))
+
+    return false
+  }
+
+  const jobs = []
+  for (const test of tests) {
+    const job = {
+      test,
+      operator: operators.find(({name}) => name === test.name)
+    }
+    jobs.push(job)
+  }
+
+  for (const key in jobs) {
+    const job = jobs[key]
+    const { test, operator } = job
+
+    process.stdout.write(`\n${chalk.yellow('━')} Running actions for operator ${operator.name}...\n`)
+
+    if (test.description) {
+      process.stdout.write(`${chalk.yellow('┗')} ${test.description}\n`)
     }
 
-    const jobs = []
-    for (const test of tests) {
-      const job = {
-        test,
-        operator: operators.find(({name}) => name === test.name)
-      }
-      jobs.push(job)
-    }
+    process.stdout.write('\n')
 
-    expect.assertions(Object.keys(jobs).length)
-    for (const key in jobs) {
-      const job = jobs[key]
-      const { test, operator } = job
-
-      process.stdout.write(`\n${chalk.yellow('━')} Running actions for operator ${operator.name}...\n`)
-
-      if (test.description) {
-        process.stdout.write(`${chalk.yellow('┗')} ${test.description}\n`)
-      }
-
-      process.stdout.write('\n')
-
+    it(`${operator.name} works as expected`, async () => {
       const results = await executeActions(new Event(operator), test)
 
       expect(results).toEqual(test.output)
-    }
-  })
+    })
+  }
 })
