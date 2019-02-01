@@ -111,13 +111,15 @@ describe('Test operators', () => {
 
     process.stdout.write(`\n${chalk.yellow('━')} Running actions for operator ${operator.name}...\n`)
 
+    let description = `${operator.name} works as expected`
     if (test.description) {
       process.stdout.write(`${chalk.yellow('┗')} ${test.description}\n`)
+      description = test.description
     }
 
     process.stdout.write('\n')
 
-    it(`${operator.name} works as expected`, async () => {
+    it(description, async () => {
       const results = await executeActions(new Event(operator), test)
 
       expect(results).toEqual(test.output)
