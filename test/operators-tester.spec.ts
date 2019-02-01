@@ -51,7 +51,7 @@ const executeActions = async (operator, {input, actions, response}) => {
 
         return retorn
       }).catch((err) => {
-        return Promise.reject(err)
+        return Promise.resolve(err)
       })
     }
 
