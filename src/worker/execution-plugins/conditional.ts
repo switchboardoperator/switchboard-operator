@@ -43,6 +43,61 @@ export default class ConditionalPlugin implements ExecutionPluginInterface {
     this.options = new ConditionalPluginOptionsSchema(action.options)
   }
 
+  castValue(value: any): string | number {
+    if (!isNaN(value)) {
+      return Number(value)
+    }
+
+    return value
+  }
+
+  empty(field: any): boolean {
+    if (isNaN(field) && typeof field !== 'string' && !field) {
+      return true
+    }
+
+    if (!isNaN(parseInt(field, 10))) {
+      return false
+    }
+
+    return field.trim().length === 0
+  }
+
+  operation(operation: string | boolean, field: any, value: any): boolean {
+    switch (operation) {
+      case true:
+      case 'true':
+      case 'isTrue':
+      return field === true
+
+      case false:
+      case 'false':
+      case 'isFalse':
+        return field === false
+
+      case 'defined':
+        return field !== undefined
+
+      case 'undefined':
+        return field === undefined
+
+      case '===':
+        return this.castValue(field) === this.castValue(value)
+
+      case '!==':
+        return this.castValue(field) !== this.castValue(value)
+
+      case 'empty':
+        return this.empty(field)
+
+      case 'notEmpty':
+        return !this.empty(field)
+
+      default:
+        return false
+    }
+  }
+
   // Execute the conditions logic
   checkConditions() {
     let retValue = true
@@ -57,38 +112,12 @@ export default class ConditionalPlugin implements ExecutionPluginInterface {
       debug(this.preLog, ': Checking next condition:', condition)
       debug(this.preLog, ': with value', this.parsedMessage[condition.field])
       debug(this.preLog, ': Against the next parsed message', this.parsedMessage)
-      let field = this.parsedMessage[condition.field]
-      let value = condition.checkValue
-      if (!isNaN(field)) {
-        field = Number(field)
-      }
-      if (!isNaN(value)) {
-        value = Number(value)
-      }
 
-      switch (condition.operation) {
-        case 'isTrue':
-          retValue = this.parsedMessage[condition.field] === true
-          break
-        case 'isFalse':
-          retValue = this.parsedMessage[condition.field] === false
-          break
-        case 'defined':
-          retValue = this.parsedMessage[condition.field] !== undefined
-          break
-        case 'undefined':
-          retValue = this.parsedMessage[condition.field] === undefined
-          break
-        case '===':
-          retValue = field === value
-          break
-        case '!==':
-          retValue = field !== value
-          break
-
-        default:
-          retValue = false
-      }
+      retValue = this.operation(
+        condition.operation,
+        this.parsedMessage[condition.field],
+        condition.checkValue
+      )
     })
 
     if (retValue) {

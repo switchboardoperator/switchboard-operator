@@ -28,7 +28,20 @@ const ConditionSchema = new SchemaObject({
   operation: {
     type: String,
     required: true,
-    enum: ['===', '!==', 'defined', 'undefined', 'isTrue', 'isFalse']
+    enum: [
+      '===',
+      '!==',
+      'defined',
+      'undefined',
+      'empty',
+      'notEmpty',
+      'isTrue',
+      'isFalse',
+      'true',
+      'false',
+      true,
+      false,
+    ]
   },
   checkValue: {
     type: String

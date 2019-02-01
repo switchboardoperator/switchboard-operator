@@ -16,7 +16,9 @@ describe('execution-plugins :: conditional', () => {
     booleans: {
       true: true,
       false: false,
-    }
+    },
+    empty: '',
+    spaces: '   ',
   }
   const action = new Action({
     name: 'testing-checks',
@@ -183,9 +185,196 @@ describe('execution-plugins :: conditional', () => {
       })
     })
 
+    describe('empty', () => {
+      it('should pass if the field does not exist', () => {
+        const passingAction = new Action({
+          name: 'testing-checks',
+          type: 'conditional',
+          options: {
+            conditions: [
+              {
+                field: 'whatever',
+                operation: 'empty'
+              }
+            ]
+          },
+          event: 'event-name',
+        })
+        const passingConditionalPlugin = new ConditionalPlugin(passingAction, '')
+
+        return expect(passingConditionalPlugin.execute(msg)).resolves.toBeTruthy()
+      })
+      it('should pass if the field is set but has an empty value', () => {
+        const passingAction = new Action({
+          name: 'testing-checks',
+          type: 'conditional',
+          options: {
+            conditions: [
+              {
+                field: 'empty',
+                operation: 'empty'
+              }
+            ]
+          },
+          event: 'event-name',
+        })
+        const passingConditionalPlugin = new ConditionalPlugin(passingAction, '')
+
+        return expect(passingConditionalPlugin.execute(msg)).resolves.toBeTruthy()
+      })
+      it('should pass if the field is set as an empty string (multiple spaces)', () => {
+        const passingAction = new Action({
+          name: 'testing-checks',
+          type: 'conditional',
+          options: {
+            conditions: [
+              {
+                field: 'spaces',
+                operation: 'empty'
+              }
+            ]
+          },
+          event: 'event-name',
+        })
+        const passingConditionalPlugin = new ConditionalPlugin(passingAction, '')
+
+        return expect(passingConditionalPlugin.execute(msg)).resolves.toBeTruthy()
+      })
+      it('should not pass if field is set to number zero', () => {
+        const passingAction = new Action({
+          name: 'testing-checks',
+          type: 'conditional',
+          options: {
+            conditions: [
+              {
+                field: 'numbers.zero',
+                operation: 'empty'
+              }
+            ]
+          },
+          event: 'event-name',
+        })
+        const passingConditionalPlugin = new ConditionalPlugin(passingAction, '')
+
+        return expect(passingConditionalPlugin.execute(msg)).rejects.toBeTruthy()
+      })
+      it('should not pass if the field exists and is not empty', () => {
+        const passingAction = new Action({
+          name: 'testing-checks',
+          type: 'conditional',
+          options: {
+            conditions: [
+              {
+                field: 'hello',
+                operation: 'empty'
+              }
+            ]
+          },
+          event: 'event-name',
+        })
+        const passingConditionalPlugin = new ConditionalPlugin(passingAction, '')
+
+        return expect(passingConditionalPlugin.execute(msg)).rejects.toBeTruthy()
+      })
+    })
+
+    describe('notEmpty', () => {
+      it('should not pass if the field does not exist', () => {
+        const passingAction = new Action({
+          name: 'testing-checks',
+          type: 'conditional',
+          options: {
+            conditions: [
+              {
+                field: 'whatever',
+                operation: 'notEmpty'
+              }
+            ]
+          },
+          event: 'event-name',
+        })
+        const passingConditionalPlugin = new ConditionalPlugin(passingAction, '')
+
+        return expect(passingConditionalPlugin.execute(msg)).rejects.toBeTruthy()
+      })
+      it('should not pass if the field is set but has an empty value', () => {
+        const passingAction = new Action({
+          name: 'testing-checks',
+          type: 'conditional',
+          options: {
+            conditions: [
+              {
+                field: 'empty',
+                operation: 'notEmpty'
+              }
+            ]
+          },
+          event: 'event-name',
+        })
+        const passingConditionalPlugin = new ConditionalPlugin(passingAction, '')
+
+        return expect(passingConditionalPlugin.execute(msg)).rejects.toBeTruthy()
+      })
+      it('should not pass if the field is set as an empty string (multiple spaces)', () => {
+        const passingAction = new Action({
+          name: 'testing-checks',
+          type: 'conditional',
+          options: {
+            conditions: [
+              {
+                field: 'spaces',
+                operation: 'notEmpty'
+              }
+            ]
+          },
+          event: 'event-name',
+        })
+        const passingConditionalPlugin = new ConditionalPlugin(passingAction, '')
+
+        return expect(passingConditionalPlugin.execute(msg)).rejects.toBeTruthy()
+      })
+      it('should pass if field is set to number zero', () => {
+        const passingAction = new Action({
+          name: 'testing-checks',
+          type: 'conditional',
+          options: {
+            conditions: [
+              {
+                field: 'numbers.zero',
+                operation: 'notEmpty'
+              }
+            ]
+          },
+          event: 'event-name',
+        })
+        const passingConditionalPlugin = new ConditionalPlugin(passingAction, '')
+
+        return expect(passingConditionalPlugin.execute(msg)).resolves.toBeTruthy()
+      })
+      it('should pass if the field exists and is not empty', () => {
+        const passingAction = new Action({
+          name: 'testing-checks',
+          type: 'conditional',
+          options: {
+            conditions: [
+              {
+                field: 'hello',
+                operation: 'notEmpty'
+              }
+            ]
+          },
+          event: 'event-name',
+        })
+        const passingConditionalPlugin = new ConditionalPlugin(passingAction, '')
+
+        return expect(passingConditionalPlugin.execute(msg)).resolves.toBeTruthy()
+      })
+    })
+
     describe('isTrue', () => {
       it('should pass if the value is true', () => {
-        const passingAction = new Action({
+        expect.assertions(3)
+        let passingAction = new Action({
           name: 'testing-checks',
           type: 'conditional',
           options: {
@@ -198,8 +387,40 @@ describe('execution-plugins :: conditional', () => {
           },
           event: 'event-name',
         })
-        const passingConditionalPlugin = new ConditionalPlugin(passingAction, '')
+        let passingConditionalPlugin = new ConditionalPlugin(passingAction, '')
 
+        expect(passingConditionalPlugin.execute(msg)).resolves.toBeTruthy()
+
+        passingAction = new Action({
+          name: 'testing-checks',
+          type: 'conditional',
+          options: {
+            conditions: [
+              {
+                field: 'booleans.true',
+                operation: true,
+              }
+            ]
+          },
+          event: 'event-name',
+        })
+        passingConditionalPlugin = new ConditionalPlugin(passingAction, '')
+        expect(passingConditionalPlugin.execute(msg)).resolves.toBeTruthy()
+
+        passingAction = new Action({
+          name: 'testing-checks',
+          type: 'conditional',
+          options: {
+            conditions: [
+              {
+                field: 'booleans.true',
+                operation: 'true',
+              }
+            ]
+          },
+          event: 'event-name',
+        })
+        passingConditionalPlugin = new ConditionalPlugin(passingAction, '')
         return expect(passingConditionalPlugin.execute(msg)).resolves.toBeTruthy()
       })
       it('should not pass if the value is other than true', () => {
@@ -224,7 +445,8 @@ describe('execution-plugins :: conditional', () => {
 
     describe('isFalse', () => {
       it('should pass if the value is false', () => {
-        const passingAction = new Action({
+        expect.assertions(3)
+        let passingAction = new Action({
           name: 'testing-checks',
           type: 'conditional',
           options: {
@@ -237,8 +459,40 @@ describe('execution-plugins :: conditional', () => {
           },
           event: 'event-name',
         })
-        const passingConditionalPlugin = new ConditionalPlugin(passingAction, '')
+        let passingConditionalPlugin = new ConditionalPlugin(passingAction, '')
 
+        expect(passingConditionalPlugin.execute(msg)).resolves.toBeTruthy()
+
+        passingAction = new Action({
+          name: 'testing-checks',
+          type: 'conditional',
+          options: {
+            conditions: [
+              {
+                field: 'booleans.false',
+                operation: false,
+              }
+            ]
+          },
+          event: 'event-name',
+        })
+        passingConditionalPlugin = new ConditionalPlugin(passingAction, '')
+        expect(passingConditionalPlugin.execute(msg)).resolves.toBeTruthy()
+
+        passingAction = new Action({
+          name: 'testing-checks',
+          type: 'conditional',
+          options: {
+            conditions: [
+              {
+                field: 'booleans.false',
+                operation: 'false',
+              }
+            ]
+          },
+          event: 'event-name',
+        })
+        passingConditionalPlugin = new ConditionalPlugin(passingAction, '')
         return expect(passingConditionalPlugin.execute(msg)).resolves.toBeTruthy()
       })
       it('should not pass if the value is other than false', () => {
