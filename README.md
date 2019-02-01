@@ -22,6 +22,7 @@ TOC
     + [`log`](#log)
     + [`http`](#http)
     + [`conditional`](#conditional)
+      - [Conditional operations](#conditional-operations)
     + [`mapper`](#mapper)
     + [`prev2task`](#prev2task)
     + [`setter`](#setter)
@@ -63,7 +64,7 @@ This library uses [rabbot](https://github.com/arobson/rabbot) node module to man
 Use case example
 ----------------
 
-You have a shop and payments, both as independent services. Until now they've been working pretty well just using REST calls and, but now you want to add e-mails here and there, without adding logic for the emails service here and there.
+You have a shop and payments, both as independent services. Until now they've been working pretty well just using REST calls, but now you want to add e-mails here and there, without adding logic for the emails service here and there specifically for this integration.
 
 Instead of adding specific logic for the emails, you can call rabbitmq exchanges for every action you do on every service, such as adding a new shop order, receiving a payment, confirming it, etc.
 
@@ -212,6 +213,18 @@ It checks for defined conditions in the received object and aborts execution if 
         operation: ===
         checkValue: valueToCheckAgainst
 ~~~
+
+##### Conditional operations
+
+- `true` | `isTrue`: Value is set as boolean `true`.
+- `false` | `isFalse`: Value is set as boolean `false`.
+- `defined`: Variable is defined.
+- `undefined`: Variable is undefined.
+- `empty`: Variable is undefined or empty.
+- `notEmpty`: Variable is defined and NOT empty.
+- `===`: Variable equals `checkValue`.
+- `!==`: Variable does not equal `checkValue`.
+
 #### `mapper`
 
 It converts the message from the last action executed, to a new object following the specified mapping.
