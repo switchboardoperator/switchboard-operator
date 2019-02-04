@@ -109,6 +109,11 @@ describe('Test operators', () => {
     const job = jobs[key]
     const { test, operator } = job
 
+    if (!operator) {
+      process.stdout.write(`\n${chalk.red('━')} Could not find operator ${test.name}!! skipping test...\n`)
+      continue
+    }
+
     process.stdout.write(`\n${chalk.yellow('━')} Running actions for operator ${operator.name}...\n`)
 
     let description = `${operator.name} works as expected`
