@@ -5,7 +5,7 @@ describe('Action', () => {
     name: 'testAction',
     type: 'some-type',
     event: 'name-event',
-    options: {}
+    options: {},
   }
   const testAction = new Action(params)
   it('must be a model instance', () => {
