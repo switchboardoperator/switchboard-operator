@@ -52,6 +52,12 @@ export default class ActionExecuter {
         return result
       })
       .catch((err) => {
+        if (this.action.allowFailure) {
+          logger.info(this.preLog, 'Action execution failed, but allowFailure is set, so ignoring...')
+
+          return Promise.resolve(message)
+        }
+
         debug('Action executed failed with %j', err)
 
         throw err

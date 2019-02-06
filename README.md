@@ -126,19 +126,18 @@ Here's an example of an operator:
 
 ~~~yaml
 # Execute every time a purchase is update
-name: someUniqueName
+name: some-unique-name-for-this-operator
 eventName: events.purchase
 route: updated
 # true by default, but here you can see you're able to disable them just adding this key.
 enabled: true
-output: "interleaved|group|prefixed"
 actions:
   # Print event purchase logs
   - name: print-log
     type: log # Type log will use log plugin
 
   # Check if event purchase is paid
-  - name: shouldSendEmail
+  - name: should-send-email
     # Type conditional will stop operator execution if some condition is not meet.
     type: conditional
     options:
@@ -149,7 +148,7 @@ actions:
         operation: defined
 
   # Convert event to email
-  - name: eventToEmailMapper
+  - name: map-event-to-email
     # Type mapper gets the previous action result and converts its fields to a new object with the specified structure.
     type: mapper
     options:
@@ -163,12 +162,21 @@ actions:
         '*': vars
 
   # Send membership to emails queue applying
-  - name: sendEventPurchaseToEmailQueue
+  - name: send-event-purchase-to-email-queue
     # Type prev2task gets the previous action message and sends it to a task queue.
     type: prev2task
     options:
       target: emails
       targetRoute: email.send
+
+  # Send a telegram message to a specific group chat
+  - name: send-telegram-message
+    type: telegram
+    # In case the Telegram API fails, ignore the error
+    allowFailure: true
+    options:
+      chatId: '-12345'
+      template: 'Member with e-mail {{ to }} has registered for event {{ vars.event.name }}'
 ~~~
 
 ### Available actions to be defined in operators
@@ -212,7 +220,10 @@ It checks for defined conditions in the received object and aborts execution if 
       - field: someReceivingObjField
         operation: ===
         checkValue: valueToCheckAgainst
+
 ~~~
+
+> **Note:** enabling `allowFailure` here would make the plugin to not work as expected.
 
 ##### Conditional operations
 
@@ -224,6 +235,7 @@ It checks for defined conditions in the received object and aborts execution if 
 - `notEmpty`: Variable is defined and NOT empty.
 - `===`: Variable equals `checkValue`.
 - `!==`: Variable does not equal `checkValue`.
+
 
 #### `mapper`
 
