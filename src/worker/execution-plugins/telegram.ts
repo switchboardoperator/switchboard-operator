@@ -11,26 +11,32 @@ import OperatorPlugin from '../OperatorPlugin'
 export default class TelegramPlugin extends OperatorPlugin implements PluginExecutorInterface {
   action: Action
   preLog: string
-  telegramToken: string
+  token: string
   options: any
 
   constructor(action: Action, preLog: string) {
     super(action, preLog, TelegramPluginOptionsSchema)
 
-    if (config.has('plugins.telegram.token')) {
-      this.telegramToken = config.get('plugins.telegram.token')
-    } else {
-      throw new Error('To use Telegram plugin you must provide a token. Talk to @BotFather to get yours.')
+    const options = {
+      ...config.get('plugins.telegram'),
+      ...action.options,
+    }
+
+    console.log(options)
+
+    this.loadOptions(TelegramPluginOptionsSchema, options)
+
+    this.token = this.options.token
+    if (!this.token) {
+      throw new Error('To use the Telegram plugin you must provide a valid bot API token. Talk with https://t.me/BotFather to get yours.')
     }
   }
 
   sendMessage(chatId, message): Promise<any> {
-    const apiUrl = `https://api.telegram.org/bot${this.telegramToken}/sendMessage`
+    const apiUrl = `https://api.telegram.org/bot${this.token}/sendMessage`
     const data = {
       chat_id: chatId,
       text: message,
-      disable_web_page_preview: true,
-      parse_mode: 'Markdown',
     }
 
     return axios({

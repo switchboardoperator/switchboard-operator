@@ -57,6 +57,7 @@
     "axios-mock-adapter": "^1.15.0",
     "chalk": "^2.4.1",
     "config": "^1.27.0",
+    "decamelize-keys": "^1.1.0",
     "deepmerge": "^2.2.1",
     "express": "^4.16.2",
     "express-healthcheck": "^0.1.0",

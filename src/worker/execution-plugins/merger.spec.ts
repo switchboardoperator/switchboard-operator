@@ -1,4 +1,5 @@
 import MergerPlugin from './merger'
+import Action from '../../model/Action';
 
 describe('execution-plugins :: merger', () => {
   const msg = {
@@ -46,7 +47,7 @@ describe('execution-plugins :: merger', () => {
         targetField: 'newBody.deep'
       }
 
-      const transformer = new MergerPlugin({options}, '')
+      const transformer = new MergerPlugin(new Action({options}), '')
 
       return expect(transformer.execute(msg)).toBeInstanceOf(Promise)
     })
@@ -60,7 +61,7 @@ describe('execution-plugins :: merger', () => {
         targetField: 'newBody.deep'
       }
 
-      const objTransformer = new MergerPlugin({options}, '')
+      const objTransformer = new MergerPlugin(new Action({options}), '')
 
       expect.assertions(4)
 
@@ -81,7 +82,7 @@ describe('execution-plugins :: merger', () => {
         targetField: 'newBody.deep'
       }
 
-      const objTransformer = new MergerPlugin({options}, '')
+      const objTransformer = new MergerPlugin(new Action({options}), '')
 
       return objTransformer.execute(msg).then((mergedObj) => {
         return expect(typeof mergedObj.newBody.deep).toBe('string')
@@ -96,7 +97,7 @@ describe('execution-plugins :: merger', () => {
         targetField: 'newBody.deep'
       }
 
-      const objTransformer = new MergerPlugin({options}, '')
+      const objTransformer = new MergerPlugin(new Action({options}), '')
 
       expect.assertions(2)
 
@@ -115,7 +116,7 @@ describe('execution-plugins :: merger', () => {
         targetField: 'newBody.deep'
       }
 
-      const objTransformer = new MergerPlugin({options}, '')
+      const objTransformer = new MergerPlugin(new Action({options}), '')
 
       expect.assertions(2)
       return objTransformer.execute(msg).then((mergedObj) => {
@@ -133,7 +134,7 @@ describe('execution-plugins :: merger', () => {
         targetField: 'newBody.deep'
       }
 
-      const objTransformer = new MergerPlugin({options}, '')
+      const objTransformer = new MergerPlugin(new Action({options}), '')
 
       expect.assertions(2)
       return objTransformer.execute(msg).then((mergedObj) => {
@@ -150,7 +151,7 @@ describe('execution-plugins :: merger', () => {
         targetField: 'newBody.deep'
       }
 
-      const objTransformer = new MergerPlugin({options}, '')
+      const objTransformer = new MergerPlugin(new Action({options}), '')
 
       expect.assertions(2)
       return objTransformer.execute(msg).then((mergedObj) => {
@@ -168,7 +169,7 @@ describe('execution-plugins :: merger', () => {
         targetField: 'newBody.deep'
       }
 
-      const objTransformer = new MergerPlugin({options}, '')
+      const objTransformer = new MergerPlugin(new Action({options}), '')
 
       expect.assertions(2)
       return objTransformer.execute(msg).then((mergedObj) => {
@@ -186,7 +187,7 @@ describe('execution-plugins :: merger', () => {
         targetField: 'newBody.deep'
       }
 
-      let objTransformer = new MergerPlugin({options}, '')
+      let objTransformer = new MergerPlugin(new Action({options}), '')
 
       expect.assertions(6)
 
@@ -204,7 +205,7 @@ describe('execution-plugins :: merger', () => {
         targetField: 'newBody.deep'
       }
 
-      objTransformer = new MergerPlugin({options}, '')
+      objTransformer = new MergerPlugin(new Action({options}), '')
 
       objTransformer.execute(msg).then((mergedObj) => {
         expect(typeof mergedObj.newBody.deep).toBe('string')
@@ -218,7 +219,7 @@ describe('execution-plugins :: merger', () => {
         targetField: 'newBody.deep'
       }
 
-      objTransformer = new MergerPlugin({options}, '')
+      objTransformer = new MergerPlugin(new Action({options}), '')
 
       return objTransformer.execute(msg).then((mergedObj) => {
         expect(typeof mergedObj.newBody.deep).toBe('string')
