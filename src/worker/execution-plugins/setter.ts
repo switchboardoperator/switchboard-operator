@@ -3,28 +3,19 @@ const debug = require('debug')('sbo-plugin-setter')
 import logger from '../../services/logger'
 import Action from "../../model/Action"
 import { SetterPluginOptionsSchema } from '../../schemas/PluginOptionsSchema'
-import { ExecutionPluginInterface } from '../ExecutionPluginInterface'
+import PluginExecutorInterface from '../PluginExecutorInterface'
+import OperatorPlugin from '../OperatorPlugin'
 
-export default class SetterPlugin implements ExecutionPluginInterface {
+export default class SetterPlugin extends OperatorPlugin implements PluginExecutorInterface {
   action: Action
   options: any
   preLog: string
 
-  constructor(action, preLog) {
-    this.action = action
-
-    // Getting the last of previous results comming from previous plugins
-    this.options = new SetterPluginOptionsSchema(action.options)
-
-
-    if (this.options.isErrors()) {
-      throw new Error('The options provided are not valid '+ JSON.stringify(this.options.getErrors()))
-    }
-
-    this.preLog = preLog + ' > ' + action.name
+  constructor(action: Action, preLog: string) {
+    super(action, preLog, SetterPluginOptionsSchema)
   }
 
-  execute(message: any) {
+  execute(message: any): Promise<any> {
     debug(
       'Running setter plugin with options: %j and msg: %j',
       this.options,

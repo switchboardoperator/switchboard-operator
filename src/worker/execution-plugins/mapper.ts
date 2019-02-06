@@ -4,28 +4,19 @@ import objectMapper from 'object-mapper'
 import Action from '../../model/Action'
 import logger from '../../services/logger'
 import { MapperPluginOptionsSchema } from '../../schemas/PluginOptionsSchema'
-import { ExecutionPluginInterface } from '../ExecutionPluginInterface'
+import PluginExecutorInterface from '../PluginExecutorInterface'
+import OperatorPlugin from '../OperatorPlugin'
 
-
-export default class MapperPlugin implements ExecutionPluginInterface {
+export default class MapperPlugin extends OperatorPlugin implements PluginExecutorInterface {
   action: Action
   options: any
   preLog: string
 
-  constructor(action, preLog) {
-    this.action = action
-
-    // Getting the last of previous results comming from previous plugins
-    this.options = new MapperPluginOptionsSchema(action.options)
-
-    if (this.options.isErrors()) {
-      throw new Error('The options provided are not valid '+ JSON.stringify(this.options.getErrors()))
-    }
-
-    this.preLog = preLog + ' > ' + action.name
+  constructor(action: Action, preLog: string) {
+    super(action, preLog, MapperPluginOptionsSchema)
   }
 
-  execute(message: any) {
+  execute(message: any): Promise<any> {
     debug(
       'Running mapper plugin with options: %j and msg: %j',
       this.options,

@@ -3,7 +3,8 @@ const debug = require('debug')('conditional-plugin')
 import Action from '../../model/Action'
 import logger from '../../services/logger'
 import { ConditionalPluginOptionsSchema } from '../../schemas/PluginOptionsSchema'
-import { ExecutionPluginInterface } from '../ExecutionPluginInterface'
+import PluginExecutorInterface from '../PluginExecutorInterface'
+import OperatorPlugin from '../OperatorPlugin'
 
 // Convert objecto to one level of deepness
 const flattenObject = (ob) => {
@@ -30,17 +31,14 @@ const flattenObject = (ob) => {
   return toReturn
 }
 
-export default class ConditionalPlugin implements ExecutionPluginInterface {
+export default class ConditionalPlugin extends OperatorPlugin implements PluginExecutorInterface {
   action: Action
   preLog: string
   parsedMessage: object
   options: any
 
-  constructor(action, preLog) {
-    this.action = action
-    this.preLog = preLog + ' > ' + action.name
-
-    this.options = new ConditionalPluginOptionsSchema(action.options)
+  constructor(action: Action, preLog: string) {
+    super(action, preLog, ConditionalPluginOptionsSchema)
   }
 
   castValue(value: any): string | number {
@@ -127,7 +125,7 @@ export default class ConditionalPlugin implements ExecutionPluginInterface {
     return retValue
   }
 
-  execute(message: any) {
+  execute(message: any): Promise<any> {
     this.parsedMessage = flattenObject(message)
 
     debug(

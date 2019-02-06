@@ -8,6 +8,26 @@ import Event from '../model/Event'
 const axiosMock = new axiosMockAdapter(axios)
 
 describe('ActionExecuter', () => {
+  it('should fail with a bad defined action', () => {
+    const action = new Action({
+      name: 'whatever',
+      type: 'telegram',
+      options: {
+        inventedKey: 'nyaaa'
+      },
+      event: 'event-name',
+    })
+
+    const actionExecuter = () => new ActionExecuter(action, rabbit, new Event({
+      name: 'test',
+      eventName: 'test',
+      route: 'test',
+      actions: []
+    }))
+
+    expect(actionExecuter).toThrow()
+  })
+
   it('should handle comming events', () => {
     const action = new Action({
       name: 'sendMembershipsToEmail',
@@ -42,15 +62,24 @@ describe('ActionExecuter', () => {
       name: 'myConditionalAction',
       type: 'conditional',
       options: {
-        conditions: {
-          field: 'test',
-          operation: 'defined'
-        }
+        conditions: [
+          {
+            field: 'body.test',
+            operation: 'defined'
+          },
+        ],
       },
       event: 'event-name',
     })
 
-    const actionExecuter = new ActionExecuter(action, rabbit, new Event({name: 'test', eventName: 'test', route: 'test', actions: []}))
+    const event = new Event({
+      name: 'test',
+      eventName: 'test',
+      route: 'test',
+      actions: []
+    })
+
+    const actionExecuter = new ActionExecuter(action, rabbit, event)
 
     const msg = {
       body: {

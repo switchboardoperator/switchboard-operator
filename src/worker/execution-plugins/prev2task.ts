@@ -4,30 +4,26 @@ import RabbotClient from "../../amqp/RabbotClient"
 import Action from "../../model/Action"
 import logger from '../../services/logger'
 import { Prev2TaskPluginOptionsSchema } from '../../schemas/PluginOptionsSchema'
-import { ExecutionPluginInterface } from '../ExecutionPluginInterface'
+import PluginExecutorInterface from '../PluginExecutorInterface'
+import OperatorPlugin from '../OperatorPlugin'
 
-export default class Prev2TaskPlugin implements ExecutionPluginInterface {
+export default class Prev2TaskPlugin extends OperatorPlugin implements PluginExecutorInterface {
   options: any
   action: Action
   rabbit: any
   preLog: string
 
-  constructor(action, preLog, rabbit) {
+  constructor(action: Action, preLog: string, rabbit: any) {
+    super(action, preLog, Prev2TaskPluginOptionsSchema)
+
     if (!rabbit) {
       throw new Error('You must provide a rabbitmq instance')
     }
 
-    this.options = new Prev2TaskPluginOptionsSchema(action.options)
-    if (this.options.isErrors()) {
-      throw new Error('The options provided are not valid '+ JSON.stringify(this.options.getErrors()))
-    }
-
-    this.action = action
     this.rabbit = rabbit
-    this.preLog = preLog + ' > ' + action.name
   }
 
-  execute(message: any) {
+  execute(message: any): Promise<any> {
     const { rabbit, action: { options } } = this
     const exchange = options.target
     const route = options.targetRoute

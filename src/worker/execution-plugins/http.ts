@@ -5,21 +5,17 @@ import nunjucks from 'nunjucks'
 import logger from '../../services/logger'
 import Action from '../../model/Action'
 import { HTTPPluginOptionsSchema } from '../../schemas/PluginOptionsSchema'
-import { ExecutionPluginInterface } from '../ExecutionPluginInterface'
+import PluginExecutorInterface from '../PluginExecutorInterface'
+import OperatorPlugin from '../OperatorPlugin'
 
-export default class HttpPlugin implements ExecutionPluginInterface {
+export default class HttpPlugin extends OperatorPlugin implements PluginExecutorInterface {
   msg: any
   options: any
   action: Action
   preLog: string
 
-  constructor(action: any, preLog: string) {
-    this.action = action
-    this.options = new HTTPPluginOptionsSchema(action.options)
-    if (this.options.isErrors()) {
-      throw new Error('The options provided are not valid ' + JSON.stringify(this.options.getErrors()))
-    }
-    this.preLog = preLog + ' > ' + action.name
+  constructor(action: Action, preLog: string) {
+    super(action, preLog, HTTPPluginOptionsSchema)
   }
 
   renderUrl() {
@@ -32,7 +28,7 @@ export default class HttpPlugin implements ExecutionPluginInterface {
     return this.msg
   }
 
-  execute(message: any) {
+  execute(message: any): Promise<any> {
     this.msg = message
 
     debug(

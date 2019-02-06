@@ -5,27 +5,19 @@ import objectMapper from 'object-mapper'
 import Action from "../../model/Action"
 import logger from '../../services/logger'
 import { MergerPluginOptionsSchema } from "../../schemas/PluginOptionsSchema"
-import { ExecutionPluginInterface } from '../ExecutionPluginInterface'
+import PluginExecutorInterface from '../PluginExecutorInterface'
+import OperatorPlugin from '../OperatorPlugin'
 
-export default class MergerPlugin implements ExecutionPluginInterface {
+export default class MergerPlugin extends OperatorPlugin implements PluginExecutorInterface {
   action: Action
   options: any
   preLog: string
 
-  constructor(action, preLog) {
-    this.action = action
-
-    // Getting the last of previous results comming from previous plugins
-    this.options = new MergerPluginOptionsSchema(action.options)
-
-    if (this.options.isErrors()) {
-      throw new Error('The options provided are not valid '+ JSON.stringify(this.options.getErrors()))
-    }
-
-    this.preLog = preLog + ' > ' + action.name
+  constructor(action: Action, preLog: string) {
+    super(action, preLog, MergerPluginOptionsSchema)
   }
 
-  execute(message: any) {
+  execute(message: any): Promise<any> {
     debug(
       'Running merger plugin with options: %j and msg: %j',
       this.options,

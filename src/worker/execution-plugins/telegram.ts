@@ -5,22 +5,17 @@ import nunjucks from 'nunjucks'
 
 import Action from '../../model/Action'
 import { TelegramPluginOptionsSchema } from '../../schemas/PluginOptionsSchema'
-import { ExecutionPluginInterface } from '../ExecutionPluginInterface'
+import PluginExecutorInterface from '../PluginExecutorInterface'
+import OperatorPlugin from '../OperatorPlugin'
 
-export default class TelegramPlugin implements ExecutionPluginInterface {
+export default class TelegramPlugin extends OperatorPlugin implements PluginExecutorInterface {
   action: Action
   preLog: string
   telegramToken: string
   options: any
 
-  constructor(action, preLog) {
-    this.action = action
-    this.preLog = preLog + ' > ' + action.name + ': %j'
-    this.options = new TelegramPluginOptionsSchema(action.options)
-
-    if (this.options.isErrors()) {
-      throw new Error('The options provided are not valid '+ JSON.stringify(this.options.getErrors()))
-    }
+  constructor(action: Action, preLog: string) {
+    super(action, preLog, TelegramPluginOptionsSchema)
 
     if (config.has('plugins.telegram.token')) {
       this.telegramToken = config.get('plugins.telegram.token')
@@ -29,7 +24,7 @@ export default class TelegramPlugin implements ExecutionPluginInterface {
     }
   }
 
-  sendMessage(chatId, message) {
+  sendMessage(chatId, message): Promise<any> {
     const apiUrl = `https://api.telegram.org/bot${this.telegramToken}/sendMessage`
     const data = {
       chat_id: chatId,

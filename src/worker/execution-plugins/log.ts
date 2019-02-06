@@ -2,20 +2,21 @@ const debug = require('debug')('sbo-plugin-log')
 
 import Action from '../../model/Action'
 import logger from '../../services/logger'
+import PluginExecutorInterface from '../PluginExecutorInterface'
+import OperatorPlugin from '../OperatorPlugin'
 
-import { ExecutionPluginInterface } from '../ExecutionPluginInterface'
-
-export default class LogPlugin implements ExecutionPluginInterface {
+export default class LogPlugin extends OperatorPlugin implements PluginExecutorInterface {
   action: Action
   preLog: string
   options: any
 
   constructor(action: Action, preLog: string) {
-    this.action = action
-    this.preLog = preLog + ' > ' + action.name + ': %j'
+    // Weird, right? But without this, tests are failing due to
+    // how the rabbit client is being passed through the app
+    super(action, preLog)
   }
 
-  execute(message: any) {
+  execute(message: any): Promise<any> {
     debug(
       'Running log plugin with msg: %j',
       message
