@@ -318,10 +318,21 @@ Then you can define your operator actions as follows:
   # Send membership to logs for debugging purposes
   - name: logMembership
     type: telegram
+    # recommended to allow failure, just to avoid telegram failures to break the operator flow
+    allowFailure: true
     options:
       chatId: '-288888888'
       template: 'A new membership with {{ id }} has been registered'
+      parseMode: html
+      disableWebPagePreview: true
+      disableNotification: true
 ~~~
+
+Note that you can use any of the options specified by the [telegram bot API][], except for the `reply_markup` option, which has been ignored for SBO.
+
+Also, all these options can be defined in the same config file where you defined the token. And you can overwrite any of those options from the operator itself (that includes the telegram token, so you can use multiple bots if you want).
+
+We recommend to define both the token and the chatId in the config file. Although we also have the parseMode and other options there. That's up to you.
 
 ### Testing your operators
 
@@ -416,6 +427,7 @@ Licence
 
 [switchboard operators]: https://upload.wikimedia.org/wikipedia/commons/8/8e/Photograph_of_Women_Working_at_a_Bell_System_Telephone_Switchboard_%283660047829%29.jpg "Switchboards operators"
 [event driven microservices using rabbitmq]: https://runnable.com/blog/event-driven-microservices-using-rabbitmq
+[telegram bot API]: https://core.telegram.org/bots/api#sendmessage
 
 [build svg]: https://img.shields.io/travis/alvarium/switchboard-operator/master.svg?logo=travis
 [gitlab-ci build svg]: https://img.shields.io/gitlab/pipeline/alvarium.io/switchboard-operator.svg?logo=gitlab

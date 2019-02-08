@@ -1,4 +1,5 @@
 const debug = require('debug')('sbo-plugin-telegram')
+import decamelizeKeys from 'decamelize-keys'
 import axios from 'axios'
 import config from 'config'
 import nunjucks from 'nunjucks'
@@ -15,14 +16,14 @@ export default class TelegramPlugin extends OperatorPlugin implements PluginExec
   options: any
 
   constructor(action: Action, preLog: string) {
-    super(action, preLog, TelegramPluginOptionsSchema)
+    // Note we're not passing the TelegramPluginOptionsSchema to avoid
+    // double-checking before loading the data
+    super(action, preLog)
 
     const options = {
       ...config.get('plugins.telegram'),
       ...action.options,
     }
-
-    console.log(options)
 
     this.loadOptions(TelegramPluginOptionsSchema, options)
 
@@ -32,17 +33,27 @@ export default class TelegramPlugin extends OperatorPlugin implements PluginExec
     }
   }
 
-  sendMessage(chatId, message): Promise<any> {
-    const apiUrl = `https://api.telegram.org/bot${this.token}/sendMessage`
-    const data = {
-      chat_id: chatId,
-      text: message,
+  prepare(message): any {
+    const options = {
+      ...this.options,
+      // Convert the 'template' to real text :)
+      text: nunjucks.renderString(
+        this.options.template,
+        message
+      ),
     }
+    delete options.token
+
+    return decamelizeKeys(options)
+  }
+
+  sendMessage(data: any): Promise<any> {
+    const apiUrl = `https://api.telegram.org/bot${this.token}/sendMessage`
 
     return axios({
       method: 'POST',
       url: apiUrl,
-      data: data
+      data,
     })
   }
 
@@ -53,12 +64,10 @@ export default class TelegramPlugin extends OperatorPlugin implements PluginExec
       message
     )
 
-    const renderedTemplate = nunjucks.renderString(
-      this.options.template,
-      message
-    )
-
-    return this.sendMessage(this.options.chatId, renderedTemplate)
+    return this.sendMessage(this.prepare(message))
+      // We currently don't care about telegram response, and return the same
+      // received message. It would be cool to add options like in the http plugin
+      // to merge or replace the message with the API response.
       .then(() => message)
   }
 }
