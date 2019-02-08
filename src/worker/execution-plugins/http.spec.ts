@@ -1,14 +1,14 @@
 import axios from 'axios'
 import MockAdapter from 'axios-mock-adapter'
 
-import ActionSchema from '../../model/Action'
+import Action from '../../model/Action'
 import HttpPlugin from './http'
 
 describe('execution-plugins :: http', () => {
   const msg = {
     hello: 'topology'
   }
-  const action = new ActionSchema({
+  const action = new Action({
     name: 'makeHttpRequest',
     type: 'http',
     options: {
@@ -56,7 +56,7 @@ describe('execution-plugins :: http', () => {
   })
 
   it('should save the request response to the defined field', () => {
-    const action = new ActionSchema({
+    const action = new Action({
       name: 'makeHttpRequest',
       type: 'http',
       options: {

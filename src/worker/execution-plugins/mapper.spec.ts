@@ -1,3 +1,4 @@
+import Action from '../../model/Action'
 import Mapper from './mapper'
 
 describe('execution-plugins :: mapper', () => {
@@ -16,10 +17,19 @@ describe('execution-plugins :: mapper', () => {
       }
     }
   }
+
+  const action = (options) => new Action({
+    name: 'test',
+    type: 'mapper',
+    event: 'test',
+    allowFailure: false,
+    options,
+  })
+
   describe('execute', () => {
     it('should return a Promise', () => {
       const options = {fields: {}}
-      const mapper = new Mapper({options}, '')
+      const mapper = new Mapper(action(options), '')
       return expect(mapper.execute(msg)).toBeInstanceOf(Promise)
     })
     it('should convert msg payload to transformed object', () => {
@@ -32,7 +42,7 @@ describe('execution-plugins :: mapper', () => {
         }
       }
 
-      const objTransformer = new Mapper({options}, '')
+      const objTransformer = new Mapper(action(options), '')
 
       expect.assertions(4)
       return objTransformer.execute(msg).then((transformedObj) => {
@@ -54,7 +64,7 @@ describe('execution-plugins :: mapper', () => {
         }
       }
 
-      const objTransformer = new Mapper({options}, '')
+      const objTransformer = new Mapper(action(options), '')
 
       expect.assertions(3)
       return objTransformer.execute(msg).then((transformedObj) => {
@@ -73,7 +83,7 @@ describe('execution-plugins :: mapper', () => {
         }
       }
 
-      const objTransformer = new Mapper({name:'convert-all', options}, '')
+      const objTransformer = new Mapper(action(options), '')
 
       expect.assertions(4)
       return objTransformer.execute(msg).then((transformedObj) => {
