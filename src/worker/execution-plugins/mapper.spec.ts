@@ -1,5 +1,6 @@
 import Action from '../../model/Action'
 import Mapper from './mapper'
+import Action from '../../model/Action'
 
 describe('execution-plugins :: mapper', () => {
   const msg = {

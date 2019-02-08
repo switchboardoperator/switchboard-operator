@@ -9,7 +9,11 @@
   },
   "plugins": {
     "telegram": {
-      "token": "1234"
+      "token": "1234",
+      "options": {
+        "disableWebPagePreview": true,
+        "parseMode": "markdown"
+      }
     }
   }
 }

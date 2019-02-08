@@ -103,12 +103,34 @@ export const SetterPluginOptionsSchema = new SchemaObject({
 
 
 export const TelegramPluginOptionsSchema = new SchemaObject({
+  token: {
+    type: String,
+    reequired: false,
+  },
   chatId: {
     type: String,
     required: true
   },
+  // Does not match with telegram API spec.. sorry for that
   template: {
     type: String,
-    required: true
-  }
+    required: true,
+  },
+  parseMode: {
+    type: String,
+    required: false,
+    enum: ['markdown', 'html'],
+  },
+  disableWebPagePreview: {
+    type: Boolean,
+    required: false,
+  },
+  disableNotification: {
+    type: Boolean,
+    required: false,
+  },
+  replyToMessageId: {
+    type: Number,
+    required: false,
+  },
 })

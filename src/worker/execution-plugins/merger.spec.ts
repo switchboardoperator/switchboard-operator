@@ -1,5 +1,6 @@
 import Action from '../../model/Action'
 import MergerPlugin from './merger'
+import Action from '../../model/Action';
 
 describe('execution-plugins :: merger', () => {
   const msg = {

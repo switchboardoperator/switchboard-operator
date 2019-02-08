@@ -1,5 +1,6 @@
 import Action from '../../model/Action'
 import SetterPlugin from './setter'
+import Action from '../../model/Action';
 
 describe('execution-plugins :: setter', () => {
   describe('execute', () => {
