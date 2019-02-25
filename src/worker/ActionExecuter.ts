@@ -41,7 +41,7 @@ export default class ActionExecuter {
   execute(message: any) {
     if (!this.plugin) {
       debug(`The plugin cannot be loaded for action: ${this.action}`)
-      return Promise.reject(new Error(`The plugin cannot be loaded for action: ${JSON.stringify(this.action)}`))
+      return Promise.reject(new Error(`The plugin cannot be loaded for action: ${this.action}`))
     }
 
     // Execute plugin and send result to callback
