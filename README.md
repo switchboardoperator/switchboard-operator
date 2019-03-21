@@ -26,6 +26,7 @@ TOC
     + [`mapper`](#mapper)
     + [`prev2task`](#prev2task)
     + [`setter`](#setter)
+    + [`template`](#template)
     + [`merger`](#merger)
     + [`telegram`](#telegram)
   * [Testing your operators](#testing-your-operators)
@@ -279,6 +280,20 @@ Manually sets some object attributes to be consumed for the next operator's acti
       paid: true
       message: Payment set to true
 ~~~
+
+#### `template`
+
+Manually sets some object attributes to be consumed for the next operator's action, additonally you can provide a nunjucks template as value.
+
+~~~yaml
+# Sets a new variable with nunjucks templating
+- name: setMemberAsPaid
+  type: template
+  options:
+    fields:
+      message: The {{ member.name }} just paid
+~~~
+
 
 #### `merger`
 
