@@ -6,6 +6,7 @@ import Prev2TaskPlugin from './prev2task'
 import SetterPlugin from './setter'
 import TelegramPlugin from './telegram'
 import MergerPlugin from './merger'
+import TemplatePlugin from './template'
 
 export default {
   conditional: ConditionalPlugin,
@@ -16,4 +17,5 @@ export default {
   setter: SetterPlugin,
   telegram: TelegramPlugin,
   merger: MergerPlugin,
+  template: TemplatePlugin
 }
