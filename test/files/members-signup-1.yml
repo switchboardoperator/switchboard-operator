@@ -1,6 +1,7 @@
 - name: membersSignup
   description: Case email template is specified in privateMeta
   input:
+    amount: 3456
     member:
       name: John Doe
       email: john@doe.com
@@ -42,3 +43,5 @@
         emailConfig:
           subject: Welcome {{ vars._email.name }}!
           template: members/signups
+      amount: 3456
+      test: "34.56"
