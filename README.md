@@ -291,7 +291,7 @@ Manually sets some object attributes to be consumed for the next operator's acti
   type: template
   options:
     fields:
-      message: The {{ member.name }} just paid
+      message: 'The {{ member.name }} just paid'
 ~~~
 
 
