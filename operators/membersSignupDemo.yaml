@@ -18,6 +18,12 @@ actions:
       merge: true
       mergeTarget: _account
 
+  - name: templateAmountField
+    type: template
+    options:
+      fields:
+        test: '{{ amount/100 }}'
+
   # Copy all contents to vars to be used in email
   - name: copyAllToVars
     type: mapper

@@ -134,3 +134,10 @@ export const TelegramPluginOptionsSchema = new SchemaObject({
     required: false,
   },
 })
+
+export const TemplatePluginOptionsSchema = new SchemaObject({
+  fields: {
+    type: Object,
+    required: true
+  }
+})
