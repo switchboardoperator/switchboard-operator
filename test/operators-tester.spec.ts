@@ -38,7 +38,7 @@ const executeActions = async (operator, {input, actions, response}) => {
         preLog = '[' + contents.id + '] > ' + preLog
       }
 
-      return executer.execute(contents).then((retorn) => {
+      return executer.execute(contents).then( async (retorn) => {
         if (actions && actions[action.name] !== undefined) {
           const step = actions[action.name]
 
@@ -46,7 +46,7 @@ const executeActions = async (operator, {input, actions, response}) => {
             process.stdout.write(`${chalk.yellow('┗')} ${step.description}\n`)
           }
 
-          expect(retorn).toEqual(step.output)
+          await expect(retorn).toEqual(step.output)
         }
 
         return retorn
