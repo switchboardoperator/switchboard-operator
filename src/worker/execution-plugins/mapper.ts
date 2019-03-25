@@ -38,7 +38,10 @@ export default class MapperPlugin extends OperatorPlugin implements PluginExecut
     logger.info(this.preLog, 'Object mapping applied')
 
     if (this.options.merge) {
-      return Promise.resolve(Object.assign({}, message, transformedObj))
+      return Promise.resolve({
+        ...message,
+        ...transformedObj,
+      })
     }
 
     return Promise.resolve(transformedObj)

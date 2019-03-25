@@ -51,7 +51,12 @@ const executeActions = async (operator, {input, actions, response}) => {
 
         return retorn
       }).catch((err) => {
-        return Promise.resolve(err)
+        // This is due to how errored payloads are treaten... something that
+        // should be reviewed
+        if (err.action && err.action === 'abort') {
+          return Promise.resolve(err)
+        }
+        return Promise.reject(err)
       })
     }
 

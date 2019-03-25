@@ -24,13 +24,21 @@ export default class TemplatePlugin extends OperatorPlugin implements PluginExec
     )
 
     const fieldsTemplate = {}
-    Object.keys(this.options.fields).forEach((field) => {
-      fieldsTemplate[field] = nunjucks.renderString(this.options.fields[field], message)
+    try {
+      Object.keys(this.options.fields).forEach((field) => {
+        fieldsTemplate[field] = nunjucks.renderString(this.options.fields[field], message)
+      })
+    } catch (error) {
+      return Promise.reject(error)
+    }
+
+    const setTemplate = Object.assign({
+      ...message,
+      ...fieldsTemplate
     })
 
-    const setTemplate = Object.assign({}, message, fieldsTemplate)
-
     logger.info(this.preLog, 'Template applied')
+
     return Promise.resolve(setTemplate)
   }
 }

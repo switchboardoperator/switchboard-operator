@@ -31,5 +31,12 @@ describe('execution-plugins :: template', () => {
         return expect(setObj.test).toEqual('34.56')
       })
     })
+
+    it('should reject in case there\'s a render problem', () => {
+      options.fields.test = '{{ amounts'
+      const objTransformer = new TemplatePlugin(action(options), '')
+
+      return expect(objTransformer.execute(msg)).rejects.toBeTruthy()
+    })
   })
 })
