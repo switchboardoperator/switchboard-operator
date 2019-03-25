@@ -448,7 +448,7 @@ Licence
 [gitlab-ci build svg]: https://img.shields.io/gitlab/pipeline/alvarium.io/switchboard-operator.svg?logo=gitlab
 [coverage svg]: https://gitlab.com/alvarium.io/switchboard-operator/badges/master/coverage.svg
 [pulls svg]: https://img.shields.io/docker/pulls/alvarium/switchboard-operator.svg?logo=docker
-[release svg]: https://img.shields.io/github/release/alvarium/switchboard-operator.svg?logo=github
+[release svg]: https://img.shields.io/github/tag/alvarium/switchboard-operator.svg?label=release&logo=github
 
 [tags]: https://github.com/alvarium/switchboard-operator/releases
 [build status]: https://travis-ci.org/alvarium/switchboard-operator
