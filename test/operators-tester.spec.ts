@@ -38,7 +38,7 @@ const executeActions = async (operator, {input, actions, response}) => {
         preLog = '[' + contents.id + '] > ' + preLog
       }
 
-      return executer.execute(contents).then( async (retorn) => {
+      return executer.execute(contents).then(async(retorn) => {
         if (actions && actions[action.name] !== undefined) {
           const step = actions[action.name]
 

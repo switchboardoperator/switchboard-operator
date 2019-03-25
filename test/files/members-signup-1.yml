@@ -17,6 +17,26 @@
           transport: sendgrid
           template: alvarium/default
           apikey: Our awesome sendgrid api key ;)
+  actions:
+    templateAmountField:
+      output:
+        _account:
+          meta:
+            emailConfig:
+              apikey: Our awesome sendgrid api key ;)
+              template: alvarium/default
+              transport: sendgrid
+        member:
+          account: 3a696232-b214-4d58-af8b-01e793c2a424
+          email: john@doe.com
+          name: John Doe
+        privateMeta:
+          emailConfig:
+            subject: Welcome {{ vars._email.name }}!
+            template: members/signups
+        amount: 3456
+        test: "34.56"
+
   output:
     subject: Welcome {{ vars._email.name }}!
     template: members/signups
