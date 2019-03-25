@@ -4,7 +4,7 @@ Switchboard Operator
 [![Build status][build svg]][build status]
 [![Gitlab build status][gitlab-ci build svg]][gitlab-ci build status]
 [![Coverage][coverage svg]][coverage]
-[![Pulls][release svg]][tags]
+[![Release][release svg]][tags]
 [![Pulls][pulls svg]][docker hub]
 
 Switchboard Operator (a.k.a. SBO) is a production-ready service used to manage RabbitMQ flows between microservices.
