@@ -52,17 +52,14 @@ export default class ActionCreator {
       return this.executeActions(msg)
         .then((result) => {
           debug('result of async actions is %j', result)
+          if (result.action && result.action === 'abort') {
+            logger.error(this.preLog, 'The execution of operator has been aborted', result)
+          }
           logger.info(this.preLog, 'All actions for', queue, 'queue has been executed propertly')
           return msg.ack()
         })
         .catch((err) => {
           debug('Error in serial execution', err)
-          // The plugin executed is asking to abort operation and
-          // discard the message, preventing to be sent to dead-letter queue
-          if (err.action && err.action === 'abort') {
-            logger.error(this.preLog, 'The execution of operator has been aborted', err)
-            return msg.ack()
-          }
           logger.error(this.preLog, 'An error has been ocurred executing the handler actions', err)
 
           // send message to dead-letter

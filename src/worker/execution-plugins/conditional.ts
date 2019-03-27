@@ -98,14 +98,14 @@ export default class ConditionalPlugin extends OperatorPlugin implements PluginE
 
   // Execute the conditions logic
   checkConditions() {
-    let retValue = true
+    let retValue: boolean = true
     this.options.conditions.forEach((condition, index) => {
       // On one action not passing it always should return false
       if (!retValue) {
         return false
       }
 
-      let log = `Checking that ${condition.field} is ${condition.operation}`
+      let log: string = `Checking that ${condition.field} is ${condition.operation}`
       if (condition.checkValue) {
         log = `Checking that ${condition.field} ${condition.operation} ${condition.checkValue}`
       }
@@ -144,10 +144,10 @@ export default class ConditionalPlugin extends OperatorPlugin implements PluginE
       message
     )
 
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       if (!this.checkConditions()) {
         logger.info(this.preLog, 'Some conditional check has failed')
-        return reject({action: 'abort'})
+        return resolve({action: 'abort'})
       }
 
       logger.info(this.preLog, ': All conditional checks has been passed')
