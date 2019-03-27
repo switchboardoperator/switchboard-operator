@@ -105,7 +105,13 @@ export default class ConditionalPlugin extends OperatorPlugin implements PluginE
         return false
       }
 
-      logger.info(this.preLog, ': Checking operation', index + 1, 'of', this.options.conditions.length)
+      let log = `Checking that ${condition.field} is ${condition.operation}`
+      if (condition.checkValue) {
+        log = `Checking that ${condition.field} ${condition.operation} ${condition.checkValue}`
+      }
+      log += ` (${index+1}/${this.options.conditions.length})`
+
+      logger.info(this.preLog, log)
 
       debug(this.preLog, ': Checking next condition:', condition)
       debug(this.preLog, ': with value', this.parsedMessage[condition.field])
@@ -116,6 +122,10 @@ export default class ConditionalPlugin extends OperatorPlugin implements PluginE
         this.parsedMessage[condition.field],
         condition.checkValue
       )
+
+      if (!retValue) {
+        logger.warn(this.preLog, 'Check failed', condition, this.parsedMessage)
+      }
     })
 
     if (retValue) {
