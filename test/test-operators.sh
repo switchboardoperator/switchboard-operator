@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env sh
 
 if [ -z ${OPERATORS_DIR+x} ]; then
   export OPERATORS_DIR=${CI_PROJECT_DIR}/operators
