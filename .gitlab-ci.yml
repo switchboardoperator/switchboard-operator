@@ -12,26 +12,18 @@ stages:
   - yarn test --coverage --verbose
   - yarn test-operators
 
-.credentials: &credentials |
-  mkdir -p ~/.docker
-  cat > ~/.docker/config.json <<EOF
-    {
-      "HttpHeaders": {
-        "Authorization": "Bearer ${DOCKER_REGISTRY_TOKEN}"
-      }
-    }
-  EOF
-
 .build: &build
   stage: build
   image: docker:git
   services:
   - docker:dind
   script:
-  - *credentials
   - docker login
     -u gitlab-ci-token
     -p ${CI_JOB_TOKEN} ${CI_REGISTRY}
+  - docker login
+    -u ${DOCKER_USERNAME}
+    -p ${DOCKER_PASSWORD}
   - docker build
     -f ${DOCKER_FILE}
     -t ${CI_REGISTRY_IMAGE}:${DOCKER_TAG}
