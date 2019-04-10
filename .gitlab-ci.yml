@@ -27,9 +27,9 @@ stages:
   - docker build
     -f ${DOCKER_FILE}
     -t ${CI_REGISTRY_IMAGE}:${DOCKER_TAG}
-    -t alvarium/switchboard-operator:${DOCKER_TAG} .
+    -t switchboardoperator/switchboard-operator:${DOCKER_TAG} .
   - docker push ${CI_REGISTRY_IMAGE}:${DOCKER_TAG}
-  - docker push alvarium/switchboard-operator:${DOCKER_TAG}
+  - docker push switchboardoperator/switchboard-operator:${DOCKER_TAG}
 
 node-7:
   <<: *test
