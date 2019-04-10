@@ -444,17 +444,17 @@ Licence
 [event driven microservices using rabbitmq]: https://runnable.com/blog/event-driven-microservices-using-rabbitmq
 [telegram bot API]: https://core.telegram.org/bots/api#sendmessage
 
-[build svg]: https://img.shields.io/travis/alvarium/switchboard-operator/master.svg?logo=travis
-[gitlab-ci build svg]: https://img.shields.io/gitlab/pipeline/alvarium.io/switchboard-operator.svg?logo=gitlab
-[coverage svg]: https://gitlab.com/alvarium.io/switchboard-operator/badges/master/coverage.svg
-[pulls svg]: https://img.shields.io/docker/pulls/alvarium/switchboard-operator.svg?logo=docker
-[release svg]: https://img.shields.io/github/tag/alvarium/switchboard-operator.svg?label=release&logo=github
+[build svg]: https://img.shields.io/travis/switchboardoperator/switchboard-operator/master.svg?logo=travis
+[gitlab-ci build svg]: https://img.shields.io/gitlab/pipeline/switchboardoperator/switchboard-operator.svg?logo=gitlab
+[coverage svg]: https://gitlab.com/switchboardoperator/switchboard-operator/badges/master/coverage.svg
+[pulls svg]: https://img.shields.io/docker/pulls/switchboardoperator/switchboard-operator.svg?logo=docker
+[release svg]: https://img.shields.io/github/tag/switchboardoperator/switchboard-operator.svg?label=release&logo=github
 
-[tags]: https://github.com/alvarium/switchboard-operator/releases
-[build status]: https://travis-ci.org/alvarium/switchboard-operator
-[coverage]: https://gitlab.com/alvarium.io/switchboard-operator/-/jobs
-[docker hub]: https://hub.docker.com/r/alvarium/switchboard-operator/
-[gitlab-ci build status]: https://gitlab.com/alvarium.io/switchboard-operator/pipelines
+[tags]: https://github.com/switchboardoperator/switchboard-operator/releases
+[build status]: https://travis-ci.org/switchboardoperator/switchboard-operator
+[coverage]: https://gitlab.com/switchboardoperator/switchboard-operator/-/jobs
+[docker hub]: https://hub.docker.com/r/switchboardoperator/switchboard-operator/
+[gitlab-ci build status]: https://gitlab.com/switchboardoperator/switchboard-operator/pipelines
 
 [operators]: ./operators
 [test]: ./test/files
