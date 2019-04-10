@@ -14,11 +14,11 @@
       meta:
         emailConfig:
           transport: sendgrid
-          template: alvarium/default
+          template: sbo/default
           apikey: Our awesome sendgrid api key ;)
   output:
     subject: Welcome {{ vars._email.name }}!
-    template: alvarium/default
+    template: sbo/default
     to: john@doe.com
     transport: sendgrid
     apikey: Our awesome sendgrid api key ;)
@@ -27,12 +27,12 @@
         meta:
           emailConfig:
             apikey: Our awesome sendgrid api key ;)
-            template: alvarium/default
+            template: sbo/default
             transport: sendgrid
       _email:
         apikey: Our awesome sendgrid api key ;)
         subject: Welcome {{ vars._email.name }}!
-        template: alvarium/default
+        template: sbo/default
         transport: sendgrid
       member:
         account: 3a696232-b214-4d58-af8b-01e793c2a424

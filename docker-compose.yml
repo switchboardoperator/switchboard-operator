@@ -1,7 +1,0 @@
-switchboard-operator:
-  image: alvarium/switchboard-operator
-  restart: always
-  volumes:
-  - ./operators:/app/operators
-  ports:
-  - 3000

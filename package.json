@@ -12,7 +12,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git@github.com:alvarium/switchboard-operator.git"
+    "url": "git@github.com:switchboardoperator/switchboard-operator.git"
   },
   "keywords": [
     "amqp",
@@ -28,7 +28,7 @@
     },
     {
       "name": "Òscar Casajuana",
-      "email": "oscar@alvarium.io",
+      "email": "elboletaire@underave.net",
       "url": "https://sourcerer.io/elboletaire"
     },
     {

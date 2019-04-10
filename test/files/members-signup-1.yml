@@ -15,7 +15,7 @@
       meta:
         emailConfig:
           transport: sendgrid
-          template: alvarium/default
+          template: sbo/default
           apikey: Our awesome sendgrid api key ;)
   actions:
     templateAmountField:
@@ -24,7 +24,7 @@
           meta:
             emailConfig:
               apikey: Our awesome sendgrid api key ;)
-              template: alvarium/default
+              template: sbo/default
               transport: sendgrid
         member:
           account: 3a696232-b214-4d58-af8b-01e793c2a424
@@ -48,7 +48,7 @@
         meta:
           emailConfig:
             apikey: Our awesome sendgrid api key ;)
-            template: alvarium/default
+            template: sbo/default
             transport: sendgrid
       _email:
         apikey: Our awesome sendgrid api key ;)

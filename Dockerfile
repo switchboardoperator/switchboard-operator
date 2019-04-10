@@ -1,6 +1,6 @@
 FROM node:8-alpine
 
-LABEL maintainer="Alvarium.io <hello@alvarium.io>"
+LABEL maintainer="Òscar Casajuana <elboletaire@underave.net>"
 
 COPY . /app
 
