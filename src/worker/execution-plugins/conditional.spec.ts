@@ -111,7 +111,7 @@ describe('execution-plugins :: conditional', () => {
           event: 'event-name',
         })
         const passingConditionalPlugin = new ConditionalPlugin(passingAction, '')
-        return expect(passingConditionalPlugin.execute(msg)).resolves.toEqual({action: 'abort'})
+        return expect(passingConditionalPlugin.execute(msg)).rejects.toBeTruthy()
       })
     })
 
@@ -133,7 +133,7 @@ describe('execution-plugins :: conditional', () => {
         })
         const passingConditionalPlugin = new ConditionalPlugin(passingAction, '')
 
-        return expect(passingConditionalPlugin.execute(msg)).resolves.toEqual({action: 'abort'})
+        return expect(passingConditionalPlugin.execute(msg)).rejects.toEqual({action: 'abort'})
       })
     })
 
@@ -160,7 +160,7 @@ describe('execution-plugins :: conditional', () => {
         })
         const passingConditionalPlugin = new ConditionalPlugin(passingAction, '')
 
-        return expect(passingConditionalPlugin.execute(msg)).resolves.toEqual({action: 'abort'})
+        return expect(passingConditionalPlugin.execute(msg)).rejects.toEqual({action: 'abort'})
       })
     })
 
@@ -256,7 +256,7 @@ describe('execution-plugins :: conditional', () => {
         })
         const passingConditionalPlugin = new ConditionalPlugin(passingAction, '')
 
-        return expect(passingConditionalPlugin.execute(msg)).resolves.toEqual({action: 'abort'})
+        return expect(passingConditionalPlugin.execute(msg)).rejects.toBeTruthy()
       })
       it('should not pass if the field exists and is not empty', () => {
         const passingAction = new Action({
@@ -274,7 +274,7 @@ describe('execution-plugins :: conditional', () => {
         })
         const passingConditionalPlugin = new ConditionalPlugin(passingAction, '')
 
-        return expect(passingConditionalPlugin.execute(msg)).resolves.toEqual({action: 'abort'})
+        return expect(passingConditionalPlugin.execute(msg)).rejects.toBeTruthy()
       })
     })
 
@@ -295,7 +295,7 @@ describe('execution-plugins :: conditional', () => {
         })
         const passingConditionalPlugin = new ConditionalPlugin(passingAction, '')
 
-        return expect(passingConditionalPlugin.execute(msg)).resolves.toEqual({action: 'abort'})
+        return expect(passingConditionalPlugin.execute(msg)).rejects.toBeTruthy()
       })
       it('should not pass if the field is set but has an empty value', () => {
         const passingAction = new Action({
@@ -313,7 +313,7 @@ describe('execution-plugins :: conditional', () => {
         })
         const passingConditionalPlugin = new ConditionalPlugin(passingAction, '')
 
-        return expect(passingConditionalPlugin.execute(msg)).resolves.toEqual({action: 'abort'})
+        return expect(passingConditionalPlugin.execute(msg)).rejects.toBeTruthy()
       })
       it('should not pass if the field is set as an empty string (multiple spaces)', () => {
         const passingAction = new Action({
@@ -331,7 +331,7 @@ describe('execution-plugins :: conditional', () => {
         })
         const passingConditionalPlugin = new ConditionalPlugin(passingAction, '')
 
-        return expect(passingConditionalPlugin.execute(msg)).resolves.toEqual({action: 'abort'})
+        return expect(passingConditionalPlugin.execute(msg)).rejects.toBeTruthy()
       })
       it('should pass if field is set to number zero', () => {
         const passingAction = new Action({
@@ -439,7 +439,7 @@ describe('execution-plugins :: conditional', () => {
         })
         const passingConditionalPlugin = new ConditionalPlugin(passingAction, '')
 
-        return expect(passingConditionalPlugin.execute(msg)).resolves.toEqual({action: 'abort'})
+        return expect(passingConditionalPlugin.execute(msg)).rejects.toBeTruthy()
       })
     })
 
@@ -511,7 +511,7 @@ describe('execution-plugins :: conditional', () => {
         })
         const passingConditionalPlugin = new ConditionalPlugin(passingAction, '')
 
-        return expect(passingConditionalPlugin.execute(msg)).resolves.toEqual({action: 'abort'})
+        return expect(passingConditionalPlugin.execute(msg)).rejects.toBeTruthy()
       })
     })
   })
@@ -585,7 +585,7 @@ describe('execution-plugins :: conditional', () => {
 
       const nonPassingConditionalPlugin = new ConditionalPlugin(nonPassingAction, '')
 
-      return expect(nonPassingConditionalPlugin.execute(msg)).resolves.toEqual({action: 'abort'})
+      return expect(nonPassingConditionalPlugin.execute(msg)).rejects.toEqual({action: 'abort'})
     })
   })
 })
