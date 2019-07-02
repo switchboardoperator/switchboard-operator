@@ -1,5 +1,5 @@
 const debug = require('debug')('http-plugin')
-import axios from 'axios'
+import axios, { AxiosRequestConfig } from 'axios'
 import nunjucks from 'nunjucks'
 
 import logger from '../../services/logger'
@@ -40,11 +40,16 @@ export default class HttpPlugin extends OperatorPlugin implements PluginExecutor
     const method = this.options.method.toLowerCase()
     logger.info(this.preLog, 'Making HTTP request')
 
-    return axios({
+    const options = {
       method: method,
       url: this.renderUrl(),
-      data: method !== 'get' ? this.populateData() : {}
-    })
+    } as AxiosRequestConfig
+
+    if (method !== 'get') {
+      options.data = this.populateData()
+    }
+
+    return axios(options)
       .then((response) => {
         debug('Received the next response ' + JSON.stringify(response.data))
         let result = {}

@@ -37,6 +37,14 @@ describe('execution-plugins :: http', () => {
     })
   })
 
+  it('should not add data for GET requests (not even an empty object)', () => {
+    return httpPlugin.execute(msg).then((result: any) => {
+      const latest = mock.history.get.shift()
+
+      return expect(latest.data).not.toBeDefined()
+    })
+  })
+
   it('should apply templating to provided url', () => {
     const result = httpPlugin.renderUrl()
 
