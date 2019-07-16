@@ -4,7 +4,8 @@
 import logger from '../services/logger'
 import Event from '../model/Event'
 import ActionCreator from '../worker/ActionCreator'
-import debug from 'debug'
+
+const debug = require('debug')('rabbit-client')
 
 export default class RabbotClient {
   rabbit: any

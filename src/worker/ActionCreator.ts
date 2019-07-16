@@ -5,11 +5,12 @@
 // the action based on type and options
 
 import rabbit from 'rabbot'
-import debug from 'debug'
 import logger from '../services/logger'
 import ActionExecuter from './ActionExecuter'
 import Event from '../model/Event'
 import Action from '../model/Action'
+
+const debug = require('debug')('action-creator')
 
 // If the message received is the one get from AMQP
 // extract only the contents.
