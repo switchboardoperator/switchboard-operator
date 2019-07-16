@@ -88,12 +88,7 @@ export default class ActionCreator {
 
     // Iterate over all actions passing the lastResult
     this.event.actions.forEach((action, index) => {
-      const executer = new ActionExecuter(
-        new Action(action),
-        rabbit,
-        this.event,
-        contents
-      )
+      const executer = new ActionExecuter(new Action(action), rabbit, this.event)
 
       const executionPromise = (contents, preLog, eventsLenght) => {
         if (contents === undefined) {

@@ -15,7 +15,7 @@ export default class TelegramPlugin extends OperatorPlugin implements PluginExec
   token: string
   options: any
 
-  constructor(action: Action, preLog: string, msg: any = {}) {
+  constructor(action: Action, preLog: string) {
     // Note we're not passing the TelegramPluginOptionsSchema to avoid
     // double-checking before loading the data
     super(action, preLog)
@@ -25,7 +25,7 @@ export default class TelegramPlugin extends OperatorPlugin implements PluginExec
       ...action.options,
     }
 
-    this.loadOptions(TelegramPluginOptionsSchema, options, msg)
+    this.loadOptions(TelegramPluginOptionsSchema, options)
 
     this.token = this.options.token
     if (!this.token) {
@@ -34,14 +34,25 @@ export default class TelegramPlugin extends OperatorPlugin implements PluginExec
   }
 
   prepare(message): any {
-    const options = {
-      ...this.options,
-      // Convert the 'template' to real text :)
-      text: nunjucks.renderString(
-        this.options.template,
+    let options = this.options.toObject()
+    for (let option of Object.keys(options)) {
+      if (typeof options[option] !== 'string') {
+        continue
+      }
+
+      options[option] = nunjucks.renderString(
+        options[option],
         message
-      ),
+      )
     }
+
+
+    options = {
+      ...options,
+      text: options.template,
+    }
+
+    delete options.template
     delete options.token
 
     return decamelizeKeys(options)

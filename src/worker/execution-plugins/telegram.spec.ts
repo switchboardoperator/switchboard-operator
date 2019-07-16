@@ -43,15 +43,31 @@ describe('execution-plugins :: telegram', () => {
     })
 
     it('should template configurations using the passed message', () => {
-      const tAction = action({template: 'test', chatId: '{{ whatever }}'})
-      const telegram = new TelegramPlugin(tAction, '', {whatever: '1234'})
-
-      return expect(telegram.options.toObject()).toEqual({
-        chatId: '1234',
+      const msg = {whatever: '1234'}
+      const tAction = action({
         template: 'test',
-        token: '1234',
-        disableWebPagePreview: true,
-        parseMode: 'markdown',
+        chatId: '{{ whatever }}',
+      })
+      const telegram = new TelegramPlugin(tAction, '')
+
+      return expect(telegram.prepare(msg)).toEqual({
+        chat_id: '1234',
+        text: 'test',
+        disable_web_page_preview: true,
+        parse_mode: 'markdown',
+      })
+    })
+
+    it('should parse template', () => {
+      const msg = {whatever: 'ola k ase'}
+      const tAction = action({chatId: 'test', template: '{{ whatever }}'})
+      const telegram = new TelegramPlugin(tAction, '')
+
+      return expect(telegram.prepare(msg)).toEqual({
+        text: 'ola k ase',
+        chat_id: 'test',
+        disable_web_page_preview: true,
+        parse_mode: 'markdown',
       })
     })
 
