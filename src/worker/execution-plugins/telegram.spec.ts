@@ -71,6 +71,45 @@ describe('execution-plugins :: telegram', () => {
       })
     })
 
+    it('should use sendMessage api path by default', () => {
+      const msg = {whatever: 'ola k ase'}
+      const tAction = action({chatId: 'test', template: 'test'})
+      const telegram = new TelegramPlugin(tAction, '')
+
+      expect(telegram.prepare(msg)).toEqual({
+        text: 'test',
+        chat_id: 'test',
+        disable_web_page_preview: true,
+        parse_mode: 'markdown',
+      })
+
+      return telegram.execute(msg).then(() => {
+        const latest = [...mock.history.post].pop()
+        return expect(latest.url).toMatch(/\/sendMessage$/)
+      })
+    })
+
+    it('should allow changing api path', () => {
+      const msg = {whatever: 'ola k ase'}
+      const tAction = action({chatId: 'test', template: 'test', path: 'editMessage'})
+      const telegram = new TelegramPlugin(tAction, '')
+
+      expect(telegram.prepare(msg)).toEqual({
+        text: 'test',
+        chat_id: 'test',
+        disable_web_page_preview: true,
+        parse_mode: 'markdown',
+        path: 'editMessage',
+      })
+
+      mock.onPost(/editMessage/).reply(200, {})
+
+      return telegram.execute(msg).then(() => {
+        const latest = [...mock.history.post].pop()
+        return expect(latest.url).toMatch(/\/editMessage$/)
+      })
+    })
+
     it('should take configurations from config files', () => {
       const telegram = new TelegramPlugin(defaultAction, '')
 

@@ -59,7 +59,12 @@ export default class TelegramPlugin extends OperatorPlugin implements PluginExec
   }
 
   sendMessage(data: any): Promise<any> {
-    const apiUrl = `https://api.telegram.org/bot${this.token}/sendMessage`
+    let apiPath = 'sendMessage'
+    if (data.path) {
+      apiPath = data.path
+      delete data.path
+    }
+    const apiUrl = `https://api.telegram.org/bot${this.token}/${apiPath}`
 
     return axios({
       method: 'POST',
