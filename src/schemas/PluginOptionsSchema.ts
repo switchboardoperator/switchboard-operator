@@ -109,7 +109,19 @@ export const TelegramPluginOptionsSchema = new SchemaObject({
   },
   chatId: {
     type: String,
-    required: true,
+    required: false,
+  },
+  inlineMessageId: {
+    type: String,
+    required: false,
+  },
+  messageId: {
+    type: String,
+    required: false,
+  },
+  caption: {
+    type: String,
+    required: false,
   },
   // Does not match with telegram API spec.. sorry for that
   template: {
