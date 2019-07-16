@@ -1,6 +1,6 @@
 {
   "name": "switchboard-operator-api",
-  "version": "2.2.5",
+  "version": "2.3.0",
   "description": "Handle the asyncronous communication between microservices using AMQP",
   "main": "built/app.js",
   "scripts": {
