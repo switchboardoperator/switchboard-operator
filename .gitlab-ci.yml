@@ -31,20 +31,10 @@ stages:
   - docker push ${CI_REGISTRY_IMAGE}:${DOCKER_TAG}
   - docker push switchboardoperator/switchboard-operator:${DOCKER_TAG}
 
-node-7:
-  <<: *test
-  variables:
-    NODE_VERSION: '7'
-
 node-8:
   <<: *test
   variables:
     NODE_VERSION: '8'
-
-node-9:
-  <<: *test
-  variables:
-    NODE_VERSION: '9'
 
 node-10:
   <<: *test
