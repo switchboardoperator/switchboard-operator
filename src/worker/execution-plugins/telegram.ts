@@ -1,6 +1,6 @@
 const debug = require('debug')('sbo-plugin-telegram')
 import decamelizeKeys from 'decamelize-keys'
-import axios from 'axios'
+import axios, { AxiosRequestConfig } from 'axios'
 import config from 'config'
 import nunjucks from 'nunjucks'
 
@@ -59,18 +59,20 @@ export default class TelegramPlugin extends OperatorPlugin implements PluginExec
   }
 
   sendMessage(data: any): Promise<any> {
-    let apiPath = 'sendMessage'
+    let path = 'sendMessage'
     if (data.path) {
-      apiPath = data.path
+      path = data.path
       delete data.path
     }
-    const apiUrl = `https://api.telegram.org/bot${this.token}/${apiPath}`
-
-    return axios({
+    const url = `https://api.telegram.org/bot${this.token}/${path}`
+    const settings: AxiosRequestConfig = {
       method: 'POST',
-      url: apiUrl,
+      url,
       data,
-    })
+    }
+    debug('Gonna send telegram message with data: %j', settings)
+
+    return axios(settings)
   }
 
   execute(message: any) {
