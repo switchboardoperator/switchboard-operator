@@ -15,7 +15,7 @@ export default class TelegramPlugin extends OperatorPlugin implements PluginExec
   token: string
   options: any
 
-  constructor(action: Action, preLog: string) {
+  constructor(action: Action, preLog: string, msg: any = {}) {
     // Note we're not passing the TelegramPluginOptionsSchema to avoid
     // double-checking before loading the data
     super(action, preLog)
@@ -25,7 +25,7 @@ export default class TelegramPlugin extends OperatorPlugin implements PluginExec
       ...action.options,
     }
 
-    this.loadOptions(TelegramPluginOptionsSchema, options)
+    this.loadOptions(TelegramPluginOptionsSchema, options, msg)
 
     this.token = this.options.token
     if (!this.token) {

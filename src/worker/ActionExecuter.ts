@@ -5,9 +5,9 @@ import plugins from './execution-plugins'
 
 const debug = require('debug')('action-executer')
 
-const loadPlugin = (action: Action, preLog: string, rabbit: any) => {
+const loadPlugin = (action: Action, preLog: string, rabbit: any, msg: any = {}) => {
   if (plugins[action.type]) {
-    return new plugins[action.type](action, preLog, rabbit)
+    return new plugins[action.type](action, preLog, rabbit, msg)
   }
 
   return false
@@ -21,7 +21,7 @@ export default class ActionExecuter {
   message: string
   public plugin: any
 
-  constructor(action: Action, rabbit: any, event: Event) {
+  constructor(action: Action, rabbit: any, event: Event, msg: any = {}) {
     debug('action executer action received: %j', action)
     this.action = action
     this.rabbit = rabbit
@@ -31,7 +31,8 @@ export default class ActionExecuter {
     this.plugin = loadPlugin(
       this.action,
       this.preLog,
-      this.rabbit
+      this.rabbit,
+      msg
     )
 
     debug('Loaded the next modules: %j', this.plugin)

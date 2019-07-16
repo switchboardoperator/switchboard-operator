@@ -41,6 +41,20 @@ describe('execution-plugins :: telegram', () => {
 
       return expect(telegram.execute(message)).toBeInstanceOf(Promise)
     })
+
+    it('should template configurations using the passed message', () => {
+      const tAction = action({template: 'test', chatId: '{{ whatever }}'})
+      const telegram = new TelegramPlugin(tAction, '', {whatever: '1234'})
+
+      return expect(telegram.options.toObject()).toEqual({
+        chatId: '1234',
+        template: 'test',
+        token: '1234',
+        disableWebPagePreview: true,
+        parseMode: 'markdown',
+      })
+    })
+
     it('should take configurations from config files', () => {
       const telegram = new TelegramPlugin(defaultAction, '')
 
