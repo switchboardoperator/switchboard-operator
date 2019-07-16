@@ -104,7 +104,7 @@ export default class ActionCreator {
         logger.info(preLog, `Running action ${index + 1} of ${eventsLenght}`)
 
         return executer.execute(contents).catch((err) => {
-          logger.error(preLog, 'Step has failed so ignoring next ones')
+          logger.warn(preLog, 'Step has failed so ignoring next ones')
           return Promise.reject(err)
         })
       }
