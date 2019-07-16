@@ -21,7 +21,7 @@ class SwitchBoardOperator {
   public server: any
 
   constructor() {
-    this.mergedConfig = Object.assign(config.get('topology'), {
+    this.mergedConfig = Object.assign({}, config.get('topology'), {
       events: this.operators
     })
 

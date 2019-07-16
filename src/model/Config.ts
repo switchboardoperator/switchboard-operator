@@ -2,7 +2,7 @@ const SchemaObject = require('schema-object')
 
 import Event from './Event'
 import Task from './Task'
-import ConnectionSchema from '../amqp/ConnectionSchema';
+import ConnectionSchema from '../amqp/ConnectionSchema'
 
 export default class Config {
   rabbitmq: ConnectionSchema
