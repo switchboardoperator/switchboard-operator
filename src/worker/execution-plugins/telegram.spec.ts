@@ -147,7 +147,6 @@ describe('execution-plugins :: telegram', () => {
       return expect(result.token).toBeUndefined()
     })
     it('should pass replyMarkup from message', () => {
-      const telegram = new TelegramPlugin(defaultAction, '')
       const markup = {
         inline_keyboard: [
           [
@@ -155,10 +154,13 @@ describe('execution-plugins :: telegram', () => {
           ],
         ],
       }
-
-      const result = telegram.prepare({
+      const telegram = new TelegramPlugin({...action({
+        chatId: '1234',
+        template: 'Test',
         replyMarkup: markup,
-      })
+      })}, '')
+
+      const result = telegram.prepare({})
 
       expect(result.reply_markup).not.toBeUndefined()
       return expect(result.reply_markup).toEqual(markup)

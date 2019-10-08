@@ -141,6 +141,10 @@ export const TelegramPluginOptionsSchema = new SchemaObject({
     type: Boolean,
     required: false,
   },
+  replyMarkup: {
+    type: Object,
+    required: false,
+  },
   replyToMessageId: {
     type: Number,
     required: false,
