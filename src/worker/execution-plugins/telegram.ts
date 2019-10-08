@@ -35,6 +35,10 @@ export default class TelegramPlugin extends OperatorPlugin implements PluginExec
 
   prepare(message): any {
     let options = this.options.toObject()
+    if (message.replyMarkup) {
+      options.replyMarkup = message.replyMarkup
+    }
+
     for (let option of Object.keys(options)) {
       if (typeof options[option] !== 'string') {
         continue
