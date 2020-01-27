@@ -59,7 +59,7 @@
     "chalk": "^2.4.2",
     "config": "^3.2.0",
     "decamelize-keys": "^1.1.0",
-    "deepmerge": "^4.0.0",
+    "deepmerge": "^4.2.2",
     "express": "^4.17.1",
     "express-healthcheck": "^0.1.0",
     "express-nunjucks": "^2.2.3",
