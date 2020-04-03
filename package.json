@@ -65,7 +65,7 @@
     "express-nunjucks": "^2.2.5",
     "js-yaml": "^3.13.1",
     "nunjucks": "^3.2.1",
-    "object-mapper": "^5.0.0",
+    "object-mapper": "^6.2.0",
     "object-transformer": "0.0.5",
     "rabbot": "^2.1.0",
     "schema-object": "^4.0.11",

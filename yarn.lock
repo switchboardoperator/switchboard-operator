@@ -3357,12 +3357,10 @@ object-keys@^1.0.12:
   resolved "https://registry.yarnpkg.com/object-keys/-/object-keys-1.0.12.tgz#09c53855377575310cca62f55bb334abff7b3ed2"
   integrity sha512-FTMyFUm2wBcGHnH2eXmz7tC6IwlqQZ6mVZ+6dm6vZ4IQIHjs6FdNsQBuKGPuUUUY6NfJw2PshC08Tn6LzLDOag==
 
-object-mapper@^5.0.0:
-  version "5.0.0"
-  resolved "https://registry.yarnpkg.com/object-mapper/-/object-mapper-5.0.0.tgz#0035fd2ecbbfaf617b41a2bf8c0fa51221035a5b"
-  integrity sha1-ADX9Lsu/r2F7QaK/jA+lEiEDWls=
-  dependencies:
-    minimatch "^3.0.4"
+object-mapper@^6.2.0:
+  version "6.2.0"
+  resolved "https://registry.yarnpkg.com/object-mapper/-/object-mapper-6.2.0.tgz#f12b097081a97da953adafbc1f7f41b3ff615cae"
+  integrity sha512-kGa23lcUwnTbT0W2GqRipoiPax734TbXVTUF3vaWlAXY5baMQES323B9NHJODvxhn9sVMZmzeenD74PnCZZuHA==
 
 object-transformer@0.0.5:
   version "0.0.5"
