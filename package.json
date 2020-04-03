@@ -62,7 +62,7 @@
     "deepmerge": "^4.2.2",
     "express": "^4.17.1",
     "express-healthcheck": "^0.1.0",
-    "express-nunjucks": "^2.2.3",
+    "express-nunjucks": "^2.2.5",
     "js-yaml": "^3.13.1",
     "nunjucks": "^3.2.1",
     "object-mapper": "^5.0.0",
