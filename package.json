@@ -56,7 +56,7 @@
   "dependencies": {
     "axios": "^0.19.2",
     "axios-mock-adapter": "^1.18.1",
-    "chalk": "^2.4.2",
+    "chalk": "^4.1.0",
     "config": "^3.3.1",
     "decamelize-keys": "^1.1.0",
     "deepmerge": "^4.2.2",
