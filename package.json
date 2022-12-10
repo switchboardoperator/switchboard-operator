@@ -60,7 +60,7 @@
     "config": "^3.3.1",
     "decamelize-keys": "^1.1.0",
     "deepmerge": "^4.2.2",
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "express-healthcheck": "^0.1.0",
     "express-nunjucks": "^2.2.5",
     "js-yaml": "^3.13.1",
